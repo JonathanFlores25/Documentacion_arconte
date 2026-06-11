@@ -141,7 +141,7 @@
     },
     "phases": [
       {
-        "id": "ph_1781136743053_q3zg",
+        "id": "ph_1781208659150_9nvy",
         "title": "Fase 1",
         "status": "active",
         "start_iso": "2026-04-21",
@@ -153,7 +153,7 @@
             "area": "PM",
             "responsible": "Abelardo",
             "done": true,
-            "id": "t_1781136743053_v655"
+            "id": "t_1781208659150_7y2u"
           },
           {
             "title": "Obtención de la data",
@@ -161,12 +161,12 @@
             "area": "Datos",
             "responsible": "Equipo IA",
             "done": true,
-            "id": "t_1781136743053_8zfe"
+            "id": "t_1781208659150_3pzq"
           }
         ]
       },
       {
-        "id": "ph_1781136743053_ijw6",
+        "id": "ph_1781208659150_f9pm",
         "title": "Fase 2",
         "status": "active",
         "start_iso": "2026-04-28",
@@ -178,7 +178,7 @@
             "area": "Frontend",
             "responsible": "Juan",
             "done": true,
-            "id": "t_1781136743053_4g96"
+            "id": "t_1781208659150_rx0n"
           },
           {
             "title": "Diseño de modelo de reconocimiento de palabras",
@@ -186,12 +186,12 @@
             "area": "AI Eng",
             "responsible": "Jonathan",
             "done": true,
-            "id": "t_1781136743053_52c3"
+            "id": "t_1781208659150_465d"
           }
         ]
       },
       {
-        "id": "ph_1781136743053_m6u1",
+        "id": "ph_1781208659150_1d1v",
         "title": "Fase 3",
         "status": "active",
         "start_iso": "2026-05-01",
@@ -203,7 +203,7 @@
             "area": "AI Eng",
             "responsible": "Jonathan",
             "done": true,
-            "id": "t_1781136743053_uos4"
+            "id": "t_1781208659150_mmuf"
           },
           {
             "title": "Identificacion de programación para radio",
@@ -211,7 +211,7 @@
             "area": "AI Eng",
             "responsible": "Israel",
             "done": true,
-            "id": "t_1781136743053_oigi"
+            "id": "t_1781208659150_xlua"
           },
           {
             "title": "Pruebas en el POD",
@@ -219,16 +219,16 @@
             "area": "Infra",
             "responsible": "Juan/Jonathan",
             "done": true,
-            "id": "t_1781136743053_5c8k"
+            "id": "t_1781208659150_dbl8"
           }
         ]
       },
       {
-        "id": "ph_1781136743053_ieqf",
+        "id": "ph_1781208659150_k3yi",
         "title": "Fase 4",
         "status": "active",
-        "start_iso": "2026-06-02",
-        "end_iso": "2026-06-09",
+        "start_iso": "2026-05-05",
+        "end_iso": "2026-06-16",
         "tasks": [
           {
             "title": "Etiquetado de datos",
@@ -236,16 +236,62 @@
             "area": "Datos",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_1n3a"
+            "id": "t_1781208659150_www2"
           }
-        ]
+        ],
+        "shift_days": 35,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-05-12"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-05-19"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-05-25"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-06-01"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-06-08"
+          }
+        ],
+        "shift_reason": "wqwd",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
       },
       {
-        "id": "ph_1781136743053_7s5t",
+        "id": "ph_1781208659150_koj5",
         "title": "Fase 5",
         "status": "active",
-        "start_iso": "2026-06-04",
-        "end_iso": "2026-06-12",
+        "start_iso": "2026-06-11",
+        "end_iso": "2026-06-19",
         "tasks": [
           {
             "title": "Setup de servidores de procesamiento (GPU)",
@@ -253,7 +299,7 @@
             "area": "Infra",
             "responsible": "Juan",
             "done": true,
-            "id": "t_1781136743053_eerh"
+            "id": "t_1781208659150_eolo"
           },
           {
             "title": "Pruebas de conectividad y bandwidth",
@@ -261,7 +307,7 @@
             "area": "Infra",
             "responsible": "Juan",
             "done": true,
-            "id": "t_1781136743053_55m8"
+            "id": "t_1781208659150_ft1t"
           },
           {
             "title": "Unificacion de la 1a version del modelo",
@@ -269,7 +315,7 @@
             "area": "AI Eng",
             "responsible": "Jonathan",
             "done": false,
-            "id": "t_1781136743053_4enk"
+            "id": "t_1781208659150_qq1q"
           },
           {
             "title": "Plataforma (1a version)",
@@ -277,15 +323,61 @@
             "area": "Frontend",
             "responsible": "Equipo IA",
             "done": true,
-            "id": "t_1781136743053_q70x"
+            "id": "t_1781208659150_4kdz"
           }
-        ]
+        ],
+        "shift_days": 35,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-07",
+            "to": "2026-05-14"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-14",
+            "to": "2026-05-21"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-21",
+            "to": "2026-05-28"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-28",
+            "to": "2026-06-04"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-04",
+            "to": "2026-06-11"
+          }
+        ],
+        "shift_reason": "wqwd",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
       },
       {
-        "id": "ph_1781136743053_mt15",
+        "id": "ph_1781208659150_4yrn",
         "title": "Fase 6",
         "status": "active",
-        "start_iso": "2026-06-08",
+        "start_iso": "2026-06-15",
         "end_iso": "2026-06-12",
         "tasks": [
           {
@@ -294,7 +386,22 @@
             "area": "Datos",
             "responsible": "Juan/Jonathan",
             "done": true,
-            "id": "t_1781136743053_oosq"
+            "id": "t_1781208659150_aung",
+            "start_iso": "2026-06-08",
+            "shift_days": -7,
+            "shift_log": [
+              {
+                "days": -7,
+                "reason": "qwddw",
+                "by": "Jonathan",
+                "at": "2026-06-11",
+                "from": "2026-06-15",
+                "to": "2026-06-08"
+              }
+            ],
+            "shift_reason": "qwddw",
+            "shifted_by": "Jonathan",
+            "shifted_at": "2026-06-11"
           },
           {
             "title": "Simulacion de escenarios",
@@ -302,12 +409,81 @@
             "area": "AI Eng",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_8b43"
+            "id": "t_1781208659150_tcfv",
+            "start_iso": "2026-06-08",
+            "shift_days": -7,
+            "shift_log": [
+              {
+                "days": -7,
+                "reason": "qwddw",
+                "by": "Jonathan",
+                "at": "2026-06-11",
+                "from": "2026-06-15",
+                "to": "2026-06-08"
+              }
+            ],
+            "shift_reason": "qwddw",
+            "shifted_by": "Jonathan",
+            "shifted_at": "2026-06-11"
           }
-        ]
+        ],
+        "shift_days": 28,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-11",
+            "to": "2026-05-18"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-18",
+            "to": "2026-05-25"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-25",
+            "to": "2026-06-01"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-01",
+            "to": "2026-06-08"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-08",
+            "to": "2026-06-15"
+          },
+          {
+            "days": -7,
+            "reason": "qwddw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-06-15"
+          }
+        ],
+        "shift_reason": "qwddw",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
       },
       {
-        "id": "ph_1781136743053_fu5d",
+        "id": "ph_1781208659150_v1hp",
         "title": "Fase 7",
         "status": "active",
         "start_iso": "2026-06-09",
@@ -319,12 +495,66 @@
             "area": "Frontend",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_89v6"
+            "id": "t_1781208659150_4d2n"
           }
-        ]
+        ],
+        "shift_days": 28,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-12",
+            "to": "2026-05-19"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-19",
+            "to": "2026-05-26"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-26",
+            "to": "2026-06-02"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-02",
+            "to": "2026-06-09"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-09",
+            "to": "2026-06-16"
+          },
+          {
+            "days": -7,
+            "reason": "qwddw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-16",
+            "to": "2026-06-09"
+          }
+        ],
+        "shift_reason": "qwddw",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
       },
       {
-        "id": "ph_1781136743053_51ho",
+        "id": "ph_1781208659150_f9r5",
         "title": "Fase 8",
         "status": "active",
         "start_iso": "2026-06-10",
@@ -336,7 +566,7 @@
             "area": "Infra",
             "responsible": "Jonathan",
             "done": false,
-            "id": "t_1781136743053_f2hf"
+            "id": "t_1781208659150_i77r"
           },
           {
             "title": "Testing de alertas y notificaciones",
@@ -344,7 +574,7 @@
             "area": "Frontend",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_u8qu"
+            "id": "t_1781208659150_whsi"
           },
           {
             "title": "Optimizacion del modelo",
@@ -352,7 +582,7 @@
             "area": "AI Eng",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_h2rv"
+            "id": "t_1781208659150_f3we"
           },
           {
             "title": "Optimización de false positives",
@@ -360,7 +590,7 @@
             "area": "AI Eng",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_n4wx"
+            "id": "t_1781208659150_5z1b"
           },
           {
             "title": "Ajuste de sensibilidad de alertas",
@@ -368,12 +598,69 @@
             "area": "AI Eng",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_bxuh"
+            "id": "t_1781208659150_72cs"
           }
+        ],
+        "shift_days": 28,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-13",
+            "to": "2026-05-20"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-20",
+            "to": "2026-05-27"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-27",
+            "to": "2026-06-03"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-03",
+            "to": "2026-06-10"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-10",
+            "to": "2026-06-17"
+          },
+          {
+            "days": -7,
+            "reason": "qwddw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-17",
+            "to": "2026-06-10"
+          }
+        ],
+        "shift_reason": "qwddw",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11",
+        "depends_on": [
+          "ph_1781208659150_v1hp"
         ]
       },
       {
-        "id": "ph_1781136743053_xkbt",
+        "id": "ph_1781208659150_r7b8",
         "title": "Fase 9",
         "status": "active",
         "start_iso": "2026-06-15",
@@ -385,7 +672,7 @@
             "area": "Infra",
             "responsible": "Juan",
             "done": false,
-            "id": "t_1781136743053_zbbh"
+            "id": "t_1781208659150_5421"
           },
           {
             "title": "Configuración de almacenamiento de video",
@@ -393,7 +680,7 @@
             "area": "Infra",
             "responsible": "Juan",
             "done": false,
-            "id": "t_1781136743053_7xlq"
+            "id": "t_1781208659150_kovf"
           },
           {
             "title": "Configuración de monitoreo 24/7",
@@ -401,7 +688,7 @@
             "area": "Infra",
             "responsible": "Juan",
             "done": false,
-            "id": "t_1781136743053_vx69"
+            "id": "t_1781208659150_t8dp"
           },
           {
             "title": "Setup de backup y redundancia",
@@ -409,7 +696,7 @@
             "area": "Infra",
             "responsible": "Juan",
             "done": false,
-            "id": "t_1781136743053_y6st"
+            "id": "t_1781208659150_mv8c"
           },
           {
             "title": "Activación de alertas en vivo",
@@ -417,7 +704,7 @@
             "area": "Frontend",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_fhro"
+            "id": "t_1781208659150_hil7"
           },
           {
             "title": "Go-Live y handover",
@@ -425,12 +712,66 @@
             "area": "PM",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_2sge"
+            "id": "t_1781208659150_fpye"
           }
-        ]
+        ],
+        "shift_days": 28,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-18",
+            "to": "2026-05-25"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-25",
+            "to": "2026-06-01"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-01",
+            "to": "2026-06-08"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-08",
+            "to": "2026-06-15"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-15",
+            "to": "2026-06-22"
+          },
+          {
+            "days": -7,
+            "reason": "qwddw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-22",
+            "to": "2026-06-15"
+          }
+        ],
+        "shift_reason": "qwddw",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
       },
       {
-        "id": "ph_1781136743053_uwov",
+        "id": "ph_1781208659150_z0wg",
         "title": "Fase 10",
         "status": "active",
         "start_iso": "2026-06-22",
@@ -442,7 +783,7 @@
             "area": "AI Eng",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_q11u"
+            "id": "t_1781208659150_olic"
           },
           {
             "title": "Actualización de datasets",
@@ -450,12 +791,66 @@
             "area": "Datos",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_ws3o"
+            "id": "t_1781208659150_9iti"
           }
-        ]
+        ],
+        "shift_days": 28,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-25",
+            "to": "2026-06-01"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-01",
+            "to": "2026-06-08"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-08",
+            "to": "2026-06-15"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-15",
+            "to": "2026-06-22"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-22",
+            "to": "2026-06-29"
+          },
+          {
+            "days": -7,
+            "reason": "qwddw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-29",
+            "to": "2026-06-22"
+          }
+        ],
+        "shift_reason": "qwddw",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
       },
       {
-        "id": "ph_1781136743053_9j0v",
+        "id": "ph_1781208659150_f5vs",
         "title": "Fase 19",
         "status": "active",
         "start_iso": "2026-06-22",
@@ -467,12 +862,66 @@
             "area": "AI Eng",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_rjy0"
+            "id": "t_1781208659150_8l34"
           }
-        ]
+        ],
+        "shift_days": 28,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-25",
+            "to": "2026-06-01"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-01",
+            "to": "2026-06-08"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-08",
+            "to": "2026-06-15"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-15",
+            "to": "2026-06-22"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-22",
+            "to": "2026-06-29"
+          },
+          {
+            "days": -7,
+            "reason": "qwddw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-29",
+            "to": "2026-06-22"
+          }
+        ],
+        "shift_reason": "qwddw",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
       },
       {
-        "id": "ph_1781136743053_ysfi",
+        "id": "ph_1781208659150_g069",
         "title": "Fase 11",
         "status": "active",
         "start_iso": "2026-06-12",
@@ -484,7 +933,7 @@
             "area": "Infra",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_gp39"
+            "id": "t_1781208659150_rkso"
           },
           {
             "title": "Mejoras y nuevas funcionalidades",
@@ -492,8 +941,65 @@
             "area": "Frontend",
             "responsible": "Equipo IA",
             "done": false,
-            "id": "t_1781136743053_k168"
+            "id": "t_1781208659150_858a"
           }
+        ],
+        "shift_days": 28,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-15",
+            "to": "2026-05-22"
+          },
+          {
+            "days": 7,
+            "reason": "ada",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-22",
+            "to": "2026-05-29"
+          },
+          {
+            "days": 7,
+            "reason": "assda",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-29",
+            "to": "2026-06-05"
+          },
+          {
+            "days": 7,
+            "reason": "ssad",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-05",
+            "to": "2026-06-12"
+          },
+          {
+            "days": 7,
+            "reason": "wqwd",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-12",
+            "to": "2026-06-19"
+          },
+          {
+            "days": -7,
+            "reason": "qwddw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-19",
+            "to": "2026-06-12"
+          }
+        ],
+        "shift_reason": "qwddw",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11",
+        "depends_on": [
+          "ph_1781208659150_v1hp"
         ]
       }
     ],
@@ -631,7 +1137,438 @@
       "pipeline_current": 1,
       "_static": true
     },
-    "phases": [],
+    "phases": [
+      {
+        "id": "ph_1781210757900_ildy",
+        "title": "Fase 1",
+        "status": "active",
+        "start_iso": "2026-04-20",
+        "end_iso": "2026-06-19",
+        "tasks": [
+          {
+            "title": "Planeación",
+            "description": "Planeacio: 5 modelos base requeridos (fardeo, rostros, caja, horario, zonas) + alcance de plataforma",
+            "area": "PM",
+            "responsible": "Abelardo / Jonathan",
+            "done": true,
+            "id": "t_1781210757900_zyp7"
+          },
+          {
+            "title": "Arquitectura",
+            "description": "Definicion arquitectura general + stack tecnologico (backend, frontend, DB)",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757900_svpv"
+          },
+          {
+            "title": "Despliegue",
+            "description": "Setup repositorio, CI/CD y ambientes (dev/staging/prod)",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": false,
+            "id": "t_1781210757901_2gfz"
+          },
+          {
+            "title": "Infraestructura",
+            "description": "Setup servidor / GPU - cloud mientras llega on-premise,!! POD requerido para CV (asumido disponible en escenario ideal)",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_64h3"
+          }
+        ],
+        "shift_days": 21,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "asdaw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-05-18"
+          },
+          {
+            "days": 7,
+            "reason": "sa",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-05-25"
+          },
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "partial": true,
+            "anchor": "2026-06-01"
+          }
+        ],
+        "shift_reason": "wdwq",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
+      },
+      {
+        "id": "ph_1781210757901_reqs",
+        "title": "Fase 2",
+        "status": "active",
+        "start_iso": "2026-05-11",
+        "end_iso": "2026-06-05",
+        "tasks": [
+          {
+            "title": "Modelo Fardeo",
+            "description": "Modelo fardeo (vanilla) - entrenamiento, validacion y pruebas",
+            "area": "AI Eng",
+            "responsible": "Sergio",
+            "done": true,
+            "id": "t_1781210757901_f1pi"
+          },
+          {
+            "title": "Modelo Rostros",
+            "description": "Modelo rostros con ID de empleado (vanilla) - entrenamiento, validacion y pruebas",
+            "area": "AI Eng",
+            "responsible": "Rodrigo",
+            "done": true,
+            "id": "t_1781210757901_rkgn"
+          },
+          {
+            "title": "Modelo Zonas ROI",
+            "description": "Modelo zonas ROI (vanilla) - entrenamiento, validacion y pruebas",
+            "area": "AI Eng",
+            "responsible": "Jonathan",
+            "done": true,
+            "id": "t_1781210757901_brcj"
+          },
+          {
+            "title": "Curación Datasets",
+            "description": "Curacion y validacion de datasets fardeo + rostros",
+            "area": "Datos",
+            "responsible": "Equipo IA",
+            "done": true,
+            "id": "t_1781210757901_bhu0"
+          },
+          {
+            "title": "Pipeline Inferencia",
+            "description": "Pipeline ingesta de video + motor de inferencia (base)",
+            "area": "AI Eng",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_khv2"
+          },
+          {
+            "title": "Base Datos",
+            "description": "Base de datos: esquema eventos, video y detecciones",
+            "area": "AI Eng",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_yya3"
+          },
+          {
+            "title": "Diseño UI/UX",
+            "description": "Diseño UI/UX + estructura base de plataforma",
+            "area": "Frontend",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_te2i"
+          }
+        ],
+        "shift_days": 21,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "asdaw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-04-20",
+            "to": "2026-04-27"
+          },
+          {
+            "days": 7,
+            "reason": "sa",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-04-27",
+            "to": "2026-05-04"
+          },
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-04",
+            "to": "2026-05-11"
+          }
+        ],
+        "shift_reason": "wdwq",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
+      },
+      {
+        "id": "ph_1781210757901_3swu",
+        "title": "Fase 3",
+        "status": "active",
+        "start_iso": "2026-06-02",
+        "end_iso": "2026-06-26",
+        "tasks": [
+          {
+            "title": "Correccion y mejora",
+            "description": "Correccion y mejora de los modelos presentados",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": true,
+            "id": "t_1781210757901_af61"
+          },
+          {
+            "title": "Transferencia de conocimiento",
+            "description": "Transferencia de conocimiento Sergio - Israel",
+            "area": "AI Eng",
+            "responsible": "Israel",
+            "done": true,
+            "id": "t_1781210757901_za1j"
+          },
+          {
+            "title": "Presentaciones",
+            "description": "Presentaciones IPN sobre Celestial Dynamics",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": true,
+            "id": "t_1781210757901_ed7l"
+          },
+          {
+            "title": "Auditoría",
+            "description": "Auditoría Arconte Reatial de la fase 1 y 2",
+            "area": "Infra",
+            "responsible": "Adrian",
+            "done": true,
+            "id": "t_1781210757901_lfad"
+          },
+          {
+            "title": "Corrección y estabilización",
+            "description": "Corrección y estabilización de backend",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_rvtm"
+          },
+          {
+            "title": "API Interna",
+            "description": "API interna: endpoints para frontend + sistema de alertas",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_wyc9"
+          },
+          {
+            "title": "Front base building",
+            "description": "Front base: estructura, componentes, dashboard — Juan construye S6–S8",
+            "area": "Frontend",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_uh0t"
+          },
+          {
+            "title": "Autoetiquetado",
+            "description": "Autoetiquetado: guardar frames de detecciones para reentrenamiento",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781210757901_tyya"
+          }
+        ],
+        "shift_days": 21,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "asdaw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-12",
+            "to": "2026-05-19"
+          },
+          {
+            "days": 7,
+            "reason": "sa",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-19",
+            "to": "2026-05-26"
+          },
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-26",
+            "to": "2026-06-02"
+          }
+        ],
+        "shift_reason": "wdwq",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
+      },
+      {
+        "id": "ph_1781210757901_wrv9",
+        "title": "Fase 4",
+        "status": "active",
+        "start_iso": "2026-06-08",
+        "end_iso": "2026-07-10",
+        "tasks": [
+          {
+            "title": "Integración completa",
+            "description": "3 modelos vanilla en plataforma",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781210757901_30ez"
+          },
+          {
+            "title": "Sponsor Requirements",
+            "description": "Reunión con Kiosko: obtención de requerimientos reales + solicitud de datasets (videos tienda, datos caja abierta/cerrada, horario apertura/cierre) + confirmación POD",
+            "area": "PM",
+            "responsible": "Abelardo",
+            "done": false,
+            "id": "t_1781210757901_kejd"
+          }
+        ],
+        "shift_days": 21,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "asdaw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-18",
+            "to": "2026-05-25"
+          },
+          {
+            "days": 7,
+            "reason": "sa",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-25",
+            "to": "2026-06-01"
+          },
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-01",
+            "to": "2026-06-08"
+          }
+        ],
+        "shift_reason": "wdwq",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11"
+      },
+      {
+        "id": "ph_1781210757901_agp6",
+        "title": "Fase 5",
+        "status": "active",
+        "start_iso": "2026-06-08",
+        "end_iso": "2026-07-03",
+        "tasks": [
+          {
+            "title": "Labaleing",
+            "description": "Etiquetado de base de datos de KISOKO Train -Test)",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781210757901_4rme"
+          },
+          {
+            "title": "Fine-tuning Fardeo",
+            "description": "Fine-tuning fardeo con videos reales de tienda Kiosko",
+            "area": "AI Eng",
+            "responsible": "Israel",
+            "done": false,
+            "id": "t_1781210757901_qbae"
+          },
+          {
+            "title": "Fine-tuning Faces",
+            "description": "Fine-tuning rostros con videos reales de tienda Kiosko",
+            "area": "AI Eng",
+            "responsible": "Rodrigo",
+            "done": false,
+            "id": "t_1781210757901_e03o"
+          },
+          {
+            "title": "Calibración ROI",
+            "description": "Calibración zonas ROI con ambiente real Kiosko",
+            "area": "AI Eng",
+            "responsible": "Jonathan",
+            "done": false,
+            "id": "t_1781210757901_jffz"
+          },
+          {
+            "title": "AI research Cajas",
+            "description": "Research + dataset + entrenamiento: caja abierta/cerrada (datos Kiosko)",
+            "area": "AI Eng",
+            "responsible": "Israel",
+            "done": false,
+            "id": "t_1781210757901_vfcf"
+          },
+          {
+            "title": "AI research Horarios",
+            "description": "Research + dataset + entrenamiento: horario apertura/cierre (datos Kiosko)",
+            "area": "AI Eng",
+            "responsible": "Rodrigo",
+            "done": false,
+            "id": "t_1781210757901_3wna"
+          },
+          {
+            "title": "Metricas",
+            "description": "Matriz de pruebas V1: mAP, F1, FP/FN en condiciones reales",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781210757901_xp2u"
+          },
+          {
+            "title": "Optimizacion",
+            "description": "Optimización de falsos positivos con operadores en condiciones reales",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781210757901_115v"
+          }
+        ],
+        "shift_days": 21,
+        "shift_log": [
+          {
+            "days": 7,
+            "reason": "asdaw",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-18",
+            "to": "2026-05-25"
+          },
+          {
+            "days": 7,
+            "reason": "sa",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-05-25",
+            "to": "2026-06-01"
+          },
+          {
+            "days": 7,
+            "reason": "wdwq",
+            "by": "Jonathan",
+            "at": "2026-06-11",
+            "from": "2026-06-01",
+            "to": "2026-06-08"
+          }
+        ],
+        "shift_reason": "wdwq",
+        "shifted_by": "Jonathan",
+        "shifted_at": "2026-06-11",
+        "depends_on": [
+          "ph_1781210757901_wrv9"
+        ]
+      }
+    ],
     "sprint_tasks": {},
     "acuerdos": [],
     "models": [],

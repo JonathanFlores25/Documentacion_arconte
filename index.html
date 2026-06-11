@@ -2585,13 +2585,20 @@
         start_iso: p.start_iso ? shiftDate(p.start_iso, shift) : null,
         end_iso:   p.end_iso   ? shiftDate(p.end_iso,   shift) : null,
         _phase_deps: deps,
+        _phase_shift: shift,
         tasks: [
-          ...p.tasks.filter(t => !deletedSet.has(t.id)).map(t => ({
-            ...t,
-            description: textOverrides[t.id] || t.description,
-            _shift_days: (taskShifts[t.id] || 0)
-          })),
-          ...(e.added_tasks || []).filter(t => t.phase_idx === pi).map(t => ({ ...t, _shift_days: 0 }))
+          ...p.tasks.filter(t => !deletedSet.has(t.id)).map(t => {
+            const tRaw    = taskShifts[t.id];
+            const tShift  = typeof tRaw === 'object' && tRaw ? (tRaw.shift || 0) : (tRaw || 0);
+            const tReason = typeof tRaw === 'object' && tRaw ? (tRaw.reason || '') : '';
+            return {
+              ...t,
+              description: textOverrides[t.id] || t.description,
+              _shift_days: tShift,
+              _shift_reason: tReason
+            };
+          }),
+          ...(e.added_tasks || []).filter(t => t.phase_idx === pi).map(t => ({ ...t, _shift_days: 0, _shift_reason: '' }))
         ]
       };
     });
@@ -2687,47 +2694,94 @@
   // ── Shift phase ───────────────────────────────────────────────────────────
 
   async function shiftPhase(phaseIdx, days) {
-    const cascade     = document.getElementById('rm-cascade-cb') && document.getElementById('rm-cascade-cb').checked;
-    const reasonInput = document.getElementById('rm-shift-reason');
-    const reason      = reasonInput ? reasonInput.value.trim() : '';
-    const e     = getEdits();
-    const total = _rm.rawData.phases.length;
-    const from  = phaseIdx;
-    const to    = cascade ? total - 1 : phaseIdx;
+    const cascade = document.getElementById('rm-cascade-cb') && document.getElementById('rm-cascade-cb').checked;
+    const total   = _rm.rawData.phases.length;
+    const from    = phaseIdx;
+    const to      = cascade ? total - 1 : phaseIdx;
+
+    // Reunir las fases que realmente se van a recorrer (las que tienen fecha)
+    // y contar cuántas tareas pendientes se aplazan, para mostrarlo en el modal.
+    const applied  = applyEdits(_rm.rawData);
+    const affected = [];
+    let pendCount  = 0;
     for (let i = from; i <= to; i++) {
       if (!_rm.rawData.phases[i].start_iso) continue;
-      const cur     = e.phase_shifts[i];
-      const curShift = typeof cur === 'object' ? (cur.shift || 0) : (cur || 0);
-      const newShift = curShift + days;
-      if (newShift === 0) {
-        delete e.phase_shifts[i];
-      } else {
-        e.phase_shifts[i] = reason ? { shift: newShift, reason } : newShift;
-      }
+      affected.push(i);
+      const ph = applied.phases[i];
+      pendCount += (ph.tasks || []).filter(t => {
+        const key = 'retail_' + t.id;
+        return !(_rm.estado && key in _rm.estado ? _rm.estado[key] : t.done_xlsx);
+      }).length;
     }
-    await persistEdits();
-    rerender();
-    const wrap   = document.querySelector('#rm-retail-roadmap .rm-cal-wrap');
-    const detail = wrap && wrap.querySelector('.rm-cal-detail');
-    if (detail) rmRoadmapDayClick(null, phaseIdx, true);
+    if (!affected.length) return;
+
+    const dir        = days > 0 ? `+${days}` : `${days}`;
+    const phaseNames = affected.map(i => `Fase ${i + 1}`).join(', ');
+    const info = cascade && affected.length > 1
+      ? `Se recorrerán ${dir} día(s) EN CASCADA: ${phaseNames}. ${pendCount} tarea(s) pendiente(s) se aplazarán.`
+      : `Se recorrerá ${dir} día(s) la ${phaseNames}. ${pendCount} tarea(s) pendiente(s) se aplazarán.`;
+
+    // Motivo obligatorio: modal que dice QUÉ se mueve y pide el PORQUÉ.
+    openActionModal({
+      title:       `Desplazar ${dir} día(s)`,
+      info,
+      label:       '¿Por qué se recorre? (requerido)',
+      placeholder: 'Ej: cliente pidió más tiempo, bloqueado por dependencia…',
+      btnLabel:    `Desplazar ${dir}d`,
+      required:    true,
+    }, async (reason) => {
+      const e = getEdits();
+      for (const i of affected) {
+        const cur      = e.phase_shifts[i];
+        const curShift = typeof cur === 'object' ? (cur.shift || 0) : (cur || 0);
+        const newShift = curShift + days;
+        if (newShift === 0) {
+          delete e.phase_shifts[i];
+        } else {
+          e.phase_shifts[i] = { shift: newShift, reason };
+        }
+      }
+      await persistEdits();
+      rerender();
+      refreshWeekView();
+      const wrap   = document.querySelector('#rm-retail-roadmap .rm-cal-wrap');
+      const detail = wrap && wrap.querySelector('.rm-cal-detail');
+      if (detail) rmRoadmapDayClick(null, phaseIdx, true);
+    });
   }
 
   // ── Shift individual task ────────────────────────────────────────────────────
 
-  async function shiftTask(taskId, phaseIdx, days) {
+  async function shiftTask(taskId, phaseIdx, days, reason) {
     const e = getEdits();
     if (!e.task_shifts) e.task_shifts = {};
-    const cur      = e.task_shifts[taskId] || 0;
+    const curRaw   = e.task_shifts[taskId];
+    const cur      = typeof curRaw === 'object' && curRaw ? (curRaw.shift || 0) : (curRaw || 0);
     const newShift = cur + days;
-    if (newShift === 0) {
-      delete e.task_shifts[taskId];
-    } else {
-      e.task_shifts[taskId] = newShift;
-    }
-    await persistEdits();
-    rerender();
-    refreshWeekView();
-    if (phaseIdx != null) rmRoadmapDayClick(null, phaseIdx, true);
+    const apply    = async (rsn) => {
+      if (newShift === 0) {
+        delete e.task_shifts[taskId];
+      } else {
+        e.task_shifts[taskId] = { shift: newShift, reason: rsn || '' };
+      }
+      await persistEdits();
+      rerender();
+      refreshWeekView();
+      if (phaseIdx != null) rmRoadmapDayClick(null, phaseIdx, true);
+    };
+    // Anular el desplazamiento (vuelve a 0) no requiere motivo.
+    if (newShift === 0) { await apply(''); return; }
+    // Si ya viene un motivo (p. ej. desde la vista semanal), úsalo directo.
+    if (typeof reason === 'string' && reason.trim()) { await apply(reason.trim()); return; }
+    // Motivo obligatorio al mover una tarea desde el detalle del roadmap.
+    openActionModal({
+      title:       'Mover tarea',
+      info:        `Desplazar la tarea ${newShift > 0 ? '+' + newShift : newShift} día(s).`,
+      label:       'Motivo del movimiento',
+      placeholder: 'Explica por qué se mueve esta tarea…',
+      btnLabel:    'Mover',
+      required:    true,
+    }, (rsn) => apply(rsn));
   }
 
   // ── Edit task text ────────────────────────────────────────────────────────
@@ -3019,8 +3073,6 @@
           <button class="rm-shift-btn" onclick="shiftPhase(${phaseIdx},-1)">−1d</button>
           <button class="rm-shift-btn" onclick="shiftPhase(${phaseIdx},1)">+1d</button>
           <button class="rm-shift-btn" onclick="shiftPhase(${phaseIdx},7)">+7d</button>
-          <input type="text" id="rm-shift-reason" class="rm-shift-reason-input"
-                 placeholder="Razón del desplazamiento…" value="${shiftReason}">
         </div>`;
       }
 
@@ -3046,16 +3098,18 @@
         const delBtn       = edit
           ? `<button class="rm-delete-btn" onclick="deleteTask('${task.id}',${phaseIdx})">✕</button>` : '';
         const shiftBadge = taskShiftAmt
-          ? `<span class="rm-task-shift-badge">${taskShiftAmt > 0 ? '+' : ''}${taskShiftAmt}d</span>` : '';
+          ? `<span class="rm-task-shift-badge" title="${(task._shift_reason || '').replace(/"/g,'&quot;')}">${taskShiftAmt > 0 ? '+' : ''}${taskShiftAmt}d</span>` : '';
         const resetBtn = taskShiftAmt
           ? `<button class="rm-task-shift-btn" onclick="shiftTask('${task.id}',${phaseIdx},${-taskShiftAmt})" title="Quitar desplazamiento">↺</button>` : '';
         // Hint de sprint destino cuando la tarea tiene shift
         let sprintHint = '';
         if (taskShiftAmt) {
-          const tStart = shiftDate(phase.start_iso, taskShiftAmt);
-          const todayStr = new Date().toISOString().slice(0,10);
-          const eff = tStart < todayStr ? todayStr : tStart;
-          const sn  = getSprintForDate(eff);
+          const phaseShift   = phase._phase_shift || 0;
+          const todayStr     = new Date().toISOString().slice(0,10);
+          const naturalStart = shiftDate(phase.start_iso, -phaseShift);
+          const anchor       = naturalStart < todayStr ? todayStr : naturalStart;
+          const bucketDate   = shiftDate(anchor, phaseShift + taskShiftAmt);
+          const sn  = getSprintForDate(bucketDate);
           sprintHint = `<span class="rm-task-sprint-hint">→ ${sn}</span>`;
         }
         // Botones shift por tarea: siempre visibles
@@ -4278,6 +4332,7 @@
   }
 
   const _pfCalState = {}; // { pid: { year, month } }
+  const _pfDayMoves = {}; // { pid: { isoOrigen: [{label, days, to, reason, by, at}] } }
 
   // ══════════════════════════════════════════════════════════════════════════
   // MODEL STACK — CRUD
@@ -4521,6 +4576,20 @@
           <span style="font-size:11px;color:var(--text-muted);">${donePh}/${activeTasks.length}</span>
           ${!phDeleted && edit ? `<button class="rm-delete-btn" onclick="event.stopPropagation();deletePfPhase('${pid}','${phase.id}')" title="Eliminar fase">✕</button>` : ''}
         </div>`;
+      // Historial de desplazamientos (siempre visible en el roadmap)
+      const _shiftLog = Array.isArray(phase.shift_log) ? phase.shift_log
+        : (phase.shift_reason ? [{ days: phase.shift_days || 0, reason: phase.shift_reason, by: phase.shifted_by, at: phase.shifted_at }] : []);
+      if (!phDeleted && _shiftLog.length) {
+        const _total = phase.shift_days != null ? phase.shift_days : _shiftLog.reduce((s, x) => s + (x.days || 0), 0);
+        const _items = _shiftLog.map(x => {
+          const r = String(x.reason || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const d = (x.days > 0 ? '+' + x.days : x.days) + 'd';
+          return `<div style="margin-top:2px;">• <strong>${d}</strong> — ${r}${x.by ? ' · ' + x.by : ''}${x.at ? ' (' + x.at + ')' : ''}</div>`;
+        }).join('');
+        html += `<div class="rm-shift-notice" style="flex-direction:column;align-items:flex-start;gap:0;">
+          <div><strong>⚠ Recorrida ${_total > 0 ? '+' + _total : _total}d en total</strong></div>${_items}
+        </div>`;
+      }
       if (phDeleted) {
         html += `<div style="padding:6px 10px;"><span class="task-deleted-badge">Eliminada por ${phase.deleted_by}${phase.deleted_at ? ' · ' + phase.deleted_at : ''}${phase.deleted_reason ? ' — ' + phase.deleted_reason : ''}</span></div>`;
       } else {
@@ -4626,6 +4695,22 @@
         }
       });
 
+      // Días origen desde los que se movió una tarea (para marcar "tareas movidas")
+      const dayMoves = {};
+      phases.filter(p => !p.deleted).forEach(ph => {
+        (ph.tasks || []).forEach(t => {
+          (Array.isArray(t.shift_log) ? t.shift_log : []).forEach(x => {
+            if (x.from && x.to && x.from !== x.to) {
+              (dayMoves[x.from] = dayMoves[x.from] || []).push({
+                label: t.title || t.description || '(tarea)',
+                days: x.days, to: x.to, reason: x.reason, by: x.by, at: x.at,
+              });
+            }
+          });
+        });
+      });
+      _pfDayMoves[pid] = dayMoves;
+
       // Mes inicial: primer mes con alguna fase o sprint task
       const allIsoDates = [...new Set([...Object.keys(dayPhases), ...Object.keys(daySprintTasks)])].sort();
       const firstISO = allIsoDates[0] || new Date().toISOString().slice(0, 10);
@@ -4640,7 +4725,8 @@
         const buildPfCell = (d, iso, isToday) => {
           const phList = dayPhases[iso] || [];
           const spList = daySprintTasks[iso] || [];
-          if (!phList.length && !spList.length) {
+          const mvList = dayMoves[iso] || [];
+          if (!phList.length && !spList.length && !mvList.length) {
             return `<div class="rm-cal-day${isToday ? ' today' : ''}" data-iso="${iso}"><span>${d}</span></div>`;
           }
           const bg = phList.length ? `background:${phaseColorMap[phList[0].id] || PHASE_PALETTE[0]};` : '';
@@ -4650,7 +4736,10 @@
           const sprintDot = spList.length
             ? `<span style="width:5px;height:5px;border-radius:50%;background:#a78bfa;display:inline-block;flex-shrink:0;" title="${spList.length} tarea${spList.length>1?'s':''} del planificador"></span>`
             : '';
-          const dotsHTML = (extraDots || sprintDot) ? `<div style="display:flex;gap:2px;justify-content:center;margin-top:1px;">${extraDots}${sprintDot}</div>` : '';
+          const moveDot = mvList.length
+            ? `<span style="width:5px;height:5px;border-radius:50%;background:var(--yellow,#fbbf24);display:inline-block;flex-shrink:0;" title="${mvList.length} tarea(s) movida(s) desde este día"></span>`
+            : '';
+          const dotsHTML = (extraDots || sprintDot || moveDot) ? `<div style="display:flex;gap:2px;justify-content:center;margin-top:1px;">${extraDots}${sprintDot}${moveDot}</div>` : '';
           return `<div class="rm-cal-day${isToday ? ' today' : ''} has-session" style="${bg}"
               data-phase-ids="${phList.map(p=>p.id).join(',')}" data-iso="${iso}" data-has-sprint="${spList.length > 0 ? '1' : ''}"
               onclick="pfRoadmapDayClick(this,'${pid}')"><span>${d}</span>${dotsHTML}</div>`;
@@ -4728,6 +4817,17 @@
         ${isBlocked ? `<span style="font-size:10px;color:#ff6b6b;font-weight:400;">⛔ Bloqueada</span>` : ''}
       </div>`;
 
+      const _dlog = Array.isArray(phase.shift_log) ? phase.shift_log
+        : (phase.shift_reason ? [{ days: phase.shift_days || 0, reason: phase.shift_reason, by: phase.shifted_by, at: phase.shifted_at }] : []);
+      if (_dlog.length) {
+        const sd = phase.shift_days != null ? phase.shift_days : _dlog.reduce((s, x) => s + (x.days || 0), 0);
+        const items = _dlog.map(x => {
+          const r = String(x.reason || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          return `<div style="margin-top:2px;">• <strong>${x.days > 0 ? '+' + x.days : x.days}d</strong> — ${r}${x.by ? ' · ' + x.by : ''}${x.at ? ' (' + x.at + ')' : ''}</div>`;
+        }).join('');
+        block += `<div class="rm-shift-notice" style="flex-direction:column;align-items:flex-start;gap:0;"><div><strong>⚠ Recorrida ${sd > 0 ? '+' + sd : sd}d en total</strong></div>${items}</div>`;
+      }
+
       if (isBlocked) {
         block += `<div style="padding:5px 8px;background:rgba(255,60,60,0.08);border-left:2px solid #ff6b6b;border-radius:3px;font-size:11px;color:#ff6b6b;margin-bottom:8px;">
           Bloqueada por: <strong>${blockedNames}</strong> — estas fases deben completarse primero.
@@ -4737,10 +4837,10 @@
       if (editMode) {
         block += `<div class="rm-shift-bar">
           <span style="font-size:11px;color:var(--text-muted);margin-right:4px;">Desplazar:</span>
-          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',-7)">−7d</button>
-          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',-1)">−1d</button>
-          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',1)">+1d</button>
-          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',7)">+7d</button>
+          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',-7,'${iso}')">−7d</button>
+          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',-1,'${iso}')">−1d</button>
+          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',1,'${iso}')">+1d</button>
+          <button class="rm-shift-btn" onclick="shiftPfPhase('${pid}','${phaseId}',7,'${iso}')">+7d</button>
           <label class="rm-cascade-label" style="margin-left:auto;">
             <input type="checkbox" id="pf-cascade-cb-${pid}" checked> Cascada
           </label>
@@ -4799,6 +4899,12 @@
           : '';
         const calUploadBtn = `<label style="cursor:pointer;font-size:9px;color:var(--text-muted);display:inline-flex;align-items:center;gap:2px;margin-top:2px;" title="Agregar evidencia">📎 Evidencia<input type="file" style="display:none;" onchange="uploadTaskSolution('${calKey}',this)"></label>`;
         const calDoneNote  = task.done && task.done_note ? `<div style="font-size:9px;color:var(--accent);border-left:2px solid var(--accent);padding-left:4px;margin-top:2px;">✓ ${task.done_note}${task.done_by?` — ${task.done_by}`:''}</div>` : '';
+        // Nota por día: qué se recorrió y por qué (aparece en el día nuevo de la tarea)
+        const tShiftLog = Array.isArray(task.shift_log) ? task.shift_log
+          : (task.shift_reason ? [{ days: task.shift_days || 0, reason: task.shift_reason, by: task.shifted_by, at: task.shifted_at }] : []);
+        const calShiftNote = tShiftLog.length
+          ? `<div style="font-size:9px;color:var(--yellow);border-left:2px solid var(--yellow);padding-left:4px;margin-top:2px;">${tShiftLog.map(x => `↳ Recorrida ${x.days>0?'+'+x.days:x.days}d — ${String(x.reason||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}${x.by?' · '+x.by:''}${x.at?' ('+x.at+')':''}`).join('<br>')}</div>`
+          : '';
         block += `<div class="pf-task-row" style="padding:4px 0;${isBlocked?'opacity:0.6;':''}">
           <input type="checkbox" ${task.done?'checked':''} ${isBlocked?'disabled title="Fase bloqueada"':''} onchange="togglePfTask('${pid}','${phaseId}','${task.id}',this.checked,this)">
           <div style="flex:1;">
@@ -4809,7 +4915,7 @@
               ${task.responsible ? `<span class="rm-resp"> ${task.responsible}</span>` : ''}
             </div>
             ${taskShiftBar}
-            ${calSolHtml}${calDoneNote}${calUploadBtn}
+            ${calShiftNote}${calSolHtml}${calDoneNote}${calUploadBtn}
           </div>${delBtn}
         </div>`;
       });
@@ -4874,6 +4980,26 @@
       pfBlocks.push(spBlock);
     }
 
+    // ── Tareas movidas DESDE este día (rastro en los días que quedaron vacíos) ──
+    const dayMovesList = (_pfDayMoves[pid] || {})[iso] || [];
+    if (dayMovesList.length) {
+      let mvBlock = `<div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--yellow);display:inline-block;flex-shrink:0;"></span>
+        Tareas movidas desde este día
+      </div>`;
+      dayMovesList.forEach(m => {
+        const lbl = String(m.label || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const r   = String(m.reason || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        mvBlock += `<div class="pf-task-row" style="padding:3px 0;opacity:0.9;">
+          <div style="flex:1;">
+            <div style="font-size:11px;color:var(--yellow);">↳ <strong>${lbl}</strong> recorrida ${m.days > 0 ? '+' + m.days : m.days}d → ${m.to}</div>
+            ${r ? `<div class="pf-task-meta" style="font-size:10px;">${r}${m.by ? ' · ' + m.by : ''}${m.at ? ' (' + m.at + ')' : ''}</div>` : ''}
+          </div>
+        </div>`;
+      });
+      pfBlocks.push(mvBlock);
+    }
+
     if (pfBlocks.length <= (iso ? 1 : 0)) { // solo tiene la línea de fecha → sin pendientes
       detail.style.display = 'none';
       return;
@@ -4900,13 +5026,15 @@
     return result;
   }
 
-  async function shiftPfPhase(pid, phaseId, days) {
-    requireAdmin(async () => {
+  async function shiftPfPhase(pid, phaseId, days, fromIso) {
+    requireAdmin(() => {
       const phases = _projects[pid]?.phases || [];
       const phaseIdx = phases.findIndex(p => p.id === phaseId);
       if (phaseIdx === -1) return;
-
+      const phase   = phases[phaseIdx];
       const cascade = document.getElementById(`pf-cascade-cb-${pid}`)?.checked !== false;
+      // Ancla: el día donde se hizo clic. Si no hay, se mueve la fase completa.
+      const anchor  = fromIso || null;
 
       function addDays(iso, n) {
         if (!iso) return iso;
@@ -4915,35 +5043,90 @@
         return d.toISOString().slice(0, 10);
       }
 
-      // Desplaza fechas de fase + tareas con start_iso propio
-      function shiftPhaseObj(ph) {
-        if (ph.start_iso) ph.start_iso = addDays(ph.start_iso, days);
-        if (ph.end_iso)   ph.end_iso   = addDays(ph.end_iso,   days);
-        (ph.tasks || []).forEach(t => {
-          if (!t.deleted && t.start_iso) t.start_iso = addDays(t.start_iso, days);
-        });
-      }
-
-      // Siempre desplazar la fase origen
-      shiftPhaseObj(phases[phaseIdx]);
-
+      // Fases de cascada (se mueven completas: ya van enteras después del ancla).
+      const cascadePhases = [];
       if (cascade) {
         const depIds = getPfDependentPhaseIds(phases, phaseId);
         if (depIds.size > 0) {
-          // Cascade inteligente: solo fases que dependen de ésta (transitivamente)
-          for (const ph of phases) {
-            if (!ph.deleted && depIds.has(ph.id)) shiftPhaseObj(ph);
-          }
+          for (const ph of phases) if (!ph.deleted && ph.id !== phaseId && depIds.has(ph.id)) cascadePhases.push(ph);
         } else {
-          // Sin dependencias configuradas → fallback: todas las fases posteriores
-          for (let i = phaseIdx + 1; i < phases.length; i++) {
-            if (!phases[i].deleted) shiftPhaseObj(phases[i]);
-          }
+          for (let i = phaseIdx + 1; i < phases.length; i++) if (!phases[i].deleted) cascadePhases.push(phases[i]);
         }
       }
 
-      await savePlatformProject(pid);
-      renderPlatformRoadmap(pid);
+      // Tareas de la fase origen que se recorren (fecha efectiva >= ancla).
+      const movingTasks = (phase.tasks || []).filter(t => {
+        if (t.deleted) return false;
+        if (!anchor) return !!t.start_iso; // sin ancla = bloque completo (todas con fecha)
+        const eff = t.start_iso || phase.start_iso;
+        return eff && eff >= anchor;
+      });
+      const pendMoving = movingTasks.filter(t => !t.done).length
+        + cascadePhases.reduce((n, ph) => n + (ph.tasks || []).filter(t => !t.deleted && !t.done).length, 0);
+
+      const dir        = days > 0 ? `+${days}` : `${days}`;
+      const cascadeTxt = cascadePhases.length ? ` + ${cascadePhases.length} fase(s) siguiente(s)` : '';
+      const info = anchor
+        ? `Desde el ${anchor}: se recorrerán ${dir} día(s) las tareas de "${phase.title}" en esa fecha o después${cascadeTxt}. El inicio de la fase (${phase.start_iso}) NO se mueve. ${pendMoving} tarea(s) pendiente(s).`
+        : `Se recorrerá ${dir} día(s) la fase completa "${phase.title}"${cascadeTxt}. ${pendMoving} tarea(s) pendiente(s).`;
+
+      // Registra el desplazamiento de una tarea (con día origen y destino).
+      function logTask(t, reason, stamp, by) {
+        const fromD = t.start_iso || phase.start_iso;
+        const toD   = addDays(fromD, days);
+        t.start_iso = toD;
+        t.shift_days = (t.shift_days || 0) + days;
+        if (!Array.isArray(t.shift_log)) t.shift_log = [];
+        t.shift_log.push({ days, reason, by, at: stamp, from: fromD, to: toD });
+        t.shift_reason = reason; t.shifted_by = by; t.shifted_at = stamp;
+      }
+      // Mueve una fase COMPLETA (inicio incluido) — para cascada y bloque.
+      function shiftWholePhase(ph, reason, stamp, by) {
+        const fromStart = ph.start_iso || null;
+        if (ph.start_iso) ph.start_iso = addDays(ph.start_iso, days);
+        if (ph.end_iso)   ph.end_iso   = addDays(ph.end_iso,   days);
+        (ph.tasks || []).forEach(t => {
+          if (t.deleted || !t.start_iso) return;
+          const fromD = t.start_iso, toD = addDays(t.start_iso, days);
+          t.start_iso = toD;
+          t.shift_days = (t.shift_days || 0) + days;
+          if (!Array.isArray(t.shift_log)) t.shift_log = [];
+          t.shift_log.push({ days, reason, by, at: stamp, from: fromD, to: toD });
+        });
+        ph.shift_days = (ph.shift_days || 0) + days;
+        if (!Array.isArray(ph.shift_log)) ph.shift_log = [];
+        ph.shift_log.push({ days, reason, by, at: stamp, from: fromStart, to: ph.start_iso || null });
+        ph.shift_reason = reason; ph.shifted_by = by; ph.shifted_at = stamp;
+      }
+
+      // Motivo obligatorio: modal que dice QUÉ se mueve y pide el PORQUÉ.
+      openActionModal({
+        title:       `Desplazar ${dir} día(s)`,
+        info,
+        label:       '¿Por qué se recorre? (requerido)',
+        placeholder: 'Ej: cliente pidió más tiempo, bloqueado por dependencia…',
+        btnLabel:    `Desplazar ${dir}d`,
+        required:    true,
+      }, async (reason) => {
+        const stamp = new Date().toISOString().slice(0, 10);
+        const by    = _currentUser || 'Admin';
+        if (anchor) {
+          // Fase origen anclada: el inicio NO se mueve; el fin se extiende;
+          // se recorren solo las tareas en/después del ancla.
+          if (phase.end_iso) phase.end_iso = addDays(phase.end_iso, days);
+          movingTasks.forEach(t => logTask(t, reason, stamp, by));
+          phase.shift_days = (phase.shift_days || 0) + days;
+          if (!Array.isArray(phase.shift_log)) phase.shift_log = [];
+          phase.shift_log.push({ days, reason, by, at: stamp, partial: true, anchor });
+          phase.shift_reason = reason; phase.shifted_by = by; phase.shifted_at = stamp;
+        } else {
+          shiftWholePhase(phase, reason, stamp, by);
+        }
+        cascadePhases.forEach(ph => shiftWholePhase(ph, reason, stamp, by));
+        await savePlatformProject(pid);
+        renderPlatformRoadmap(pid);
+        refreshWeekView();
+      });
     });
   }
 
@@ -5085,38 +5268,71 @@
         const phase = phases.find(p => p.id === phaseId);
         const task  = (phase?.tasks || []).find(t => t.id === taskId);
         if (!task) return;
-        const base = task.start_iso || currentIso || phase.start_iso;
-        if (!base) return;
-        const d = new Date(base + 'T12:00:00');
-        d.setDate(d.getDate() + days);
-        task.start_iso = d.toISOString().slice(0, 10);
-        task.shift_reason = reason; task.shifted_by = _currentUser || 'Admin'; task.shifted_at = new Date().toISOString().slice(0,10);
-        // Cascade a fases dependientes (respeta depends_on, fallback a todas las posteriores)
-        const depIds = getPfDependentPhaseIds(phases, phaseId);
+        // Ancla = fecha desde la que se recorre (la fecha de la tarea / día clicado).
+        const anchor = task.start_iso || currentIso || phase.start_iso;
+        if (!anchor) return;
+        const stamp = new Date().toISOString().slice(0, 10);
+        const by    = _currentUser || 'Admin';
+
         function _addDays(iso, n) {
           if (!iso) return iso;
           const dd = new Date(iso + 'T12:00:00');
           dd.setDate(dd.getDate() + n);
           return dd.toISOString().slice(0, 10);
         }
-        function _shiftPh(ph) {
+        function _logTaskShift(t) {
+          t.shift_days = (t.shift_days || 0) + days;
+          if (!Array.isArray(t.shift_log)) t.shift_log = [];
+          t.shift_log.push({ days, reason, by, at: stamp });
+          t.shift_reason = reason; t.shifted_by = by; t.shifted_at = stamp;
+        }
+        function _logPhaseShift(ph) {
+          ph.shift_days = (ph.shift_days || 0) + days;
+          if (!Array.isArray(ph.shift_log)) ph.shift_log = [];
+          ph.shift_log.push({ days, reason, by, at: stamp });
+          ph.shift_reason = reason; ph.shifted_by = by; ph.shifted_at = stamp;
+        }
+
+        // 1) Fase actual: el INICIO no se mueve; se extiende el fin; se recorren
+        //    solo las tareas con fecha efectiva >= ancla (las previas quedan en su día).
+        if (phase.end_iso) phase.end_iso = _addDays(phase.end_iso, days);
+        (phase.tasks || []).forEach(t => {
+          if (t.deleted) return;
+          if (t.id === taskId) {
+            // La tarea seleccionada siempre se recorre desde su día actual.
+            t.start_iso = _addDays(task.start_iso || currentIso || phase.start_iso, days);
+            _logTaskShift(t);
+            return;
+          }
+          const eff = t.start_iso || phase.start_iso;
+          if (eff && eff >= anchor) {
+            t.start_iso = _addDays(t.start_iso || phase.start_iso, days);
+            _logTaskShift(t);
+          }
+        });
+
+        // 2) Cascada: las fases que dependen de ésta (o todas las posteriores) se
+        //    mueven completas, porque ya van enteras después del ancla.
+        const depIds = getPfDependentPhaseIds(phases, phaseId);
+        function _shiftPhFull(ph) {
           if (ph.start_iso) ph.start_iso = _addDays(ph.start_iso, days);
           if (ph.end_iso)   ph.end_iso   = _addDays(ph.end_iso,   days);
           (ph.tasks || []).forEach(t => {
-            if (!t.deleted && t.start_iso && t.id !== taskId) t.start_iso = _addDays(t.start_iso, days);
+            if (!t.deleted && t.start_iso) t.start_iso = _addDays(t.start_iso, days);
           });
+          _logPhaseShift(ph);
         }
         if (depIds.size > 0) {
-          for (const ph of phases) { if (!ph.deleted && depIds.has(ph.id)) _shiftPh(ph); }
+          for (const ph of phases) { if (!ph.deleted && depIds.has(ph.id)) _shiftPhFull(ph); }
         } else {
           const phIdx = phases.findIndex(p => p.id === phaseId);
-          for (let i = phIdx + 1; i < phases.length; i++) { if (!phases[i].deleted) _shiftPh(phases[i]); }
+          for (let i = phIdx + 1; i < phases.length; i++) { if (!phases[i].deleted) _shiftPhFull(phases[i]); }
         }
         await savePlatformProject(pid);
         renderPlatformRoadmap(pid); refreshWeekView();
       } else {
-        // retail: delegar a shiftTask
-        await shiftTask(taskId, null, days);
+        // retail: delegar a shiftTask con el motivo ya capturado (evita doble modal)
+        await shiftTask(taskId, null, days, reason);
       }
     });
   }
@@ -5305,20 +5521,25 @@
         const deps       = phase._phase_deps || [];
         const isBlocked  = deps.some(depIdx => !isPhaseComplete(depIdx));
         const blockedBy  = deps.filter(depIdx => !isPhaseComplete(depIdx)).map(i => `Fase ${i + 1}`);
+        // Las fases bloqueadas no se muestran en la vista semanal (sí en el calendario).
+        if (isBlocked) return;
         phase.tasks.forEach(task => {
           const key        = 'retail_' + task.id;
           const done       = _rm.estado && key in _rm.estado ? _rm.estado[key] : task.done_xlsx;
-          const taskShift  = task._shift_days || 0;
-          const taskStart  = shiftDate(phase.start_iso, taskShift);
-          const taskEnd    = phase.end_iso ? shiftDate(phase.end_iso, taskShift) : taskStart;
-          // Filtrar fases que no tienen ningún traslape con este sprint
-          if (taskEnd < sprint.start || taskStart > sprint.end) return;
-          // Cada tarea aparece en UN solo sprint:
-          //   - Si ya comenzó → mostrar en el sprint que contiene la fecha de hoy (sprint actual/próximo)
-          //   - Si es futura  → mostrar en el sprint que contiene su fecha de inicio
-          const today = new Date().toISOString().slice(0, 10);
-          const effectiveDate = taskStart < today ? today : taskStart;
-          if (getSprintForDate(effectiveDate) !== sprint.name) return;
+          const phaseShift = phase._phase_shift || 0;
+          const taskShift  = task._shift_days   || 0;
+          const today      = new Date().toISOString().slice(0, 10);
+          // Fecha natural de la tarea, sin recorridos manuales (fase ni tarea).
+          const naturalStart = shiftDate(phase.start_iso, -phaseShift);
+          // Cada tarea cae en UN solo sprint:
+          //   - Vencida (fecha natural < hoy) → se ancla a la semana actual.
+          //   - Futura → conserva su fecha natural.
+          // El recorrido manual (fase + tarea) la mueve RELATIVO a ese ancla,
+          // así "mover 1 semana" siempre la corre un sprint, sin importar
+          // cuánto lleve vencida.
+          const anchor     = naturalStart < today ? today : naturalStart;
+          const bucketDate = shiftDate(anchor, phaseShift + taskShift);
+          if (getSprintForDate(bucketDate) !== sprint.name) return;
           tasks.push({ project: 'Arconte Retail', phase: phase.title, task, done, key, type: 'retail', isBlocked, blockedBy });
         });
       });
@@ -5334,6 +5555,8 @@
         const phBlockedBy  = phBlockedIds.map(id =>
           (project.phases || []).find(p => p.id === id)?.title || id
         );
+        // Las fases bloqueadas no se muestran en la vista semanal (sí en el calendario).
+        if (phIsBlocked) return;
 
         (phase.tasks || []).forEach(task => {
           if (task.deleted) return;
@@ -5826,9 +6049,11 @@
             : type === 'plan'
               ? `onWkCheckChange('${key}','plan','${pid}','','',${planIdx},'${sprintName}',this)`
               : `onWkCheckChange('${key}','platform','${pid}','${phaseId}','${taskId}',0,'',this)`;
-          const taskShift = ((_rm.edits?.arconte_retail?.task_shifts) || {})[taskId] || 0;
+          const taskShiftRaw = ((_rm.edits?.arconte_retail?.task_shifts) || {})[taskId];
+          const taskShift    = typeof taskShiftRaw === 'object' && taskShiftRaw ? (taskShiftRaw.shift || 0) : (taskShiftRaw || 0);
+          const taskShiftRsn = typeof taskShiftRaw === 'object' && taskShiftRaw ? (taskShiftRaw.reason || '') : '';
           const shiftBadge = taskShift
-            ? `<span style="font-size:9px;color:var(--yellow);margin-left:2px;">${taskShift > 0 ? '+' : ''}${taskShift}d</span>` : '';
+            ? `<span style="font-size:9px;color:var(--yellow);margin-left:2px;" title="${taskShiftRsn.replace(/"/g,'&quot;')}">${taskShift > 0 ? '+' : ''}${taskShift}d</span>` : '';
           // Shift: solo admin, con razón obligatoria
           const shiftBtns = !isAdmin() ? '' :
             type === 'retail' ? `<span class="wk-task-shifts">

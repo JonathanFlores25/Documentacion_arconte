@@ -365,7 +365,11 @@ def create_vote_proposal(body: VoteProposalBody):
     if existing:
         raise HTTPException(status_code=409, detail="Ya existe una propuesta pendiente para este proyecto")
     total_users = len(users)
-    needed      = (total_users // 2) + 1
+    # Umbral por defecto: mayoría simple (50% + 1). Se puede forzar otro valor
+    # con "votes_needed_override" en config.json (útil para debugging; quitar o
+    # poner null para volver a la mayoría automática).
+    override    = cfg.get("votes_needed_override")
+    needed      = override if isinstance(override, int) and override > 0 else (total_users // 2) + 1
     vote_id     = f"v_{int(datetime.now().timestamp())}"
     now_str     = datetime.now().strftime("%Y-%m-%d %H:%M")
     proposal = {
@@ -538,9 +542,19 @@ STATIC_EXTENSIONS = {
 }
 
 
+# Cabeceras anti-caché: el frontend es un solo index.html servido como archivo.
+# Sin esto, el navegador reusa la versión vieja sin revalidar y los cambios de
+# JS/CSS no se ven aunque se reinicie el servidor. Forzamos revalidación siempre.
+NO_CACHE_HEADERS = {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma":        "no-cache",
+    "Expires":       "0",
+}
+
+
 @app.get("/")
 def serve_index():
-    return FileResponse(BASE_DIR / "index.html")
+    return FileResponse(BASE_DIR / "index.html", headers=NO_CACHE_HEADERS)
 
 
 @app.get("/{path:path}")
@@ -553,10 +567,10 @@ def serve_static(path: str):
         raise HTTPException(status_code=403, detail="Acceso denegado")
 
     if target.exists() and target.is_file() and target.suffix in STATIC_EXTENSIONS:
-        return FileResponse(target)
+        return FileResponse(target, headers=NO_CACHE_HEADERS)
 
     # Fallback a index.html para rutas SPA (por si se agrega router después)
-    return FileResponse(BASE_DIR / "index.html")
+    return FileResponse(BASE_DIR / "index.html", headers=NO_CACHE_HEADERS)
 
 
 # ── Arranque ──────────────────────────────────────────────────────────────────

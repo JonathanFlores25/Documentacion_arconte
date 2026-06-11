@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fight Detector — Arconte Detection Tools</title>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --bg2:       #1a1d27;
+      --bg3:       #222636;
+      --border:    #2e3350;
+      --accent:    #ff4d6d;
+      --accent2:   #00d4ff;
+      --green:     #3ddc84;
+      --yellow:    #ffd166;
+      --purple:    #b39ddb;
+      --text:      #e2e8f0;
+      --muted:     #8892a4;
+      --code-bg:   #161b2e;
+      --tag-fight: rgba(255, 60, 100, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* ── Header ── */
+    header {
+      border-left: 4px solid var(--accent);
+      padding: 1.2rem 1.5rem;
+      background: var(--bg2);
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 2.5rem;
+    }
+    header h1 { font-size: 1.8rem; color: var(--accent); letter-spacing: -0.5px; }
+    header p  { color: var(--muted); margin-top: 0.4rem; font-size: 0.95rem; }
+
+    /* ── Section titles ── */
+    h2 {
+      font-size: 1.2rem;
+      color: var(--accent2);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin: 2.5rem 0 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    h3 { font-size: 1.05rem; color: var(--yellow); margin: 1.8rem 0 0.7rem; }
+    h4 { font-size: 0.95rem; color: var(--purple); margin: 1.2rem 0 0.5rem; }
+
+    /* ── Script cards ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+    }
+    .card.prod::before  { background: var(--accent); }
+    .card.debug::before { background: var(--green); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge.prod { background: var(--tag-fight); color: var(--accent);  border: 1px solid var(--accent); }
+    .badge.dbg  { background: rgba(61,220,132,.12); color: var(--green); border: 1px solid var(--green); }
+
+    .filename {
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    /* ── Code blocks ── */
+    pre, code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.84rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      color: #c9d1d9;
+    }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.82rem;
+      color: var(--accent2);
+    }
+    pre code { background: none; border: none; padding: 0; color: inherit; }
+
+    /* ── Pipeline steps ── */
+    .pipeline {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+    .pipeline li {
+      counter-increment: step;
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 0.5rem;
+      align-items: flex-start;
+      font-size: 0.93rem;
+    }
+    .pipeline li::before {
+      content: counter(step);
+      min-width: 24px;
+      height: 24px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent2);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .pipeline li strong { color: var(--yellow); }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.8rem 0;
+    }
+    th {
+      background: var(--bg3);
+      color: var(--accent2);
+      text-align: left;
+      padding: 0.55rem 0.9rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 0.5rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: var(--bg3); }
+    td:first-child { font-family: 'Cascadia Code','Fira Code',monospace; color: var(--accent2); font-size: 0.82rem; }
+
+    /* ── Dashboard layout ── */
+    .dashboard-grid {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.8rem;
+      line-height: 1.9;
+      color: #a0aec0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* ── Score legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin: 0.6rem 0;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+    }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Formula ── */
+    .formula {
+      background: var(--bg3);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 6px 6px 0;
+      padding: 0.6rem 1rem;
+      margin: 0.7rem 0;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.9rem;
+      color: var(--yellow);
+    }
+
+    /* ── Callout ── */
+    .callout {
+      background: rgba(61,220,132,.08);
+      border: 1px solid rgba(61,220,132,.3);
+      border-radius: 8px;
+      padding: 0.8rem 1.1rem;
+      font-size: 0.9rem;
+      color: var(--green);
+      margin: 1rem 0;
+    }
+    .callout strong { color: #fff; }
+
+    /* ── Alert callout ── */
+    .callout-alert {
+      background: rgba(255,60,100,.08);
+      border: 1px solid rgba(255,60,100,.3);
+      border-radius: 8px;
+      padding: 0.8rem 1.1rem;
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin: 1rem 0;
+    }
+    .callout-alert strong { color: #fff; }
+
+    /* ── Directory tree ── */
+    .tree {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1.2rem;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.83rem;
+      color: #a0aec0;
+      line-height: 1.8;
+    }
+    .tree .dir  { color: var(--accent2); }
+    .tree .file { color: var(--muted); }
+    .tree .note { color: #555; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Misc ── */
+    ul { padding-left: 1.4rem; }
+    ul li { margin-bottom: 0.25rem; font-size: 0.93rem; }
+    p { margin-bottom: 0.6rem; font-size: 0.93rem; }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══════════════════ HEADER ══════════════════ -->
+  <header>
+    <h1>Fight Detector</h1>
+    <p>Arconte Detection Tools &mdash; JonathanTools / Figthing &nbsp;&bull;&nbsp; Detección de peleas en tiempo real para cámaras RGB</p>
+  </header>
+
+  <!-- ══════════════════ DESCRIPCIÓN ══════════════════ -->
+  <h2>¿Qué hace este módulo?</h2>
+  <p>
+    Detecta <strong>peleas y agresiones físicas</strong> en video en tiempo real (archivo local o stream RTSP)
+    usando un pipeline de dos etapas diseñado para minimizar falsas alarmas en entornos con multitudes,
+    saludos, abrazos y movimiento normal entre personas.
+  </p>
+  <ul>
+    <li><strong>Etapa 1 — Heurística espacial:</strong> YOLO + ByteTrack detecta personas y calcula un score de proximidad + solapamiento + movimiento inter-frame por cada par. Descarta pares estáticos sin coste CLIP.</li>
+    <li><strong>Etapa 2 — Verificación semántica:</strong> CLIP evalúa mosaicos de 6 key frames con 8 prompts positivos y 22 negativos antes de confirmar una alerta.</li>
+    <li><strong>Multi-ROI paralelo:</strong> hasta 3 zonas de pelea simultáneas, cada una con su propio buffer, EMA y estado de confirmación.</li>
+    <li><strong>Alertas:</strong> screenshots guardados automáticamente en <code>ALERTAS_FIGHT/</code>.</li>
+  </ul>
+
+  <!-- ══════════════════ MODELOS ══════════════════ -->
+  <h2>Modelos</h2>
+  <table>
+    <thead><tr><th>Archivo</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>yolo11x.pt</td><td>YOLOv11x — detección de personas (clase 0)</td></tr>
+      <tr><td>bytetrack.yaml</td><td>ByteTrack — tracker multi-objeto con IDs persistentes entre frames</td></tr>
+      <tr><td>ViT-B/32</td><td>CLIP ViT-B/32 (más rápido, menor VRAM)</td></tr>
+      <tr><td>ViT-B/16</td><td>CLIP ViT-B/16</td></tr>
+      <tr><td>ViT-L/14</td><td>CLIP ViT-L/14 (más preciso, default)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════ SCRIPTS ══════════════════ -->
+  <h2>Scripts</h2>
+
+  <!-- ── PRODUCCIÓN ── -->
+  <div class="card prod">
+    <div class="card-header">
+      <span class="badge prod">Producción</span>
+      <span class="filename">FightDetector_Production.py</span>
+    </div>
+    <p>Versión de despliegue. Overlay mínimo sobre el video original, sin dashboard de debug.
+       Optimizada para correr en servidor o NVR con monitoreo remoto vía <code>FIGHT_PROD_LIVE.jpg</code>.</p>
+
+    <h4>Pipeline</h4>
+    <ol class="pipeline">
+      <li><strong>YOLO + ByteTrack</strong> — detección de personas en resolución nativa con IDs persistentes. Clase 0 únicamente.</li>
+      <li><strong>Score de pares</strong> — para cada par (i, j): proximidad <code>max(0, 1−dist/300)×40</code> + solapamiento <code>IoU×100</code> + movimiento inter-frame <code>×50</code>. Par rechazado si <code>score &lt; 28</code>.</li>
+      <li><strong>Gate de movimiento</strong> — si <code>(mov1 + mov2) / 2 &lt; 2.0</code> el par no se envía a CLIP. Descarta personas paradas juntas (saludos, esperas).</li>
+      <li><strong>Multi-ROI</strong> — hasta 3 zonas (<code>FightZone</code>) simultáneas. Cada zona es identificada por el par de IDs que la creó.</li>
+      <li><strong>CropZoneStabilizer</strong> — EMA (α=0.25) sobre la bbox del crop. Evita el zigzag cuando la bbox salta entre frames.</li>
+      <li><strong>Buffer de 6 frames</strong> por zona → enviado al worker CLIP al completarse.</li>
+      <li><strong>KSM</strong> (Key-frame Selection Module) — selecciona los 6 frames con mayor diferencia inter-frame (los más activos) del buffer.</li>
+      <li><strong>Mosaico 3×2</strong> a 128×128 px por celda → imagen 384×256 px enviada a CLIP.</li>
+      <li><strong>Score raw</strong> = <code>scale × (feat·pos_text − feat·neg_text)</code><br>
+          8 prompts positivos (peleas, puñetazos, patadas, agresiones físicas) · 22 negativos (saludos, conversaciones, abrazos, multitudes).</li>
+      <li><strong>Fast-track</strong> — si <code>raw ≥ 6.0</code> → <code>smoothed_score = raw</code>, <code>consec_pos = 10</code> → confirmación inmediata.</li>
+    </ol>
+
+    <div class="formula">smoothed_score = 0.70 × raw + 0.30 × smoothed_score_prev</div>
+
+    <ol class="pipeline" style="counter-reset: step 10">
+      <li><strong>Consecutivos</strong> — <code>smoothed_score &gt; 3.8</code> → <code>consec_pos += 1</code>; si no → <code>consec_pos -= 1</code>.</li>
+      <li><strong>Umbral</strong> <code>consec_pos ≥ 3</code> → <strong style="color:var(--accent)">ALERTA PELEA</strong>.</li>
+      <li><strong>Zona idle</strong> — si no recibe pares activos durante 45 frames → descartada automáticamente.</li>
+    </ol>
+
+    <h4>Modo multitud</h4>
+    <p class="muted">Si hay más de 5 personas en el frame y la zona tiene al menos 2 personas dentro de su bbox, el contador idle no incrementa aunque el par específico no sea visible.</p>
+
+    <h4>Display overlay</h4>
+    <ul>
+      <li>Banner superior 50 px: <span style="color:var(--green)">NORMAL</span> / <span style="color:var(--accent)">PELEA DETECTADA</span></li>
+      <li>Bboxes verdes sobre cada persona detectada con su ID de tracker.</li>
+      <li>ROI rectangles por zona: <span style="color:#f00">rojo</span>=confirmada · <span style="color:#ff8c00">naranja</span>=activa · <span style="color:#0dc">cian</span>=tibia</li>
+      <li>Info bar inferior 30 px: FPS · skip · frame · modelo CLIP · YOLO ms · CLIP ms · VRAM · zonas · CLIPs totales.</li>
+    </ul>
+
+    <h4>Alertas generadas</h4>
+    <ul>
+      <li><code>ALERTAS_FIGHT/FIGHT_z&lt;id&gt;_YYYYMMDD_HHMMSS.jpg</code> — frame al momento de confirmación por zona.</li>
+      <li><code>FIGHT_PROD_LIVE.jpg</code> — snapshot del último frame procesado (monitoreo remoto sin acceso a la ventana).</li>
+    </ul>
+
+    <h4>Uso</h4>
+    <pre><code>python FightDetector_Production.py &lt;video_path&gt;
+python FightDetector_Production.py rtsp://...
+python FightDetector_Production.py video.mp4 --clip-model ViT-B/32 --frame-skip 1 --save
+python FightDetector_Production.py rtsp://... --no-display --no-summary
+python FightDetector_Production.py video.mp4 --resize 1280x720 --save</code></pre>
+
+    <table style="margin-top:0.6rem">
+      <thead><tr><th>Flag</th><th>Default</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>--clip-model</td><td>ViT-L/14</td><td>Modelo CLIP: ViT-B/32 · ViT-B/16 · ViT-L/14</td></tr>
+        <tr><td>--frame-skip N</td><td>0</td><td>Saltar N frames entre detecciones</td></tr>
+        <tr><td>--resize WxH</td><td>nativo</td><td>Redimensionar frame antes de procesar</td></tr>
+        <tr><td>--save</td><td>off</td><td>Guardar video con overlay en <code>grabaciones/</code></td></tr>
+        <tr><td>--no-display</td><td>off</td><td>Headless, sin ventana OpenCV</td></tr>
+        <tr><td>--no-summary</td><td>off</td><td>Omitir tabla de resumen final en consola</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── DEBUG v6 ── -->
+  <div class="card debug">
+    <div class="card-header">
+      <span class="badge dbg">Debug RGB · v6</span>
+      <span class="filename">FightDetector_Debug_v6.py</span>
+    </div>
+    <p>Versión de desarrollo más reciente. Mismo pipeline que Producción, más un dashboard de visualización completo para analizar el comportamiento del detector frame a frame.</p>
+
+    <h4>Novedades respecto a v5</h4>
+    <ul>
+      <li>EMA de tiempo YOLO (<code>t_yolo_ms</code>) y CLIP (<code>t_clip_ms</code>) visibles en pantalla en tiempo real.</li>
+      <li>Seguimiento de VRAM: alloc y reserved en MB, actualizado cada 30 frames.</li>
+      <li>Worker <code>imwrite</code> asíncrono — <code>cv2.imwrite</code> ya no bloquea el loop principal.</li>
+      <li><code>--clip-model</code> y <code>--frame-skip</code> configurables por CLI.</li>
+      <li>Info bar expandida a 130 px con 3 líneas de información.</li>
+      <li>Resumen final con breakdown ms/call al terminar el video.</li>
+      <li>Shutdown limpio con sentinel + join en todos los workers.</li>
+    </ul>
+
+    <h4>Dashboard</h4>
+    <div class="dashboard-grid">┌─────────────────┬─────────────────┐  frame YOLO con bboxes y ROIs por zona
+│  frame + YOLO   │  crop zona prim.│  crop estabilizado de la zona con mayor score
+├─────────────────┴─────────────────┤
+│         BUFFER PREVIEW  (6 celdas)│  frames acumulados en el buffer CLIP de la zona primaria
+├───────────────────────────────────┤
+│     ZONAS ACTIVAS  [N/3]          │  strip por zona: ema · raw · consec · idle · barra de score
+├───────────────────────────────────┤
+│   TESTIGOS CLIP  (grid 4×2)       │  últimos 8 mosaicos enviados a CLIP con score raw
+├───────────────────────────────────┤  borde rojo ≥ 6.0 (fast-track) · naranja ≥ 3.8 · gris &lt; 3.8
+│       INFO BAR  (3 líneas)        │  estado · timings+VRAM · FPS/config/thresholds
+└───────────────────────────────────┘</div>
+
+    <h4>Detalle del dashboard</h4>
+    <ul>
+      <li><strong>Frame + YOLO</strong> (640×480): salida de <code>res.plot()</code> con bboxes del par top candidato en color de zona. Banner PELEA/NORMAL y borde rojo si confirmado.</li>
+      <li><strong>Crop zona primaria</strong> (640×480): crop estabilizado de la zona con mayor <code>smoothed_score</code>. Header con ID de zona, par de personas, EMA y fill del buffer.</li>
+      <li><strong>Buffer preview</strong> (1280×120): 6 celdas con los frames del buffer de la zona primaria. Barra de progreso inferior mostrando fill %.</li>
+      <li><strong>Zonas activas</strong> (1280×56): celda por zona con estado (CONFIRMADA / ACTIVA / tibia / fria), métricas numéricas y barra proporcional al fast-track threshold.</li>
+      <li><strong>Testigos CLIP</strong> (1280×320): grid 4×2 con los últimos 8 mosaicos. Color de borde según score · separadores de cuadrícula del mosaico 3×2 interno.</li>
+      <li><strong>Info bar</strong> (1280×130):
+        <ul>
+          <li>Línea 1: estado · zona primaria · smoothed · raw · consec</li>
+          <li>Línea 2: YOLO ms · CLIP ms · VRAM alloc/reserved · modelo · frame-skip</li>
+          <li>Línea 3: FPS · personas · zonas activas · CLIPs totales · tamaño mosaico · thresholds · frame idx</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h4>Colores de zonas</h4>
+    <div class="legend">
+      <div class="legend-item"><div class="dot" style="background:#f00"></div><span>Confirmada (<code>consec_pos ≥ 3</code>)</span></div>
+      <div class="legend-item"><div class="dot" style="background:#ff8c00"></div><span>Activa (<code>score ≥ 3.8</code>)</span></div>
+      <div class="legend-item"><div class="dot" style="background:#0dc"></div><span>Tibia (<code>score ≥ 1.5</code>)</span></div>
+      <div class="legend-item"><div class="dot" style="background:#505050"></div><span>Fria (<code>score &lt; 1.5</code>)</span></div>
+    </div>
+
+    <h4>Uso</h4>
+    <pre><code>python FightDetector_Debug_v6.py video.mp4
+python FightDetector_Debug_v6.py rtsp://...
+python FightDetector_Debug_v6.py video.mp4 --clip-model ViT-B/32
+python FightDetector_Debug_v6.py video.mp4 --frame-skip 1</code></pre>
+
+    <table style="margin-top:0.6rem">
+      <thead><tr><th>Flag</th><th>Default</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>--clip-model</td><td>ViT-L/14</td><td>Modelo CLIP: ViT-B/32 · ViT-B/16 · ViT-L/14</td></tr>
+        <tr><td>--frame-skip N</td><td>0</td><td>Saltar N frames entre detecciones</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout" style="margin-top:1rem">
+      El video debug se guarda siempre en <code>grabaciones/FIGHT_DEBUG_v6_&lt;ts&gt;.avi</code>
+      y el snapshot live en <code>grabaciones/FIGHT_DEBUG_v6_LIVE.jpg</code>.
+    </div>
+  </div>
+
+  <!-- ══════════════════ PARÁMETROS ══════════════════ -->
+  <h2>Parámetros clave</h2>
+  <table>
+    <thead><tr><th>Constante</th><th>Valor</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>F_DIST_MAX_LIMIT</td><td>300 px</td><td>Distancia máxima entre centros de bbox para considerar un par</td></tr>
+      <tr><td>F_MIN_IOU_CRITICAL</td><td>0.01</td><td>IoU mínimo alternativo a la distancia para incluir el par</td></tr>
+      <tr><td>F_STICKY_FRAMES</td><td>25</td><td>Frames que una zona sobrevive sin par activo visible (sticky buffer)</td></tr>
+      <tr><td>F_PAD_PIXELS</td><td>100 px</td><td>Padding del crop cuando personas no se solapan</td></tr>
+      <tr><td>F_PAD_CLOSE</td><td>160 px</td><td>Padding mayor cuando <code>IoU &gt; 0.05</code> (cuerpos muy juntos)</td></tr>
+      <tr><td>F_MIN_MOVEMENT_FOR_CLIP</td><td>2.0</td><td>Umbral de movimiento mínimo promedio para enviar frames a CLIP</td></tr>
+      <tr><td>F_BUFFER_SIZE</td><td>6</td><td>Frames acumulados por zona antes de invocar CLIP</td></tr>
+      <tr><td>F_SET_SCORE_TH</td><td>3.8</td><td>Umbral EMA para incrementar contador consecutivo</td></tr>
+      <tr><td>F_CONSEC_MIN</td><td>3</td><td>Batches consecutivos positivos para confirmar pelea</td></tr>
+      <tr><td>F_SMOOTH_FACTOR</td><td>0.70</td><td>Factor EMA del score de zona (peso del raw actual)</td></tr>
+      <tr><td>F_FAST_TRACK_TH</td><td>6.0</td><td>Score raw que dispara confirmación inmediata (omite EMA)</td></tr>
+      <tr><td>KSM_SELECT</td><td>6</td><td>Frames seleccionados por KSM del buffer</td></tr>
+      <tr><td>ZONE_MAX</td><td>3</td><td>Máximo de zonas de pelea paralelas simultáneas</td></tr>
+      <tr><td>ZONE_IDLE_MAX</td><td>45</td><td>Frames idle antes de descartar una zona</td></tr>
+      <tr><td>ZONE_MIN_PAIR_SCORE</td><td>28</td><td>Score mínimo de par para crear o alimentar una zona</td></tr>
+      <tr><td>CROWD_PERSON_TH</td><td>5</td><td>Umbral de personas en frame para activar modo multitud</td></tr>
+      <tr><td>STAB_EMA_ALPHA</td><td>0.25</td><td>Alpha del EMA del estabilizador de zona (CropZoneStabilizer)</td></tr>
+      <tr><td>STAB_IOU_TH</td><td>0.05</td><td>IoU mínimo para que el estabilizador acepte la nueva bbox</td></tr>
+      <tr><td>STAB_PENDING_MAX</td><td>4</td><td>Frames pendientes antes de forzar el cambio de bbox en el estabilizador</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════ PROMPTS CLIP ══════════════════ -->
+  <h2>Prompts CLIP</h2>
+
+  <h4>Positivos (8) — peleas y agresiones físicas</h4>
+  <ul>
+    <li>"two people throwing punches and hitting each other hard"</li>
+    <li>"violent street brawl with people kicking and punching aggressively"</li>
+    <li>"two men fighting violently on the street throwing fists"</li>
+    <li>"person striking another person with a punch or kick attack"</li>
+    <li>"people wrestling aggressively on the ground fighting"</li>
+    <li>"violent physical assault with hitting kicking and striking"</li>
+    <li>"street fight with people grabbing and hitting each other"</li>
+    <li>"two people in a violent altercation throwing blows at each other"</li>
+  </ul>
+
+  <h4>Negativos (22) — situaciones normales y falsas alarmas</h4>
+  <p class="muted">Saludos, conversaciones, abrazos, personas paradas juntas, multitudes caminando, colas, mercados, zonas peatonales concurridas.</p>
+
+  <!-- ══════════════════ ESTRUCTURA ══════════════════ -->
+  <h2>Estructura de salida</h2>
+  <div class="tree">
+<span class="dir">Figthing/</span>
+├── <span class="dir">ALERTAS_FIGHT/</span>            <span class="note"># snapshots de alertas de pelea</span>
+│   └── <span class="file">FIGHT_z&lt;id&gt;_YYYYMMDD_HHMMSS.jpg</span>
+├── <span class="file">FIGHT_PROD_LIVE.jpg</span>        <span class="note"># snapshot live para monitoreo remoto (producción)</span>
+└── <span class="dir">grabaciones/</span>               <span class="note"># videos con overlay</span>
+    ├── <span class="file">FIGHT_PROD_YYYYMMDD_HHMMSS.avi</span>   <span class="note"># producción (con --save)</span>
+    ├── <span class="file">FIGHT_DEBUG_v6_YYYYMMDD_HHMMSS.avi</span> <span class="note"># debug (siempre)</span>
+    └── <span class="file">FIGHT_DEBUG_v6_LIVE.jpg</span>           <span class="note"># snapshot live debug</span>
+  </div>
+
+  <!-- ══════════════════ DEPS ══════════════════ -->
+  <h2>Dependencias</h2>
+  <pre><code>opencv-python
+ultralytics        # YOLOv11 + ByteTrack
+torch
+clip               # openai/CLIP
+Pillow</code></pre>
+
+  <footer>
+    Arconte Detection Tools &mdash; JonathanTools &bull; 2026
+  </footer>
+
+</div>
+</body>
+</html>

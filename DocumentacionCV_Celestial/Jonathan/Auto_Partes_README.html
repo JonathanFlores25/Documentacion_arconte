@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarParts Theft Detector — Arconte Detection Tools</title>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --bg2:       #1a1d27;
+      --bg3:       #222636;
+      --border:    #2e3350;
+      --accent:    #00e676;
+      --accent2:   #00d4ff;
+      --red:       #ff4444;
+      --yellow:    #ffd166;
+      --purple:    #b39ddb;
+      --orange:    #ff9800;
+      --text:      #e2e8f0;
+      --muted:     #8892a4;
+      --code-bg:   #161b2e;
+      --tag-cp:    rgba(0, 230, 118, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* ── Header ── */
+    header {
+      border-left: 4px solid var(--accent);
+      padding: 1.2rem 1.5rem;
+      background: var(--bg2);
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 2.5rem;
+    }
+    header h1 { font-size: 1.8rem; color: var(--accent); letter-spacing: -0.5px; }
+    header p  { color: var(--muted); margin-top: 0.4rem; font-size: 0.95rem; }
+
+    /* ── Section titles ── */
+    h2 {
+      font-size: 1.2rem;
+      color: var(--accent2);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin: 2.5rem 0 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    h3 { font-size: 1.05rem; color: var(--yellow); margin: 1.8rem 0 0.7rem; }
+    h4 { font-size: 0.95rem; color: var(--purple); margin: 1.2rem 0 0.5rem; }
+
+    /* ── Script cards ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+    }
+    .card.prod::before  { background: var(--accent); }
+    .card.debug::before { background: var(--orange); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge.prod  { background: var(--tag-cp);              color: var(--accent); border: 1px solid var(--accent); }
+    .badge.debug { background: rgba(255,152,0,.12);         color: var(--orange); border: 1px solid var(--orange); }
+
+    .filename {
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    /* ── Code blocks ── */
+    pre, code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.84rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      color: #c9d1d9;
+    }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.82rem;
+      color: var(--accent2);
+    }
+    pre code { background: none; border: none; padding: 0; color: inherit; }
+
+    /* ── Pipeline steps ── */
+    .pipeline {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+    .pipeline li {
+      counter-increment: step;
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 0.5rem;
+      align-items: flex-start;
+      font-size: 0.93rem;
+    }
+    .pipeline li::before {
+      content: counter(step);
+      min-width: 24px;
+      height: 24px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent2);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .pipeline li strong { color: var(--yellow); }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.8rem 0;
+    }
+    th {
+      background: var(--bg3);
+      color: var(--accent2);
+      text-align: left;
+      padding: 0.55rem 0.9rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 0.5rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: var(--bg3); }
+    td:first-child { font-family: 'Cascadia Code','Fira Code',monospace; color: var(--accent2); font-size: 0.82rem; }
+
+    /* ── Dashboard layout ── */
+    .dashboard-grid {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.8rem;
+      line-height: 1.9;
+      color: #a0aec0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* ── Formula ── */
+    .formula {
+      background: var(--bg3);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 6px 6px 0;
+      padding: 0.6rem 1rem;
+      margin: 0.7rem 0;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.9rem;
+      color: var(--yellow);
+    }
+
+    /* ── Callout ── */
+    .callout {
+      background: rgba(0,230,118,.07);
+      border: 1px solid rgba(0,230,118,.28);
+      border-radius: 8px;
+      padding: 0.8rem 1.1rem;
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin: 1rem 0;
+    }
+    .callout strong { color: #fff; }
+
+    /* ── Warning callout ── */
+    .callout-warn {
+      background: rgba(255,152,0,.07);
+      border: 1px solid rgba(255,152,0,.28);
+      border-radius: 8px;
+      padding: 0.8rem 1.1rem;
+      font-size: 0.9rem;
+      color: var(--orange);
+      margin: 1rem 0;
+    }
+    .callout-warn strong { color: #fff; }
+
+    /* ── State tags ── */
+    .state {
+      display: inline-block;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.78rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin: 0.1rem;
+      font-weight: 600;
+    }
+    .state.frozen   { background: rgba(0,212,255,.12); color: var(--accent2); border: 1px solid var(--accent2); }
+    .state.pending  { background: rgba(255,152,0,.12); color: var(--orange);  border: 1px solid var(--orange); }
+    .state.expanded { background: rgba(255,212,0,.10); color: var(--yellow);  border: 1px solid var(--yellow); }
+    .state.inactive { background: rgba(100,100,100,.12); color: #777; border: 1px solid #444; }
+    .state.alert    { background: rgba(255,60,60,.12); color: var(--red);    border: 1px solid var(--red); }
+
+    /* ── Directory tree ── */
+    .tree {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1.2rem;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.83rem;
+      color: #a0aec0;
+      line-height: 1.8;
+    }
+    .tree .dir  { color: var(--accent2); }
+    .tree .file { color: var(--muted); }
+    .tree .note { color: #555; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Misc ── */
+    ul { padding-left: 1.4rem; }
+    ul li { margin-bottom: 0.25rem; font-size: 0.93rem; }
+    p { margin-bottom: 0.6rem; font-size: 0.93rem; }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══════════════════ HEADER ══════════════════ -->
+  <header>
+    <h1>CarParts Theft Detector</h1>
+    <p>Arconte Detection Tools &mdash; JonathanTools / CarParts &nbsp;&bull;&nbsp; Detección de robo de autopartes en tiempo real para cámaras RGB</p>
+  </header>
+
+  <!-- ══════════════════ DESCRIPCIÓN ══════════════════ -->
+  <h2>¿Qué hace este módulo?</h2>
+  <p>
+    Detecta <strong>robos de autopartes</strong> (faros, piezas del vehículo) en video en tiempo real
+    usando un pipeline de dos etapas. La primera etapa usa YOLO para localizar personas cerca de vehículos
+    estacionados y estabilizar un crop de la zona de interacción. La segunda etapa analiza ese crop con CLIP
+    combinando tres scores complementarios para minimizar falsas alarmas de transeúntes, dueños y fondos de calle.
+  </p>
+  <ul>
+    <li><strong>Etapa 1 — Heurística espacial:</strong> YOLO + ByteTrack detecta personas y vehículos. Se confirma un vehículo ancla y se evalúa la proximidad de personas a él. Descarta situaciones sin coste CLIP.</li>
+    <li><strong>Etapa 2 — Verificación semántica:</strong> CLIP evalúa segmentos de 24 frames con KSM + score_kf + WinCLIP (score_pc) + grids temporales (score_tc).</li>
+    <li><strong>Early exit:</strong> si score_kf es muy bajo, PC y TC se omiten para ahorrar cómputo.</li>
+    <li><strong>Alertas:</strong> screenshots guardados en <code>ALERTAS_CP/</code> al momento de la transición de detección.</li>
+  </ul>
+
+  <!-- ══════════════════ MODELOS ══════════════════ -->
+  <h2>Modelos</h2>
+  <table>
+    <thead><tr><th>Archivo</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>yolo11x.pt</td><td>YOLOv11x — detecta personas (clase 0) y vehículos (2=car, 5=bus, 7=truck)</td></tr>
+      <tr><td>bytetrack.yaml</td><td>ByteTrack — tracker multi-objeto con IDs persistentes entre frames</td></tr>
+      <tr><td>ViT-B/32</td><td>CLIP ViT-B/32 (más rápido, menor VRAM)</td></tr>
+      <tr><td>ViT-B/16</td><td>CLIP ViT-B/16</td></tr>
+      <tr><td>ViT-L/14</td><td>CLIP ViT-L/14 (más preciso, default)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════ SCRIPTS ══════════════════ -->
+  <h2>Scripts</h2>
+
+  <!-- ── PRODUCCIÓN ── -->
+  <div class="card prod">
+    <div class="card-header">
+      <span class="badge prod">Producción</span>
+      <span class="filename">CarPartsDetector_Production.py</span>
+    </div>
+    <p>Versión de despliegue. Overlay mínimo sobre el video original.
+       Monitoreo remoto vía <code>CP_PROD_LIVE.jpg</code>.</p>
+
+    <h4>Pipeline</h4>
+    <ol class="pipeline">
+      <li><strong>YOLO + ByteTrack</strong> — detección simultánea de personas y vehículos en resolución nativa con IDs persistentes.</li>
+      <li><strong>Vehículo ancla</strong> — el vehículo que recibe candidatos por <code>ANCHOR_CONFIRM_FRAMES=3</code> frames consecutivos se convierte en ancla. Liberado si ausente más de <code>ANCHOR_MISS_MAX=25</code> frames.</li>
+      <li><strong>Candidatos</strong> — persona dentro del perímetro escalado del ancla. Score = <code>100/dist + (1−IoU_prev)×50</code>. Dos candidatos próximos se fusionan en un crop grupal.</li>
+      <li><strong>Crop estabilizado</strong> — bbox persona + esquina próxima del vehículo + padding. TTL de 60 frames sin candidato antes de expirar.</li>
+      <li><strong>Segmento</strong> — 24 crops redimensionados a 224×224 → worker CLIP asíncrono.</li>
+      <li><strong>KSM</strong> — selecciona k̂ (frame con mayor similitud al query KSM) + 3 frames distribuidos.</li>
+      <li><strong>score_kf</strong> — <code>sigmoid((logit_scale·(pos−neg) − center) / scale)</code> → <code>[0,1]</code>.</li>
+      <li><strong>Early exit</strong> — si <code>score_kf &lt; exit_th</code> → <code>ascore = 0.60·kf</code>, skip PC y TC.</li>
+      <li><strong>score_pc</strong> (WinCLIP) — k̂ a 240×240, evaluado en 3 escalas de ventanas (48×48, 80×80, 120×120). Mapa de similitud promedio → top-50% mean → <code>[0,1]</code>. Genera <code>hot_bbox_norm</code> (zona umbral 0.65).</li>
+      <li><strong>score_tc</strong> — grids 2×2 (112×112 px/celda) con 4 key frames, 3 escalas. Score del grid más similar → normalizado en [0.15, 0.35] → <code>[0,1]</code>.</li>
+    </ol>
+
+    <div class="formula">ascore = 0.60 · score_kf &nbsp;+&nbsp; 0.25 · score_pc &nbsp;+&nbsp; 0.15 · score_tc</div>
+
+    <ol class="pipeline" style="counter-reset: step 10">
+      <li><strong>Gaussian smoothing</strong> — σ=2, historial de 12 ascore → <code>smoothed_score</code>.</li>
+      <li><strong>Umbral</strong> <code>smoothed &gt; 0.50</code> → <strong style="color:var(--red)">ALERTA ROBO</strong>.</li>
+      <li><strong>Decay</strong> — sin crop activo: <code>smoothed -= 0.02</code> por frame hasta 0.</li>
+    </ol>
+
+    <h4>Estados del crop</h4>
+    <p>
+      <span class="state inactive">inactivo</span> sin candidatos y timer expirado ·
+      <span class="state frozen">congelado</span> bbox fija (persona no se movió más de <code>move_th</code> px) ·
+      <span class="state pending">pendiente</span> nueva bbox acumulando 5 frames antes de reemplazar ·
+      <span class="state expanded">expandido</span> bbox ampliada para incluir candidato fuera del crop
+    </p>
+
+    <h4>Parámetros sigmoid por modelo CLIP</h4>
+    <table>
+      <thead><tr><th>Modelo</th><th>kf_center</th><th>kf_scale</th><th>kf_exit_th</th></tr></thead>
+      <tbody>
+        <tr><td>ViT-B/32</td><td>2.8</td><td>1.5</td><td>0.25</td></tr>
+        <tr><td>ViT-B/16</td><td>2.8</td><td>1.5</td><td>0.25</td></tr>
+        <tr><td>ViT-L/14</td><td>1.2</td><td>1.0</td><td>0.10</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Display overlay</h4>
+    <ul>
+      <li>Banner superior 50 px: <span style="color:var(--accent)">NORMAL</span> / <span style="color:var(--red)">ROBO DETECTADO</span></li>
+      <li>Anchor vehicle bbox <span style="color:#0f0">verde</span> con label <code>ANCLA v&lt;id&gt;</code>.</li>
+      <li>Frozen crop ROI con esquinas: <span style="color:#0ff">cian</span>=normal · <span style="color:var(--red)">rojo</span>=alerta. Label con estado y dimensiones del crop.</li>
+      <li>Hot area WinCLIP proyectada al frame (rojo, solo en alerta): bbox de la zona de mayor activación.</li>
+      <li>Personas candidatas en naranja-amarillo.</li>
+      <li>Info bar inferior 30 px: FPS · frame · skip · modelo · YOLO ms · CLIP ms · VRAM · th · sigmoid params.</li>
+    </ul>
+
+    <h4>Alertas generadas</h4>
+    <ul>
+      <li><code>ALERTAS_CP/CP_YYYYMMDD_HHMMSS.jpg</code> — frame renderizado al momento de la transición.</li>
+      <li><code>CP_PROD_LIVE.jpg</code> — snapshot del último frame procesado (monitoreo remoto).</li>
+    </ul>
+
+    <h4>Uso</h4>
+    <pre><code>python CarPartsDetector_Production.py &lt;video_path&gt;
+python CarPartsDetector_Production.py video.mp4 --clip-model ViT-B/32 --frame-skip 1
+python CarPartsDetector_Production.py video.mp4 --resize 1280x720 --save
+python CarPartsDetector_Production.py rtsp://... --no-display --no-summary</code></pre>
+
+    <table style="margin-top:0.6rem">
+      <thead><tr><th>Flag</th><th>Default</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>--clip-model</td><td>ViT-L/14</td><td>Modelo CLIP: ViT-B/32 · ViT-B/16 · ViT-L/14</td></tr>
+        <tr><td>--frame-skip N</td><td>0</td><td>Saltar N frames entre detecciones</td></tr>
+        <tr><td>--resize WxH</td><td>nativo</td><td>Redimensionar frame antes de procesar</td></tr>
+        <tr><td>--save</td><td>off</td><td>Guardar video con overlay en <code>grabaciones/</code></td></tr>
+        <tr><td>--no-display</td><td>off</td><td>Headless, sin ventana OpenCV</td></tr>
+        <tr><td>--no-summary</td><td>off</td><td>Omitir tabla de resumen final en consola</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── DEBUG V4 ── -->
+  <div class="card debug">
+    <div class="card-header">
+      <span class="badge debug">Debug · V4</span>
+      <span class="filename">CarPartsExpert_V4.py</span>
+    </div>
+    <p>Versión de desarrollo más reciente. Mismo pipeline que Producción, más un dashboard de visualización completo.</p>
+
+    <h4>Novedades respecto a V3</h4>
+    <ul>
+      <li><code>CarPartsDetector</code> class — YOLO, CLIP y worker encapsulados en <code>__init__</code>.</li>
+      <li><strong>KF_EARLY_EXIT_TH</strong> — skip de PC+TC si <code>score_kf &lt; exit_th</code>. Ahorra cómputo cuando el frame es claramente negativo.</li>
+      <li><code>_update_smooth()</code> extraído como método propio en <code>CLIPAnomalyDetector</code>.</li>
+      <li>Shutdown limpio con sentinel (<code>None</code>) + <code>join(timeout=5)</code> en el worker CLIP.</li>
+      <li>Contadores separados <code>f_raw</code> / <code>f_idx</code> — el resumen final muestra ambos FPS.</li>
+      <li><code>--clip-model</code> y <code>--frame-skip</code> configurables por CLI.</li>
+      <li>Tag <code>[EARLY_EXIT]</code> visible en la celda BL del dashboard.</li>
+    </ul>
+
+    <h4>Dashboard (1280×610 px)</h4>
+    <div class="dashboard-grid">┌──────────────────────┬──────────────────────┐
+│                      │  TL: Frame limpio    │  frame con hot_bbox_norm
+│  YOLO anotado        │  con anomalía bbox   │  proyectada (si alerta)
+│  + ancla (verde)     ├──────────┬───────────┤
+│  + frozen crop ROI   │  TR: YOLO│           │
+│  + pending bbox      │  completo│           │  Panel derecho: 2×2 grid
+│  640×480             ├──────────┤ BR: PC    │  (320×240 por celda)
+│                      │  BL: k̂  │ attention │
+│                      │  [EARLY] │ heatmap   │  BL con tag [EARLY_EXIT] si aplica
+└──────────────────────┴──────────┴───────────┘
+┌─────────────────────────────────────────────┐
+│  INFO BAR (130px, 4 líneas)                 │
+│  Línea 1: estado · smooth · ascore · segs   │
+│  Línea 2: YOLO ms · CLIP ms · VRAM · modelo │
+│  Línea 3: kf · pc · tc · γ · th · sigmoid  │
+│  Línea 4: FPS · frames · P/V · cand · ancla │
+└─────────────────────────────────────────────┘</div>
+
+    <h4>Detalle de cada celda del grid</h4>
+    <ul>
+      <li><strong>TL — Frame limpio:</strong> frame original con la <code>hot_bbox_norm</code> proyectada (bbox roja de la zona de anomalía WinCLIP). Borde rojo si alerta.</li>
+      <li><strong>TR — YOLO completo:</strong> salida de <code>res.plot()</code> con label del modo de crop (<code>solo</code> / <code>grupo</code>).</li>
+      <li><strong>BL — k̂ → CLIP:</strong> key frame seleccionado por KSM con <code>score_kf</code>. Tag <code>[EARLY_EXIT]</code> cuando PC y TC fueron omitidos.</li>
+      <li><strong>BR — PC attention:</strong> heatmap WinCLIP sobre k̂ (<code>addWeighted(frame, 0.45, jet, 0.55)</code>) con <code>score_pc</code> y <code>score_tc</code>.</li>
+    </ul>
+
+    <h4>Líneas del info bar</h4>
+    <ul>
+      <li><strong>Línea 1:</strong> estado ROBO/normal · smooth · ascore · segs analizados · buf fill</li>
+      <li><strong>Línea 2:</strong> YOLO ms · CLIP ms · VRAM alloc/reserved · modelo · frame-skip</li>
+      <li><strong>Línea 3:</strong> kf · pc · tc · γ pesos · th · crop_state · sigmoid center/scale · exit_th</li>
+      <li><strong>Línea 4:</strong> FPS · frame idx (raw/proc) · personas · vehículos · candidatos · ancla · move_th · timer · scale</li>
+    </ul>
+
+    <div class="callout-warn">
+      El video debug se guarda siempre en <code>grabaciones/V4_&lt;ts&gt;.avi</code>
+      y el snapshot live en <code>grabaciones/V4_LIVE.jpg</code>.
+    </div>
+
+    <h4>Uso</h4>
+    <pre><code>python CarPartsExpert_V4.py video.mp4
+python CarPartsExpert_V4.py video.mp4 --clip-model ViT-B/32 --frame-skip 1
+python CarPartsExpert_V4.py video.mp4 --resize 640x480
+python CarPartsExpert_V4.py rtsp://...</code></pre>
+
+    <table style="margin-top:0.6rem">
+      <thead><tr><th>Flag</th><th>Default</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>--clip-model</td><td>ViT-L/14</td><td>Modelo CLIP: ViT-B/32 · ViT-B/16 · ViT-L/14</td></tr>
+        <tr><td>--frame-skip N</td><td>0</td><td>Saltar N frames entre detecciones</td></tr>
+        <tr><td>--resize WxH</td><td>nativo</td><td>Redimensionar frames de entrada</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════ PARÁMETROS ══════════════════ -->
+  <h2>Parámetros clave</h2>
+  <p class="muted" style="margin-bottom:0.8rem">Los umbrales espaciales se escalan proporcionalmente al ancho del frame: <code>valor = ref × (frame_w / 1280)</code>.</p>
+  <table>
+    <thead><tr><th>Constante</th><th>Valor ref 1280×720</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>CP_PERIMETRO_PX_REF</td><td>50 px</td><td>Radio de proximidad persona-vehículo para ser candidato</td></tr>
+      <tr><td>CP_PAD_SOLO_REF</td><td>15 px</td><td>Padding del crop con una sola persona candidata</td></tr>
+      <tr><td>CP_PAD_GRUPO_REF</td><td>40 px</td><td>Padding del crop cuando dos candidatos se fusionan</td></tr>
+      <tr><td>CP_GRUPO_DIST_PX_REF</td><td>200 px</td><td>Distancia máxima entre candidatos para fusionarlos</td></tr>
+      <tr><td>SEGMENT_LEN</td><td>24</td><td>Frames del crop acumulados antes de invocar CLIP</td></tr>
+      <tr><td>KEY_FRAMES_K</td><td>4</td><td>Key frames seleccionados por KSM (1 k̂ + 3 distribuidos)</td></tr>
+      <tr><td>GAMMA1</td><td>0.60</td><td>Peso de score_kf en ascore</td></tr>
+      <tr><td>GAMMA2</td><td>0.25</td><td>Peso de score_pc en ascore</td></tr>
+      <tr><td>GAMMA3</td><td>0.15</td><td>Peso de score_tc en ascore</td></tr>
+      <tr><td>ALERT_THRESHOLD</td><td>0.50</td><td>Umbral de smoothed_score para disparar alerta</td></tr>
+      <tr><td>SMOOTH_SIGMA</td><td>2.0</td><td>σ del filtro Gaussiano sobre el historial de scores</td></tr>
+      <tr><td>SMOOTH_HISTORY</td><td>12</td><td>Longitud del historial de ascore para el suavizado</td></tr>
+      <tr><td>TC_SIM_LOW / HIGH</td><td>0.15 / 0.35</td><td>Rango de similitud CLIP para normalizar score_tc</td></tr>
+      <tr><td>IMG_SIZE</td><td>240 px</td><td>Resolución a la que se resiza k̂ para PC y TC</td></tr>
+      <tr><td>WIN_SMALL / MID / LARGE</td><td>48 / 80 / 120 px</td><td>Ventanas WinCLIP en las 3 escalas</td></tr>
+      <tr><td>CROP_FREEZE_FRAMES</td><td>60</td><td>Frames sin candidato antes de expirar el crop</td></tr>
+      <tr><td>CROP_CONFIRM_FRAMES</td><td>5</td><td>Frames que debe mantenerse estable una pending bbox</td></tr>
+      <tr><td>CROP_GENEROUS_PAD_REF</td><td>80 px</td><td>Padding generoso al crear un crop nuevo</td></tr>
+      <tr><td>CROP_MOVE_TH_PX_REF</td><td>45 px</td><td>Desplazamiento mínimo de bbox para activar pending</td></tr>
+      <tr><td>CROP_MAX_W_FRAC</td><td>0.65</td><td>Fracción máxima del ancho del frame que puede tener el crop</td></tr>
+      <tr><td>CROP_MAX_H_FRAC</td><td>0.80</td><td>Fracción máxima del alto del frame que puede tener el crop</td></tr>
+      <tr><td>ANCHOR_CONFIRM_FRAMES</td><td>3</td><td>Frames consecutivos con el mismo vehículo para confirmar ancla</td></tr>
+      <tr><td>ANCHOR_MISS_MAX</td><td>25</td><td>Frames sin ver el ancla antes de liberarla</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════ PROMPTS ══════════════════ -->
+  <h2>Prompts CLIP</h2>
+
+  <h4>Query KSM (selección del key frame k̂)</h4>
+  <pre><code>"a person stealing car headlights or parts from a parked vehicle"</code></pre>
+
+  <h4>Positivos (4) — robo en acción</h4>
+  <ul>
+    <li>"a person prying out car headlights with tools"</li>
+    <li>"hands pulling off a vehicle headlight"</li>
+    <li>"someone dismantling the front lights of a car"</li>
+    <li>"a thief stealing headlights from a vehicle"</li>
+  </ul>
+
+  <h4>Negativos (4) — situaciones normales</h4>
+  <ul>
+    <li>"a person walking past a car"</li>
+    <li>"owner opening a car door"</li>
+    <li>"a parked car with lights intact"</li>
+    <li>"street background"</li>
+  </ul>
+
+  <!-- ══════════════════ ESTRUCTURA ══════════════════ -->
+  <h2>Estructura de salida</h2>
+  <div class="tree">
+<span class="dir">CarParts/</span>
+├── <span class="dir">ALERTAS_CP/</span>               <span class="note"># snapshots de alertas de robo</span>
+│   └── <span class="file">CP_YYYYMMDD_HHMMSS.jpg</span>
+├── <span class="file">CP_PROD_LIVE.jpg</span>           <span class="note"># snapshot live para monitoreo remoto (producción)</span>
+└── <span class="dir">grabaciones/</span>               <span class="note"># videos con overlay</span>
+    ├── <span class="file">CP_PROD_YYYYMMDD_HHMMSS.avi</span>  <span class="note"># producción (con --save)</span>
+    ├── <span class="file">V4_YYYYMMDD_HHMMSS.avi</span>       <span class="note"># debug (siempre)</span>
+    └── <span class="file">V4_LIVE.jpg</span>                  <span class="note"># snapshot live debug</span>
+  </div>
+
+  <!-- ══════════════════ DEPS ══════════════════ -->
+  <h2>Dependencias</h2>
+  <pre><code>opencv-python
+ultralytics        # YOLOv11 + ByteTrack
+torch
+clip               # openai/CLIP
+scipy              # gaussian_filter1d para suavizado de scores
+Pillow</code></pre>
+
+  <footer>
+    Arconte Detection Tools &mdash; JonathanTools &bull; 2026
+  </footer>
+
+</div>
+</body>
+</html>

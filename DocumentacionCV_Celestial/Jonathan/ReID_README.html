@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Re-ID Person Tracker — Arconte Detection Tools</title>
+  <style>
+    :root {
+      --bg:       #0f1117;
+      --bg2:      #1a1d27;
+      --bg3:      #222636;
+      
+      --border:   #2e3350;
+      --accent:   #7c6af7;
+      --accent2:  #00d4ff;
+      --green:    #3ddc84;
+      --yellow:   #ffd166;
+      --purple:   #b39ddb;
+      --red:      #f38ba8;
+      --orange:   #ff6b35;
+      --text:     #e2e8f0;
+      --muted:    #8892a4;
+      --code-bg:  #161b2e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 1020px; margin: 0 auto; }
+
+    /* ── Header ── */
+    header {
+      border-left: 4px solid var(--accent);
+      padding: 1.4rem 1.8rem;
+      background: var(--bg2);
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 2.8rem;
+    }
+    header h1 { font-size: 2rem; color: var(--accent); letter-spacing: -0.5px; }
+    header p  { color: var(--muted); margin-top: 0.5rem; font-size: 0.95rem; }
+    header .tagline { color: var(--accent2); font-size: 1rem; margin-top: 0.3rem; font-style: italic; }
+
+    /* ── TOC ── */
+    .toc { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.6rem; margin-bottom: 2.5rem; }
+    .toc h2 { margin: 0 0 0.8rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); border: none; }
+    .toc ol { padding-left: 1.4rem; }
+    .toc li { font-size: 0.9rem; margin: 0.25rem 0; }
+    .toc a { color: var(--accent2); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── Section titles ── */
+    h2 {
+      font-size: 1.15rem;
+      color: var(--accent2);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin: 3rem 0 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    h3 { font-size: 1.05rem; color: var(--yellow); margin: 2rem 0 0.7rem; }
+    h4 { font-size: 0.95rem; color: var(--purple); margin: 1.4rem 0 0.5rem; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+    .card.enroll::before  { background: var(--green); }
+    .card.search::before  { background: var(--accent2); }
+    .card.stream::before  { background: var(--orange); }
+    .card.model::before   { background: var(--purple); }
+    .card.warn::before    { background: var(--yellow); }
+    .card.tip::before     { background: var(--green); }
+
+    .card-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .card-sub   { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.8rem; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-right: 0.4rem;
+    }
+    .badge.enroll { background: rgba(61,220,132,.12); color: var(--green);   border: 1px solid var(--green); }
+    .badge.search { background: rgba(0,212,255,.10);  color: var(--accent2); border: 1px solid var(--accent2); }
+    .badge.stream { background: rgba(255,107,53,.12); color: var(--orange);  border: 1px solid var(--orange); }
+    .badge.model  { background: rgba(179,157,219,.12);color: var(--purple);  border: 1px solid var(--purple); }
+    .badge.best   { background: rgba(61,220,132,.15); color: var(--green);   border: 1px solid var(--green); }
+    .badge.warn   { background: rgba(255,209,102,.12);color: var(--yellow);  border: 1px solid var(--yellow); }
+
+    /* ── Code ── */
+    pre, code {
+      font-family: 'Cascadia Code','Fira Code','Consolas',monospace;
+      font-size: 0.84rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      color: #c9d1d9;
+      line-height: 1.6;
+    }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      color: var(--accent2);
+    }
+    pre code { background: none; border: none; padding: 0; color: inherit; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.87rem;
+      margin: 0.8rem 0;
+    }
+    th {
+      background: var(--bg3);
+      color: var(--accent2);
+      text-align: left;
+      padding: 0.55rem 0.9rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.48rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: var(--bg3); }
+    .col-param { font-family: 'Cascadia Code','Fira Code',monospace; color: var(--accent2); font-size: 0.82rem; white-space: nowrap; }
+    .col-def   { font-family: 'Cascadia Code','Fira Code',monospace; color: var(--green);   font-size: 0.82rem; }
+    .best-row td { color: var(--green) !important; font-weight: 600; }
+    .best-row .col-param { color: var(--green) !important; }
+
+    /* ── Pipeline ── */
+    .pipeline { counter-reset: step; list-style: none; padding: 0; }
+    .pipeline li {
+      counter-increment: step;
+      display: flex;
+      gap: 0.9rem;
+      margin-bottom: 0.7rem;
+      align-items: flex-start;
+      font-size: 0.93rem;
+    }
+    .pipeline li::before {
+      content: counter(step);
+      min-width: 26px; height: 26px;
+      background: var(--bg3);
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .pipeline li strong { color: var(--yellow); }
+
+    /* ── Flow diagram ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin: 1.2rem 0;
+    }
+    .flow-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      text-align: center;
+      min-width: 120px;
+    }
+    .flow-box .fname { font-family: monospace; color: var(--accent2); font-size: 0.75rem; display: block; }
+    .flow-arrow { color: var(--muted); font-size: 1.3rem; padding: 0 0.5rem; }
+
+    /* ── State machine ── */
+    .sm {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .sm-state {
+      background: var(--bg3);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 0.8rem 1.1rem;
+      flex: 1;
+      min-width: 160px;
+    }
+    .sm-state.search { border-color: var(--accent2); }
+    .sm-state.track  { border-color: var(--green); }
+    .sm-state.lost   { border-color: var(--red); }
+    .sm-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.4rem; }
+    .sm-state.search .sm-title { color: var(--accent2); }
+    .sm-state.track  .sm-title { color: var(--green); }
+    .sm-state.lost   .sm-title { color: var(--red); }
+    .sm-body { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── Recommended config cards ── */
+    .rcfg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin: 1.2rem 0; }
+    .rcfg {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+    }
+    .rcfg h4 { margin: 0 0 0.7rem; font-size: 0.95rem; }
+    .rcfg .score { font-size: 0.78rem; color: var(--muted); }
+    .rcfg table { font-size: 0.82rem; }
+    .rcfg td { padding: 0.3rem 0.6rem; }
+
+    /* ── Output legend ── */
+    .log-line { font-family: monospace; font-size: 0.83rem; }
+    .t-search { color: var(--accent2); }
+    .t-lock   { color: var(--green); }
+    .t-track  { color: #64d2ff; }
+    .t-lost   { color: var(--red); }
+    .t-top    { color: var(--yellow); }
+    .t-result { color: var(--green); font-weight: 700; }
+    .t-neg    { color: var(--purple); }
+    .t-info   { color: var(--muted); }
+
+    p { margin: 0.5rem 0; font-size: 0.93rem; }
+    ul { padding-left: 1.4rem; font-size: 0.93rem; }
+    li { margin: 0.25rem 0; }
+    .dim { color: var(--muted); font-size: 0.85rem; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <h1>Re-ID Person &amp; Vehicle Tracker</h1>
+  <p class="tagline">Sistema de búsqueda de personas y vehículos por Re-Identificación visual</p>
+  <p>
+    <span class="badge enroll">Enrollment</span>
+    <span class="badge search">Offline Search</span>
+    <span class="badge stream">Live Stream</span>
+    &nbsp;·&nbsp; TransReID · OSNet · ViT/DINO · CLIP &nbsp;·&nbsp; YOLO11x · Real-ESRGAN SR
+  </p>
+</header>
+
+<!-- ══════════════ TOC ══════════════ -->
+<div class="toc">
+  <h2>Contenido</h2>
+  <ol>
+    <li><a href="#overview">Visión general del sistema</a></li>
+    <li><a href="#enroll-launcher">enroll_launcher.py — Interfaz gráfica de enrollment</a></li>
+    <li><a href="#auto-enroll">auto_enroll_v2.py — Motor de enrollment</a></li>
+    <li><a href="#offline">reid_viewer_v2_offline.py — Búsqueda en videos grabados</a></li>
+    <li><a href="#stream">reid_viewer_v2_stream.py — Búsqueda en stream en vivo</a></li>
+    <li><a href="#models">Modelos de features: comparativa</a></li>
+    <li><a href="#configs">Configuraciones recomendadas por tipo de objetivo</a></li>
+    <li><a href="#statemachine">Máquina de estados: SEARCH → TRACK → LOST</a></li>
+    <li><a href="#output">Interpretar la salida de consola</a></li>
+    <li><a href="#troubleshoot">Problemas comunes y soluciones</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════ 1. OVERVIEW ══════════════ -->
+<section id="overview">
+<h2>1. Visión General del Sistema</h2>
+
+<p>El sistema opera en dos etapas independientes: primero se <strong>enrolla</strong> al objetivo (construir una galería de features), y luego se <strong>busca</strong> ese objetivo en videos o en un stream en vivo.</p>
+
+<div class="flow">
+  <div class="flow-box">
+    <strong>Video de referencia</strong>
+    <span class="fname">.mp4 / .avi</span>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box" style="border-color:var(--green)">
+    <strong>enroll_launcher.py</strong>
+    <span class="fname">GUI tkinter</span>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box" style="border-color:var(--green)">
+    <strong>auto_enroll_v2.py</strong>
+    <span class="fname">SAMURAI + FeatureExtractor</span>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box" style="border-color:var(--yellow)">
+    <strong>galería.json + .npy</strong>
+    <span class="fname">Data/</span>
+  </div>
+</div>
+<div class="flow" style="margin-top:0.3rem">
+  <div class="flow-box">
+    <strong>Videos / Stream</strong>
+    <span class="fname">*.mp4 / RTSP</span>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box" style="border-color:var(--accent2)">
+    <strong>reid_viewer_v2_offline.py</strong>
+    <span class="fname">o _stream.py</span>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box" style="border-color:var(--yellow)">
+    <strong>galería.json + .npy</strong>
+    <span class="fname">Data/</span>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box" style="border-color:var(--orange)">
+    <strong>Clips + consola</strong>
+    <span class="fname">reid_clips/</span>
+  </div>
+</div>
+
+<h3>Flujo interno de enrollment (auto_enroll_v2.py)</h3>
+<ol class="pipeline">
+  <li><strong>LocateAnything-3B</strong> — localiza al objetivo en el primer frame válido con un bbox inicial</li>
+  <li><strong>SAMURAI</strong> (SAM2 con memoria) — trackea al objetivo cuadro a cuadro durante <code>search_frames</code> frames</li>
+  <li><strong>LOCK</strong> — una vez que el tracker está seguro, graba <code>clip_frames</code> frames del objetivo bloqueado</li>
+  <li><strong>Extracción de features</strong> — para cada crop bloqueado: aplica SR opcional → extrae vector de características (TransReID / OSNet / ViT / CLIP)</li>
+  <li><strong>Filtrado outliers</strong> — cosine similarity vs. ancla; se eliminan crops de baja similitud (IQR fence)</li>
+  <li><strong>Top-K</strong> — selecciona los <code>top_crops</code> mejores crops por similitud</li>
+  <li><strong>PCA visualization</strong> — grafica la distribución 2D de features (guardado como <code>_pca.png</code>)</li>
+  <li><strong>Data augmentation</strong> — genera variaciones (flip, brillo, saturación, crop) según <code>aug_factor</code></li>
+  <li><strong>Guardar galería</strong> — escribe <code>Data/{nombre}.json</code> + <code>Data/{nombre}.npy</code></li>
+</ol>
+
+<h3>Flujo interno de búsqueda (reid_viewer_v2_offline.py)</h3>
+<ol class="pipeline">
+  <li><strong>Fase 1 — YOLO11x batch</strong> — detecta todas las personas/vehículos en cada frame analizado; extrae features en lote (GPU)</li>
+  <li><strong>Galería negativa</strong> — los primeros <code>neg_frames</code> frames construyen un set de "no es el objetivo" para rechazar falsos positivos</li>
+  <li><strong>[TOP] diagnóstico</strong> — imprime el mejor score/fracción encontrado en toda la fase 1 para ajuste de umbrales</li>
+  <li><strong>Fase 2 — Máquina de estados</strong> — simula la lógica online (SEARCH → TRACK → LOST) sobre las detecciones de fase 1</li>
+  <li><strong>Fase 3 — Clips + crops</strong> — para cada intervalo TRACK genera un .mp4 recortado a la zona bloqueada</li>
+</ol>
+</section>
+
+<!-- ══════════════ 2. ENROLL LAUNCHER ══════════════ -->
+<section id="enroll-launcher">
+<h2>2. enroll_launcher.py — Interfaz Gráfica</h2>
+
+<div class="card enroll">
+  <div class="card-title">GUI de enrollment — lanzador visual de auto_enroll_v2.py</div>
+  <div class="card-sub">Permite configurar y ejecutar el enrollment sin escribir comandos a mano</div>
+</div>
+
+<pre>python enroll_launcher.py</pre>
+
+<h3>Secciones de la interfaz</h3>
+
+<h4>Objetivo</h4>
+<ul>
+  <li><strong>Video</strong> — ruta al video de referencia (Browse o pegar path). Al seleccionar un video válido aparece una <em>previsualización del frame</em> (~5% del video) con resolución, fps y duración.</li>
+  <li><strong>Descripción</strong> — texto libre del objetivo. Ej: <em>"Hombre en moto con playera negra y pantalón azul"</em>. Se usa para auto-generar el nombre de la galería y para que LocateAnything-3B entienda qué buscar.</li>
+  <li><strong>Nombre galería</strong> — nombre del archivo JSON/NPY resultante. Auto-generado desde la descripción, editable manualmente.</li>
+  <li><strong>Agregar a</strong> — si ya existe una galería, agregar los nuevos features a ella (útil para robustecer con otro ángulo).</li>
+</ul>
+
+<h4>Parámetros</h4>
+<table>
+  <thead><tr><th>Control</th><th>Default</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">Modelo features</td><td class="col-def">auto</td><td>Backend de features. <strong>auto</strong> elige el mejor disponible (TransReID > OSNet). Ver sección de modelos.</td></tr>
+    <tr><td class="col-param">Aug factor</td><td class="col-def">5</td><td>Cuántas versiones aumentadas por crop base (flip, brillo, contraste, saturación). Mayor = galería más robusta.</td></tr>
+    <tr><td class="col-param">Top crops</td><td class="col-def">5</td><td>Cuántos crops base se incluyen en la galería final (los N con mejor cosine similarity).</td></tr>
+    <tr><td class="col-param">Veh ratio</td><td class="col-def">1.0</td><td>Escala del crop de vehículo (modo Contexto). 1.0 = sin escala extra. 1.5–2.0 si la persona es pequeña respecto al vehículo.</td></tr>
+    <tr><td class="col-param">Frames búsqueda</td><td class="col-def">120</td><td>SAMURAI analiza hasta N frames antes de decidir el LOCK del objetivo.</td></tr>
+    <tr><td class="col-param">Frames clip</td><td class="col-def">100</td><td>Una vez bloqueado, graba N frames del objetivo para construir la galería.</td></tr>
+    <tr><td class="col-param">Video completo</td><td class="col-def">false</td><td>Ignorar los límites de frames; analizar todo el video.</td></tr>
+    <tr><td class="col-param">Super-resolución</td><td class="col-def">off</td><td>Aplica Real-ESRGAN antes de extraer features. Muy útil si la cámara está lejos y los crops son pequeños (&lt;60×30 px).</td></tr>
+    <tr><td class="col-param">Escala SR</td><td class="col-def">4</td><td>Factor de upscale: x2 (más rápido) o x4 (mejor calidad).</td></tr>
+  </tbody>
+</table>
+
+<h4>Clases YOLO</h4>
+<p><strong>Buscar</strong> — clases que YOLO detecta en el frame completo (por defecto: <code>person (0)</code>). Se sugieren automáticamente desde la descripción.</p>
+<p><strong>Contexto</strong> — clases que deben estar <em>cerca</em> para confirmar la identidad. Ej: para una moto, marcar <code>motorcycle (3)</code>. El crop se expandirá 80% arriba y 30% a los lados del vehículo para capturar al rider.</p>
+<div class="card warn">
+  <strong>Importante:</strong> Las clases se <em>auto-detectan</em> desde palabras clave en la descripción (moto, carro, bicicleta…). Siempre verifica que la auto-detección sea correcta antes de ejecutar.
+</div>
+
+<h4>Botones post-enrollment</h4>
+<ul>
+  <li><strong>🖼 Ver Crops</strong> — abre una ventana con el grid scrollable de todos los crops base y aumentados. Los crops base se muestran con el bbox en crudo (sin letterbox).</li>
+  <li><strong>🔍 Ver PCA</strong> — abre el gráfico PCA 2D de los features del enrollment (verde = conservados, rojo = outliers eliminados).</li>
+</ul>
+<p>Ninguna ventana se abre automáticamente al terminar — debes hacer clic en el botón que quieras.</p>
+</section>
+
+<!-- ══════════════ 3. AUTO ENROLL ══════════════ -->
+<section id="auto-enroll">
+<h2>3. auto_enroll_v2.py — Motor de Enrollment</h2>
+
+<div class="card enroll">
+  <div class="card-title">Normalmente se invoca desde enroll_launcher.py — raramente a mano</div>
+</div>
+
+<h3 style="margin-top:1.4rem">Diagrama de bloques</h3>
+<div style="overflow-x:auto;margin:0.8rem 0 1.8rem;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+<svg viewBox="0 0 780 512" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif" style="width:100%;min-width:480px;display:block;margin:0 auto">
+<defs><marker id="aen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3ddc84"/></marker></defs>
+<!-- Inputs -->
+<rect x="20" y="14" width="320" height="46" rx="7" fill="#1a1d27" stroke="#2e3350" stroke-width="1.5"/>
+<text x="180" y="33" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="600">Video de referencia</text>
+<text x="180" y="51" text-anchor="middle" fill="#8892a4" font-size="11">.mp4 / .avi del objetivo</text>
+<rect x="440" y="14" width="320" height="46" rx="7" fill="#1a1d27" stroke="#2e3350" stroke-width="1.5"/>
+<text x="600" y="33" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="600">Descripción textual</text>
+<text x="600" y="51" text-anchor="middle" fill="#8892a4" font-size="11">"Hombre con playera roja en moto"</text>
+<line x1="180" y1="60" x2="180" y2="84" stroke="#2e3350" stroke-width="1.5"/>
+<line x1="600" y1="60" x2="600" y2="84" stroke="#2e3350" stroke-width="1.5"/>
+<line x1="180" y1="84" x2="600" y2="84" stroke="#2e3350" stroke-width="1.5"/>
+<line x1="390" y1="84" x2="390" y2="100" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#aen)"/>
+<!-- LocateAnything-3B -->
+<rect x="100" y="100" width="580" height="48" rx="7" fill="#1a1d27" stroke="#3ddc84" stroke-width="2"/>
+<text x="390" y="122" text-anchor="middle" fill="#3ddc84" font-size="13" font-weight="700">LocateAnything-3B</text>
+<text x="390" y="139" text-anchor="middle" fill="#8892a4" font-size="11">Localiza al objetivo en el primer frame válido usando la descripción → bbox inicial</text>
+<line x1="390" y1="148" x2="390" y2="166" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#aen)"/>
+<!-- SAMURAI -->
+<rect x="100" y="166" width="580" height="48" rx="7" fill="#1a1d27" stroke="#00d4ff" stroke-width="2"/>
+<text x="390" y="188" text-anchor="middle" fill="#00d4ff" font-size="13" font-weight="700">SAMURAI  (SAM2 + memoria temporal)</text>
+<text x="390" y="205" text-anchor="middle" fill="#8892a4" font-size="11">Trackea cuadro a cuadro durante search_frames · elige el intervalo con mejor visibilidad</text>
+<line x1="390" y1="214" x2="390" y2="232" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#aen)"/>
+<!-- LOCK -->
+<rect x="200" y="232" width="380" height="42" rx="7" fill="#1a1d27" stroke="#3ddc84" stroke-width="2"/>
+<text x="390" y="250" text-anchor="middle" fill="#3ddc84" font-size="12" font-weight="700">LOCK — clip_frames frames del objetivo bloqueado</text>
+<text x="390" y="265" text-anchor="middle" fill="#8892a4" font-size="11">Crops crudos del bbox real (sin letterbox ni relleno negro)</text>
+<line x1="390" y1="274" x2="390" y2="292" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#aen)"/>
+<!-- Feature Extractor -->
+<rect x="100" y="292" width="580" height="68" rx="7" fill="#1a1d27" stroke="#7c6af7" stroke-width="2"/>
+<text x="390" y="314" text-anchor="middle" fill="#7c6af7" font-size="13" font-weight="700">Feature Extractor + Filtrado + Top-K</text>
+<text x="390" y="330" text-anchor="middle" fill="#8892a4" font-size="11">TransReID (3840d) · OSNet (512d) · ViT/DINO (768d) · CLIP (768d)</text>
+<text x="390" y="347" text-anchor="middle" fill="#8892a4" font-size="11">SR Real-ESRGAN opcional (x2/x4) · outliers IQR → Top-K crops · L2-norm</text>
+<line x1="390" y1="360" x2="390" y2="378" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#aen)"/>
+<!-- Augmentation -->
+<rect x="100" y="378" width="580" height="44" rx="7" fill="#1a1d27" stroke="#2e3350" stroke-width="1.5"/>
+<text x="390" y="396" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Data Augmentation  ×aug_factor por crop base</text>
+<text x="390" y="413" text-anchor="middle" fill="#8892a4" font-size="11">flip horizontal · brillo · saturación · recorte aleatorio</text>
+<line x1="390" y1="422" x2="390" y2="440" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#aen)"/>
+<!-- Output fan lines -->
+<line x1="390" y1="440" x2="100" y2="440" stroke="#3ddc84" stroke-width="1"/>
+<line x1="390" y1="440" x2="260" y2="440" stroke="#3ddc84" stroke-width="1"/>
+<line x1="390" y1="440" x2="520" y2="440" stroke="#3ddc84" stroke-width="1"/>
+<line x1="390" y1="440" x2="680" y2="440" stroke="#3ddc84" stroke-width="1"/>
+<line x1="100" y1="440" x2="100" y2="454" stroke="#3ddc84" stroke-width="1"/>
+<line x1="260" y1="440" x2="260" y2="454" stroke="#3ddc84" stroke-width="1"/>
+<line x1="520" y1="440" x2="520" y2="454" stroke="#3ddc84" stroke-width="1"/>
+<line x1="680" y1="440" x2="680" y2="454" stroke="#3ddc84" stroke-width="1"/>
+<!-- 4 output boxes -->
+<rect x="20" y="454" width="160" height="54" rx="6" fill="#131820" stroke="#3ddc84" stroke-width="1.5"/>
+<text x="100" y="473" text-anchor="middle" fill="#3ddc84" font-size="11" font-weight="700">{nombre}.json</text>
+<text x="100" y="488" text-anchor="middle" fill="#8892a4" font-size="10">metadatos galería</text>
+<text x="100" y="501" text-anchor="middle" fill="#8892a4" font-size="10">modelo, dim, SR, clases</text>
+<rect x="180" y="454" width="160" height="54" rx="6" fill="#131820" stroke="#3ddc84" stroke-width="1.5"/>
+<text x="260" y="473" text-anchor="middle" fill="#3ddc84" font-size="11" font-weight="700">{nombre}.npy</text>
+<text x="260" y="488" text-anchor="middle" fill="#8892a4" font-size="10">features float32</text>
+<text x="260" y="501" text-anchor="middle" fill="#8892a4" font-size="10">[N × feat_dim] L2-norm</text>
+<rect x="440" y="454" width="160" height="54" rx="6" fill="#131820" stroke="#2e3350" stroke-width="1.5"/>
+<text x="520" y="473" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700">Frames/*.jpg</text>
+<text x="520" y="488" text-anchor="middle" fill="#8892a4" font-size="10">crops base + aug</text>
+<text x="520" y="501" text-anchor="middle" fill="#8892a4" font-size="10">para verificación visual</text>
+<rect x="600" y="454" width="160" height="54" rx="6" fill="#131820" stroke="#b39ddb" stroke-width="1.5"/>
+<text x="680" y="473" text-anchor="middle" fill="#b39ddb" font-size="11" font-weight="700">{nombre}_pca.png</text>
+<text x="680" y="488" text-anchor="middle" fill="#8892a4" font-size="10">distribución PCA 2D</text>
+<text x="680" y="501" text-anchor="middle" fill="#8892a4" font-size="10">verde=ok · rojo=outlier</text>
+</svg>
+</div>
+
+<pre>python auto_enroll_v2.py \
+  --video /ruta/video.mp4 \
+  --description "Hombre con playera amarilla y pantalón negro" \
+  --name Playera_Amarilla_Pantaon_20260604 \
+  --feat_model auto \
+  --aug_factor 5 --top_crops 5 \
+  --search_frames 120 --clip_frames 100 \
+  --sr --sr_scale 4 --sr_blend 0.5 \
+  --no_show_pca</pre>
+
+<h3>Parámetros principales</h3>
+<table>
+  <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">--video</td><td class="col-def">required</td><td>Video de referencia donde aparece el objetivo.</td></tr>
+    <tr><td class="col-param">--description</td><td class="col-def">required</td><td>Descripción en lenguaje natural del objetivo. Usada por LocateAnything-3B para localizar al objetivo.</td></tr>
+    <tr><td class="col-param">--name</td><td class="col-def">required</td><td>Nombre de la galería (sin extensión). Resultado: <code>Data/{name}.json</code> + <code>Data/{name}.npy</code>.</td></tr>
+    <tr><td class="col-param">--feat_model</td><td class="col-def">auto</td><td><code>auto</code> | <code>transreid</code> | <code>osnet</code> | <code>vit</code> | <code>clip</code>. <em>auto</em> selecciona TransReID si los pesos existen, si no OSNet.</td></tr>
+    <tr><td class="col-param">--aug_factor</td><td class="col-def">5</td><td>Aumentos por crop base. 0=sin augmentación. Recomendado 5–8.</td></tr>
+    <tr><td class="col-param">--top_crops</td><td class="col-def">5</td><td>N mejores crops a guardar (por cosine sim vs. ancla). Recomendado 5–10.</td></tr>
+    <tr><td class="col-param">--search_frames</td><td class="col-def">120</td><td>Frames que SAMURAI analiza buscando al objetivo. Más = más tiempo para encontrarlo pero más lento.</td></tr>
+    <tr><td class="col-param">--clip_frames</td><td class="col-def">100</td><td>Frames a grabar una vez que SAMURAI bloqueó al objetivo.</td></tr>
+    <tr><td class="col-param">--full_video</td><td class="col-def">false</td><td>Ignorar límites de frames y analizar el video completo.</td></tr>
+    <tr><td class="col-param">--veh_ratio</td><td class="col-def">1.0</td><td>Factor de escala del crop de vehículo. 1.5–2.0 para objetivo pequeño en pantalla.</td></tr>
+    <tr><td class="col-param">--sr</td><td class="col-def">false</td><td>Activar Real-ESRGAN en los crops. Mejora calidad de features cuando los crops son pequeños.</td></tr>
+    <tr><td class="col-param">--sr_scale</td><td class="col-def">4</td><td>Factor SR: 2 (rápido) o 4 (mejor calidad).</td></tr>
+    <tr><td class="col-param">--sr_blend</td><td class="col-def">0.5</td><td>Mezcla SR con original: 0.0=original puro, 1.0=SR puro. 0.5 = mitad, reduce artefactos.</td></tr>
+    <tr><td class="col-param">--append_to</td><td class="col-def">None</td><td>Ruta a galería existente. Los nuevos features se agregan a esa galería.</td></tr>
+    <tr><td class="col-param">--no_show_pca</td><td class="col-def">false</td><td>No abrir ventana interactiva de PCA (siempre activo cuando se lanza desde enroll_launcher).</td></tr>
+  </tbody>
+</table>
+
+<h3>Archivos de salida</h3>
+<table>
+  <thead><tr><th>Archivo</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">Data/{nombre}.json</td><td>Metadatos de la galería: label, modelo, dimensión, ruta al .npy, clases YOLO, SR settings.</td></tr>
+    <tr><td class="col-param">Data/{nombre}.npy</td><td>Matriz float32 de shape <code>[N_features × feat_dim]</code> L2-normalizada. Ej: 30×3840 para TransReID con aug=5 top=5.</td></tr>
+    <tr><td class="col-param">Data/Frames/{nombre}_fXXXXXX.jpg</td><td>Crops base en crudo (sin letterbox) — tal como se recortó del video. Usados para la galería.</td></tr>
+    <tr><td class="col-param">Data/Frames/{nombre}_aug/*.jpg</td><td>Crops aumentados (flip, brillo, etc.).</td></tr>
+    <tr><td class="col-param">Data/{nombre}_pca.png</td><td>Gráfico PCA 2D de los features: verde = conservados, rojo = outliers, estrella = centroide.</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════ 4. OFFLINE ══════════════ -->
+<section id="offline">
+<h2>4. reid_viewer_v2_offline.py — Búsqueda en Videos Grabados</h2>
+
+<div class="card search">
+  <div class="card-title">Modo batch — máxima velocidad con GPU (13–20 f/s en RTX 3060)</div>
+  <div class="card-sub">Procesa carpetas de videos, genera clips de cada intervalo donde aparece el objetivo</div>
+</div>
+
+<h3 style="margin-top:1.4rem">Diagrama de bloques</h3>
+<div style="overflow-x:auto;margin:0.8rem 0 1.8rem;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+<svg viewBox="0 0 780 466" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif" style="width:100%;min-width:480px;display:block;margin:0 auto">
+<defs>
+  <marker id="aoff" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#00d4ff"/></marker>
+  <marker id="aoffg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3ddc84"/></marker>
+  <marker id="aoffr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f38ba8"/></marker>
+</defs>
+<!-- Entrada -->
+<rect x="100" y="10" width="580" height="44" rx="7" fill="#1a1d27" stroke="#2e3350" stroke-width="1.5"/>
+<text x="390" y="29" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Videos + galería .json / .npy + umbrales</text>
+<text x="390" y="46" text-anchor="middle" fill="#8892a4" font-size="11">--videos_dir  --gallery  --thr_feat  --min_fraction  --frame_skip</text>
+<line x1="390" y1="54" x2="390" y2="70" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#aoff)"/>
+<!-- FASE 1 container -->
+<rect x="14" y="70" width="752" height="152" rx="8" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="28" y="86" fill="#00d4ff" font-size="11" font-weight="700" letter-spacing="0.5">FASE 1 — Procesamiento batch GPU</text>
+<rect x="28" y="92" width="200" height="52" rx="6" fill="#1a1d27" stroke="#2e3350" stroke-width="1"/>
+<text x="128" y="112" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">YOLO11x batch</text>
+<text x="128" y="126" text-anchor="middle" fill="#8892a4" font-size="10">yolo_batch frames/lote</text>
+<text x="128" y="137" text-anchor="middle" fill="#8892a4" font-size="9">detecta personas / vehículos</text>
+<line x1="228" y1="118" x2="246" y2="118" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#aoff)"/>
+<rect x="248" y="92" width="228" height="52" rx="6" fill="#1a1d27" stroke="#7c6af7" stroke-width="1"/>
+<text x="362" y="112" text-anchor="middle" fill="#7c6af7" font-size="12" font-weight="600">Feature Extractor batch</text>
+<text x="362" y="126" text-anchor="middle" fill="#8892a4" font-size="10">feat_batch crops/lote</text>
+<text x="362" y="137" text-anchor="middle" fill="#8892a4" font-size="9">TransReID / OSNet / ViT / CLIP</text>
+<line x1="476" y1="118" x2="494" y2="118" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#aoff)"/>
+<rect x="496" y="92" width="258" height="52" rx="6" fill="#1a1d27" stroke="#2e3350" stroke-width="1"/>
+<text x="625" y="112" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Cache detecciones</text>
+<text x="625" y="126" text-anchor="middle" fill="#8892a4" font-size="10">score · frac · bbox · is_match</text>
+<text x="625" y="137" text-anchor="middle" fill="#8892a4" font-size="9">por frame · ~13–20 fps (RTX 3060)</text>
+<!-- NEG + TOP -->
+<rect x="28" y="156" width="280" height="54" rx="6" fill="#131820" stroke="#ffd166" stroke-width="1" stroke-dasharray="4,2"/>
+<text x="168" y="174" text-anchor="middle" fill="#ffd166" font-size="11" font-weight="700">Galería negativa (auto)</text>
+<text x="168" y="188" text-anchor="middle" fill="#8892a4" font-size="10">primeros neg_frames acumulan features ≠ objetivo</text>
+<text x="168" y="200" text-anchor="middle" fill="#8892a4" font-size="9">score_adj = score − alpha × neg_score</text>
+<rect x="320" y="156" width="434" height="54" rx="6" fill="#131820" stroke="#ffd166" stroke-width="1"/>
+<text x="537" y="174" text-anchor="middle" fill="#ffd166" font-size="11" font-weight="700">[TOP] diagnóstico</text>
+<text x="537" y="188" text-anchor="middle" fill="#8892a4" font-size="10">mejor s= y f= encontrado en todo el video</text>
+<text x="537" y="200" text-anchor="middle" fill="#8892a4" font-size="9">"OK ≥ thr" · "FALTA" → bajar thr_feat · "f=0%" → re-enrollar</text>
+<line x1="390" y1="222" x2="390" y2="240" stroke="#00d4ff" stroke-width="1.5" marker-end="url(#aoff)"/>
+<!-- FASE 2 container -->
+<rect x="14" y="240" width="752" height="150" rx="8" fill="none" stroke="#7c6af7" stroke-width="1.5"/>
+<text x="28" y="256" fill="#7c6af7" font-size="11" font-weight="700" letter-spacing="0.5">FASE 2 — Máquina de estados sobre el cache</text>
+<!-- 3 state boxes -->
+<rect x="28" y="264" width="196" height="50" rx="6" fill="#1a1d27" stroke="#00d4ff" stroke-width="1.8"/>
+<text x="126" y="283" text-anchor="middle" fill="#00d4ff" font-size="12" font-weight="700">SEARCH</text>
+<text x="126" y="298" text-anchor="middle" fill="#8892a4" font-size="10">confirm_count ++ (zone_thr px)</text>
+<text x="126" y="309" text-anchor="middle" fill="#8892a4" font-size="9">lock: [imm] [dyn] [reg]</text>
+<line x1="224" y1="289" x2="248" y2="289" stroke="#3ddc84" stroke-width="2" marker-end="url(#aoffg)"/>
+<text x="236" y="283" text-anchor="middle" fill="#3ddc84" font-size="9">LOCK</text>
+<rect x="250" y="264" width="200" height="50" rx="6" fill="#1a1d27" stroke="#3ddc84" stroke-width="1.8"/>
+<text x="350" y="283" text-anchor="middle" fill="#3ddc84" font-size="12" font-weight="700">TRACK</text>
+<text x="350" y="298" text-anchor="middle" fill="#8892a4" font-size="10">YOLO en zona bloqueada</text>
+<text x="350" y="309" text-anchor="middle" fill="#8892a4" font-size="9">thr×0.85 · lost_count++</text>
+<line x1="450" y1="289" x2="474" y2="289" stroke="#f38ba8" stroke-width="1.5" marker-end="url(#aoffr)"/>
+<text x="462" y="283" text-anchor="middle" fill="#f38ba8" font-size="9">LOST</text>
+<rect x="476" y="264" width="192" height="50" rx="6" fill="#1a1d27" stroke="#f38ba8" stroke-width="1.8"/>
+<text x="572" y="283" text-anchor="middle" fill="#f38ba8" font-size="12" font-weight="700">LOST</text>
+<text x="572" y="298" text-anchor="middle" fill="#8892a4" font-size="10">cierra intervalo TRACK</text>
+<text x="572" y="309" text-anchor="middle" fill="#8892a4" font-size="9">guarda f_inicio, f_fin, s_avg</text>
+<!-- interval output -->
+<rect x="680" y="264" width="74" height="50" rx="6" fill="#131820" stroke="#3ddc84" stroke-width="1.5"/>
+<text x="717" y="283" text-anchor="middle" fill="#3ddc84" font-size="10" font-weight="700">Intervalo</text>
+<text x="717" y="297" text-anchor="middle" fill="#8892a4" font-size="9">TRACK</text>
+<text x="717" y="309" text-anchor="middle" fill="#8892a4" font-size="8">guardado</text>
+<line x1="668" y1="289" x2="680" y2="289" stroke="#3ddc84" stroke-width="1" stroke-dasharray="3,2"/>
+<!-- Return arc LOST → SEARCH -->
+<line x1="572" y1="314" x2="572" y2="356" stroke="#f38ba8" stroke-width="1" stroke-dasharray="4,2"/>
+<line x1="572" y1="356" x2="126" y2="356" stroke="#f38ba8" stroke-width="1" stroke-dasharray="4,2"/>
+<line x1="126" y1="356" x2="126" y2="316" stroke="#f38ba8" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#aoffr)"/>
+<text x="349" y="372" text-anchor="middle" fill="#f38ba8" font-size="10">→ vuelve a SEARCH hasta fin del video</text>
+<line x1="390" y1="390" x2="390" y2="408" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#aoffg)"/>
+<!-- FASE 3 -->
+<rect x="14" y="408" width="752" height="54" rx="8" fill="none" stroke="#3ddc84" stroke-width="1.5"/>
+<text x="28" y="424" fill="#3ddc84" font-size="11" font-weight="700" letter-spacing="0.5">FASE 3 — Exportación</text>
+<rect x="90" y="430" width="270" height="24" rx="5" fill="#1a1d27" stroke="#2e3350" stroke-width="1"/>
+<text x="225" y="447" text-anchor="middle" fill="#e2e8f0" font-size="11">Clips .mp4 recortados a la zona bloqueada</text>
+<rect x="380" y="430" width="370" height="24" rx="5" fill="#1a1d27" stroke="#2e3350" stroke-width="1"/>
+<text x="565" y="447" text-anchor="middle" fill="#3ddc84" font-size="11">[RESULTADO] ENCONTRADO / NO ENCONTRADO</text>
+</svg>
+</div>
+
+<h3>Uso básico</h3>
+<pre># Personas (TransReID)
+python reid_viewer_v2_offline.py \
+  --videos_dir /ruta/Videos \
+  --gallery Data/Playera_Amarilla_Pantaon_20260604.json \
+  --thr_feat 0.70 --min_fraction 0.25 \
+  --frame_skip 2 --yolo_batch 8 --feat_batch 32 \
+  --output_dir reid_clips
+
+# Motos (TransReID, modo Contexto)
+python reid_viewer_v2_offline.py \
+  --videos_dir /ruta/Videos \
+  --gallery Data/Dos_Personas_Motocicleta_20260604.json \
+  --thr_feat 0.60 --min_fraction 0.25 \
+  --frame_skip 2 --yolo_batch 8 --feat_batch 32 \
+  --output_dir reid_clips
+
+# Carros (ViT/DINO)
+python reid_viewer_v2_offline.py \
+  --videos_dir /ruta/Videos \
+  --gallery Data/Taxi_Color_Rosa_20260604.json \
+  --thr_feat 0.60 --min_fraction 0.25 \
+  --frame_skip 2 --yolo_batch 8 --feat_batch 32 \
+  --output_dir reid_clips</pre>
+
+<h3>Todos los parámetros</h3>
+<table>
+  <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">--videos_dir</td><td class="col-def">—</td><td>Carpeta con videos (.mp4/.avi/.mkv/.mov). Procesa todos en orden alfabético.</td></tr>
+    <tr><td class="col-param">--video</td><td class="col-def">—</td><td>Alternativamente, un solo video a procesar.</td></tr>
+    <tr><td class="col-param">--gallery</td><td class="col-def">required</td><td>Ruta al JSON de galería generado por auto_enroll_v2.py.</td></tr>
+    <tr class="best-row"><td class="col-param">--thr_feat</td><td class="col-def">0.60</td><td><strong>[CRÍTICO]</strong> Umbral de cosine similarity para considerar una detección como candidata en SEARCH. Ver tabla de valores por modelo.</td></tr>
+    <tr class="best-row"><td class="col-param">--min_fraction</td><td class="col-def">0.25</td><td><strong>[CRÍTICO]</strong> Fracción mínima de features de galería que deben superar <code>thr_feat</code>. Un match requiere al menos el 25% de los features de galería de acuerdo.</td></tr>
+    <tr><td class="col-param">--thr_feat_track</td><td class="col-def">thr×0.85</td><td>Umbral en estado TRACK (más permisivo). Por defecto 85% del umbral de búsqueda.</td></tr>
+    <tr><td class="col-param">--min_fraction_track</td><td class="col-def">min_frac÷2</td><td>Fracción mínima en TRACK. Por defecto la mitad de min_fraction.</td></tr>
+    <tr><td class="col-param">--frame_skip</td><td class="col-def">1</td><td>Analizar 1 de cada N frames. 2 = la mitad de frames, ~2× más rápido. Recomendado: 2.</td></tr>
+    <tr><td class="col-param">--yolo_batch</td><td class="col-def">4</td><td>Frames simultáneos en YOLO11x. Más = más rápido hasta llenar la VRAM. Recomendado: 8.</td></tr>
+    <tr><td class="col-param">--feat_batch</td><td class="col-def">16</td><td>Crops simultáneos en el extractor de features. Recomendado: 32.</td></tr>
+    <tr><td class="col-param">--conf</td><td class="col-def">0.25</td><td>Confianza mínima de YOLO para detectar una persona/vehículo. 0.25–0.35 es buen rango.</td></tr>
+    <tr><td class="col-param">--lock_frames</td><td class="col-def">4</td><td>Frames consecutivos de confirmación necesarios para pasar de SEARCH a TRACK.</td></tr>
+    <tr><td class="col-param">--zone_thr</td><td class="col-def">80.0</td><td>Distancia máxima en píxeles entre detecciones consecutivas para considerarlas la misma persona (continuidad del confirm).</td></tr>
+    <tr><td class="col-param">--lost_max</td><td class="col-def">15</td><td>Frames sin detección en TRACK antes de volver a SEARCH.</td></tr>
+    <tr><td class="col-param">--neg_frames</td><td class="col-def">80</td><td>Primeros N frames para construir galería negativa. 0 = desactivar.</td></tr>
+    <tr><td class="col-param">--neg_alpha</td><td class="col-def">0.5</td><td>Peso de la penalización negativa: score_adj = score_pos − α × neg_score.</td></tr>
+    <tr><td class="col-param">--neg_max</td><td class="col-def">80</td><td>Máximo de features en la galería negativa.</td></tr>
+    <tr><td class="col-param">--output_dir</td><td class="col-def">reid_clips</td><td>Carpeta donde se guardan los clips de los intervalos encontrados.</td></tr>
+    <tr><td class="col-param">--sr</td><td class="col-def">del JSON</td><td>Forzar SR en búsqueda (sobreescribe la config del JSON).</td></tr>
+    <tr><td class="col-param">--sr_scale</td><td class="col-def">del JSON</td><td>Escala SR (2 o 4). Sobreescribe el JSON.</td></tr>
+    <tr><td class="col-param">--sr_blend</td><td class="col-def">del JSON</td><td>Mezcla SR (0.0–1.0). Sobreescribe el JSON.</td></tr>
+    <tr><td class="col-param">--transreid_weights</td><td class="col-def">auto</td><td>Ruta al .pth de TransReID. Default: <code>weights/vit_transreid_msmt.pth</code>.</td></tr>
+    <tr><td class="col-param">--debug</td><td class="col-def">false</td><td>Imprime cada detección individual con score, fracción y posición.</td></tr>
+  </tbody>
+</table>
+
+<h3>Notación compacta de configuración</h3>
+<p>La notación <code>aug-top-veh_ratio-search-clip-SR-scale</code> describe los parámetros de enrollment más el SR usado:</p>
+<pre>5-5-1-120-100-SR-4
+└─ aug_factor=5
+   └─ top_crops=5
+      └─ veh_ratio=1.0
+         └─ search_frames=120
+            └─ clip_frames=100
+               └─ SR activado, scale=4</pre>
+
+<h3>Fase 1 — Qué significa cada línea</h3>
+<pre><span class="t-info">[F1]  451f → 226 analizados  2078 dets  32.5s  (14fps)</span>   ← resumen de YOLO+FE
+<span class="t-neg">[NEG] 80 muestras negativas</span>                                ← galería negativa lista
+<span class="t-top">[TOP]  mejor: s=0.854 f=83% en f=248  (thr=0.70/frac≥25%)  OK ≥ thr</span>  ← diagnóstico</pre>
+
+<div class="card warn">
+  <strong>[TOP]</strong> es el diagnóstico más importante. Si muestra <code>FALTA -0.05</code>, el mejor score encontrado está por debajo del umbral — reducir <code>--thr_feat</code> o re-enrollar con mejor video.
+  Si <code>f=0%</code>, la galería fue enrollada con crops incorrectos (muy probable si se enrolló antes de corregir el bug de portrait). Solución: re-enrollar.
+</div>
+</section>
+
+<!-- ══════════════ 5. STREAM ══════════════ -->
+<section id="stream">
+<h2>5. reid_viewer_v2_stream.py — Búsqueda en Stream en Vivo</h2>
+
+<div class="card stream">
+  <div class="card-title">Modo tiempo real — cámara USB o IP (RTSP)</div>
+  <div class="card-sub">Misma lógica SEARCH/TRACK que offline, con UI visual y reconexión automática</div>
+</div>
+
+<h3 style="margin-top:1.4rem">Diagrama de bloques</h3>
+<div style="overflow-x:auto;margin:0.8rem 0 1.8rem;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+<svg viewBox="0 0 780 400" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif" style="width:100%;min-width:480px;display:block;margin:0 auto">
+<defs>
+  <marker id="ast" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ff6b35"/></marker>
+  <marker id="astg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3ddc84"/></marker>
+  <marker id="astr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f38ba8"/></marker>
+</defs>
+<!-- Stream entrada -->
+<rect x="100" y="10" width="580" height="46" rx="7" fill="#1a1d27" stroke="#ff6b35" stroke-width="2"/>
+<text x="390" y="30" text-anchor="middle" fill="#ff6b35" font-size="13" font-weight="700">Stream en vivo</text>
+<text x="390" y="47" text-anchor="middle" fill="#8892a4" font-size="11">RTSP: rtsp://user:pass@192.168.1.xx:554/stream  ·  USB: --stream 0</text>
+<line x1="390" y1="56" x2="390" y2="74" stroke="#ff6b35" stroke-width="1.5" marker-end="url(#ast)"/>
+<!-- Frame capture -->
+<rect x="210" y="74" width="360" height="40" rx="7" fill="#1a1d27" stroke="#2e3350" stroke-width="1.5"/>
+<text x="390" y="90" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Captura de frame</text>
+<text x="390" y="105" text-anchor="middle" fill="#8892a4" font-size="11">Resize 640×420 · reconexión automática si falla</text>
+<line x1="390" y1="114" x2="390" y2="132" stroke="#ff6b35" stroke-width="1.5" marker-end="url(#ast)"/>
+<!-- YOLO -->
+<rect x="100" y="132" width="580" height="50" rx="7" fill="#1a1d27" stroke="#00d4ff" stroke-width="2"/>
+<text x="390" y="153" text-anchor="middle" fill="#00d4ff" font-size="13" font-weight="700">YOLO11x</text>
+<text x="220" y="172" text-anchor="middle" fill="#8892a4" font-size="10">SEARCH → frame completo</text>
+<text x="560" y="172" text-anchor="middle" fill="#3ddc84" font-size="10">TRACK → solo zona bloqueada</text>
+<line x1="390" y1="182" x2="390" y2="200" stroke="#ff6b35" stroke-width="1.5" marker-end="url(#ast)"/>
+<!-- Feature Extractor -->
+<rect x="100" y="200" width="580" height="42" rx="7" fill="#1a1d27" stroke="#7c6af7" stroke-width="2"/>
+<text x="390" y="218" text-anchor="middle" fill="#7c6af7" font-size="12" font-weight="700">Feature Extractor  →  Match galería</text>
+<text x="390" y="233" text-anchor="middle" fill="#8892a4" font-size="11">TransReID / OSNet · cosine similarity · fracción vs galería</text>
+<line x1="390" y1="242" x2="390" y2="260" stroke="#ff6b35" stroke-width="1.5" marker-end="url(#ast)"/>
+<!-- State machine container -->
+<rect x="100" y="260" width="580" height="70" rx="7" fill="#1a1d27" stroke="#7c6af7" stroke-width="1.5"/>
+<text x="390" y="276" text-anchor="middle" fill="#7c6af7" font-size="11" font-weight="700">Máquina de estados</text>
+<rect x="116" y="282" width="154" height="38" rx="5" fill="#131820" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="193" y="297" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="700">SEARCH</text>
+<text x="193" y="311" text-anchor="middle" fill="#8892a4" font-size="9">confirmar bbox ≥ N frames</text>
+<line x1="270" y1="301" x2="286" y2="301" stroke="#3ddc84" stroke-width="1.5" marker-end="url(#astg)"/>
+<rect x="288" y="282" width="154" height="38" rx="5" fill="#131820" stroke="#3ddc84" stroke-width="1.5"/>
+<text x="365" y="297" text-anchor="middle" fill="#3ddc84" font-size="11" font-weight="700">TRACK</text>
+<text x="365" y="311" text-anchor="middle" fill="#8892a4" font-size="9">zona bloqueada · graba clip</text>
+<line x1="442" y1="301" x2="458" y2="301" stroke="#f38ba8" stroke-width="1.5" marker-end="url(#astr)"/>
+<rect x="460" y="282" width="204" height="38" rx="5" fill="#131820" stroke="#f38ba8" stroke-width="1.5"/>
+<text x="562" y="297" text-anchor="middle" fill="#f38ba8" font-size="11" font-weight="700">LOST</text>
+<text x="562" y="311" text-anchor="middle" fill="#8892a4" font-size="9">lost_max sin match → vuelve a SEARCH</text>
+<line x1="390" y1="330" x2="390" y2="350" stroke="#ff6b35" stroke-width="1.5" marker-end="url(#ast)"/>
+<!-- Output panels fan -->
+<line x1="390" y1="350" x2="158" y2="350" stroke="#2e3350" stroke-width="1"/>
+<line x1="390" y1="350" x2="622" y2="350" stroke="#2e3350" stroke-width="1"/>
+<line x1="158" y1="350" x2="158" y2="362" stroke="#2e3350" stroke-width="1"/>
+<line x1="390" y1="350" x2="390" y2="362" stroke="#2e3350" stroke-width="1"/>
+<line x1="622" y1="350" x2="622" y2="362" stroke="#2e3350" stroke-width="1"/>
+<!-- 3 output boxes -->
+<rect x="20" y="362" width="276" height="34" rx="6" fill="#131820" stroke="#ff6b35" stroke-width="1.5"/>
+<text x="158" y="377" text-anchor="middle" fill="#ff6b35" font-size="11" font-weight="600">Panel izquierdo</text>
+<text x="158" y="390" text-anchor="middle" fill="#8892a4" font-size="10">Video 640×420 + bboxes + HUD (FPS, estado)</text>
+<rect x="310" y="362" width="160" height="34" rx="6" fill="#131820" stroke="#7c6af7" stroke-width="1.5"/>
+<text x="390" y="377" text-anchor="middle" fill="#7c6af7" font-size="11" font-weight="600">Panel derecho</text>
+<text x="390" y="390" text-anchor="middle" fill="#8892a4" font-size="10">Crops + score + fracción</text>
+<rect x="484" y="362" width="276" height="34" rx="6" fill="#131820" stroke="#3ddc84" stroke-width="1.5"/>
+<text x="622" y="377" text-anchor="middle" fill="#3ddc84" font-size="11" font-weight="600">Clip recorder</text>
+<text x="622" y="390" text-anchor="middle" fill="#8892a4" font-size="10">Graba .mp4 mientras TRACK activo</text>
+</svg>
+</div>
+
+<h3>Uso</h3>
+<pre># Cámara USB
+python reid_viewer_v2_stream.py \
+  --stream 0 \
+  --gallery Data/Sueter_Rojo_20260604.json \
+  --thr_feat 0.70 --min_fraction 0.25
+
+# Cámara IP RTSP
+python reid_viewer_v2_stream.py \
+  --stream "rtsp://user:pass@192.168.1.51:554/stream1" \
+  --gallery Data/Sueter_Rojo_20260604.json \
+  --thr_feat 0.70 --min_fraction 0.25</pre>
+
+<h3>Parámetros exclusivos del stream</h3>
+<table>
+  <thead><tr><th>Parámetro</th><th>Default</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">--stream</td><td class="col-def">required</td><td>URL RTSP o índice de cámara (0, 1…). Ej: <code>"rtsp://celestial:celestial@192.168.168.51:554/stream1"</code></td></tr>
+    <tr><td class="col-param">--reconnect_max</td><td class="col-def">5</td><td>Intentos de reconexión si el stream cae antes de salir.</td></tr>
+  </tbody>
+</table>
+
+<h3>Controles de teclado</h3>
+<table>
+  <thead><tr><th>Tecla</th><th>Acción</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">Q / ESC</td><td>Salir y guardar el clip abierto.</td></tr>
+    <tr><td class="col-param">SPACE</td><td>Pausar / reanudar el procesamiento.</td></tr>
+  </tbody>
+</table>
+
+<h3>Layout de la ventana</h3>
+<pre>┌─────────────────────────────────────────────────────────────────────────────┐
+│  Panel izquierdo (880px)                    │  Panel derecho                │
+│  ─────────────────────────────────────────  │  ─────────────────────────    │
+│                                             │  Crops de detección           │
+│   Video procesado 640×420                  │  [crop1] [crop2] [crop3]       │
+│   ┌────────────────┐                        │  s=0.854  f=83%               │
+│   │ [bbox verdes = │                        │  [████████░░░] 83% (25% min)  │
+│   │  match activo] │                        │  ─────────────────────────    │
+│   └────────────────┘                        │  Zoom zona bloqueada          │
+│                                             │  [imagen] | PCA scatter       │
+│   HUD: f=248  16.2s  3 dets  1 match        │                               │
+│        14.0 FPS  [SEARCH 2/4]  TransReID    │                               │
+└─────────────────────────────────────────────────────────────────────────────┘</pre>
+
+<p>El <strong>panel derecho</strong> muestra en tiempo real las detecciones del frame actual con su score y barra de fracción. En <code>--debug</code> muestra el scatterplot PCA de los features de galería con el query proyectado.</p>
+</section>
+
+<!-- ══════════════ 6. MODELS ══════════════ -->
+<section id="models">
+<h2>6. Modelos de Features — Comparativa</h2>
+
+<div class="rcfg-grid">
+  <div class="rcfg" style="border-color:var(--accent)">
+    <h4 style="color:var(--accent)">TransReID — vit_base_patch16_224_TransReID</h4>
+    <p class="score">3840 dimensiones · MSMT17 entrenado</p>
+    <table>
+      <tr><td>Precisión Re-ID</td><td><strong style="color:var(--green)">Máxima</strong></td></tr>
+      <tr><td>Velocidad</td><td>Lento (ViT-B/16 + JPM)</td></tr>
+      <tr><td>Umbral recomendado</td><td class="col-def">0.70</td></tr>
+      <tr><td>Mejor para</td><td>Personas, motos (con rider visible)</td></tr>
+      <tr><td>Requiere</td><td><code>weights/vit_transreid_msmt.pth</code></td></tr>
+    </table>
+  </div>
+
+  <div class="rcfg" style="border-color:var(--accent2)">
+    <h4 style="color:var(--accent2)">OSNet — osnet_x1_0</h4>
+    <p class="score">512 dimensiones · ImageNet + Market1501</p>
+    <table>
+      <tr><td>Precisión Re-ID</td><td>Buena</td></tr>
+      <tr><td>Velocidad</td><td><strong style="color:var(--green)">Rápido</strong></td></tr>
+      <tr><td>Umbral recomendado</td><td class="col-def">0.65–0.70</td></tr>
+      <tr><td>Mejor para</td><td>Personas a pie (fallback si no hay TransReID)</td></tr>
+      <tr><td>Input size</td><td>256×128 (portrait)</td></tr>
+    </table>
+  </div>
+
+  <div class="rcfg" style="border-color:var(--purple)">
+    <h4 style="color:var(--purple)">ViT/DINO — vit_base_patch16_224.dino</h4>
+    <p class="score">768 dimensiones · DINO self-supervised</p>
+    <table>
+      <tr><td>Precisión Re-ID</td><td>Muy buena para vehículos</td></tr>
+      <tr><td>Velocidad</td><td>Medio</td></tr>
+      <tr><td>Umbral recomendado</td><td class="col-def">0.60</td></tr>
+      <tr><td>Mejor para</td><td>Carros, taxis (color/forma del vehículo)</td></tr>
+    </table>
+  </div>
+
+  <div class="rcfg" style="border-color:var(--yellow)">
+    <h4 style="color:var(--yellow)">CLIP — ViT-L/14</h4>
+    <p class="score">768 dimensiones · multimodal semántico</p>
+    <table>
+      <tr><td>Precisión Re-ID</td><td>Semántica (contexto)</td></tr>
+      <tr><td>Velocidad</td><td>Medio-lento</td></tr>
+      <tr><td>Umbral recomendado</td><td class="col-def">0.55–0.65</td></tr>
+      <tr><td>Mejor para</td><td>Búsqueda semántica (ej. "camisa roja"), vehículos por color/tipo</td></tr>
+    </table>
+  </div>
+</div>
+
+<h3 style="margin-top:2.5rem">Diagramas de arquitectura — cómo genera features cada modelo</h3>
+
+<!-- ═══════════════ TransReID ═══════════════ -->
+<h4>TransReID — ViT-B/16 + Jigsaw Patch Module (JPM) → 3840d</h4>
+<div style="overflow-x:auto;margin-bottom:1.6rem">
+<svg viewBox="0 0 690 142" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:520px;max-width:690px;display:block;border-radius:8px">
+<defs><marker id="ar1" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#44485a"/></marker></defs>
+<rect width="690" height="142" fill="#161b2e" rx="8"/>
+<!-- 1 - Imagen -->
+<rect x="6" y="26" width="72" height="90" rx="5" fill="#222636" stroke="#2e3350" stroke-width="1.5"/>
+<rect x="12" y="32" width="60" height="40" rx="3" fill="#1a1d27"/>
+<line x1="22" y1="32" x2="22" y2="72" stroke="#2e3350" stroke-width="0.8"/><line x1="32" y1="32" x2="32" y2="72" stroke="#2e3350" stroke-width="0.8"/><line x1="42" y1="32" x2="42" y2="72" stroke="#2e3350" stroke-width="0.8"/><line x1="52" y1="32" x2="52" y2="72" stroke="#2e3350" stroke-width="0.8"/><line x1="62" y1="32" x2="62" y2="72" stroke="#2e3350" stroke-width="0.8"/>
+<line x1="12" y1="43" x2="72" y2="43" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="54" x2="72" y2="54" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="65" x2="72" y2="65" stroke="#2e3350" stroke-width="0.8"/>
+<text x="42" y="85" text-anchor="middle" font-family="monospace" fill="#e2e8f0" font-size="9">256×128</text>
+<text x="42" y="103" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">imagen</text>
+<line x1="78" y1="71" x2="90" y2="71" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar1)"/>
+<!-- 2 - Patch Embed -->
+<rect x="92" y="26" width="80" height="90" rx="5" fill="#222636" stroke="#7c6af7" stroke-width="1.5"/>
+<text x="132" y="51" text-anchor="middle" font-family="sans-serif" fill="#7c6af7" font-size="10" font-weight="bold">Patch Embed</text>
+<text x="132" y="65" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">parches 16×16</text>
+<text x="132" y="78" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">128 tokens</text>
+<text x="132" y="91" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">→ 768d c/u</text>
+<text x="132" y="107" text-anchor="middle" font-family="monospace" fill="#7c6af7" font-size="8">Linear Proj</text>
+<line x1="172" y1="71" x2="184" y2="71" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar1)"/>
+<!-- 3 - CLS + SIE -->
+<rect x="186" y="26" width="78" height="90" rx="5" fill="#222636" stroke="#7c6af7" stroke-width="1.5"/>
+<text x="225" y="49" text-anchor="middle" font-family="sans-serif" fill="#00d4ff" font-size="11" font-weight="bold">[CLS]</text>
+<text x="225" y="63" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8.5">token prepend</text>
+<text x="225" y="77" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8.5">+ Pos. Enc.</text>
+<text x="225" y="91" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8.5">+ SIE cam ID</text>
+<text x="225" y="107" text-anchor="middle" font-family="monospace" fill="#7c6af7" font-size="8">129 tokens</text>
+<line x1="264" y1="71" x2="276" y2="71" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar1)"/>
+<!-- 4 - Transformer ×12 -->
+<rect x="278" y="18" width="88" height="106" rx="5" fill="#222636" stroke="#7c6af7" stroke-width="2"/>
+<text x="322" y="43" text-anchor="middle" font-family="sans-serif" fill="#7c6af7" font-size="10" font-weight="bold">Transformer</text>
+<text x="322" y="62" text-anchor="middle" font-family="sans-serif" fill="#7c6af7" font-size="22" font-weight="bold">×12</text>
+<text x="322" y="83" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">MH Attention</text>
+<text x="322" y="96" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">+ FFN + LN</text>
+<text x="322" y="110" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">768d · 12 heads</text>
+<line x1="366" y1="71" x2="378" y2="71" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar1)"/>
+<!-- 5 - JPM -->
+<rect x="380" y="18" width="88" height="106" rx="5" fill="#222636" stroke="#ffd166" stroke-width="1.5"/>
+<text x="424" y="38" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="10" font-weight="bold">JPM</text>
+<text x="424" y="51" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">Jigsaw Patch</text>
+<text x="424" y="63" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">divide patches</text>
+<text x="424" y="75" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="8">en 4 franjas:</text>
+<rect x="390" y="81" width="68" height="7" rx="2" fill="#2a2a4a"/>
+<rect x="390" y="90" width="68" height="7" rx="2" fill="#2a2a4a"/>
+<rect x="390" y="99" width="68" height="7" rx="2" fill="#2a2a4a"/>
+<rect x="390" y="108" width="68" height="7" rx="2" fill="#2a2a4a"/>
+<text x="424" y="127" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7">+ 1 global</text>
+<line x1="468" y1="71" x2="480" y2="71" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar1)"/>
+<!-- 6 - BN Bottleneck ×5 -->
+<rect x="482" y="18" width="104" height="106" rx="5" fill="#222636" stroke="#2e3350" stroke-width="1.5"/>
+<text x="534" y="37" text-anchor="middle" font-family="sans-serif" fill="#e2e8f0" font-size="9" font-weight="bold">BN Bottleneck ×5</text>
+<text x="534" y="50" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">1 global · 4 local</text>
+<rect x="490" y="57" width="18" height="18" rx="3" fill="#3ddc84" opacity="0.75"/>
+<rect x="510" y="57" width="18" height="18" rx="3" fill="#7c6af7" opacity="0.6"/>
+<rect x="530" y="57" width="18" height="18" rx="3" fill="#7c6af7" opacity="0.6"/>
+<rect x="550" y="57" width="18" height="18" rx="3" fill="#7c6af7" opacity="0.6"/>
+<rect x="570" y="57" width="18" height="18" rx="3" fill="#7c6af7" opacity="0.6"/>
+<text x="499" y="88" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="7">g</text>
+<text x="538" y="88" text-anchor="middle" font-family="sans-serif" fill="#b39ddb" font-size="7">l1  l2  l3  l4</text>
+<text x="534" y="101" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">768d cada uno</text>
+<text x="534" y="115" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">→ concat ×5</text>
+<line x1="586" y1="71" x2="598" y2="71" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar1)"/>
+<!-- 7 - Output -->
+<rect x="600" y="26" width="84" height="90" rx="5" fill="#222636" stroke="#3ddc84" stroke-width="2"/>
+<text x="642" y="52" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="11" font-weight="bold">Feature</text>
+<text x="642" y="72" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="24" font-weight="bold">3840</text>
+<text x="642" y="91" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">5 × 768d</text>
+<text x="642" y="105" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">L2-normalizado</text>
+</svg>
+</div>
+
+<!-- ═══════════════ OSNet ═══════════════ -->
+<h4>OSNet — Omni-Scale Aggregation Network → 512d</h4>
+<div style="overflow-x:auto;margin-bottom:1.6rem">
+<svg viewBox="0 0 700 162" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:500px;max-width:700px;display:block;border-radius:8px">
+<defs><marker id="ar2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#44485a"/></marker></defs>
+<rect width="700" height="162" fill="#161b2e" rx="8"/>
+<!-- 1 - Imagen -->
+<rect x="6" y="36" width="72" height="90" rx="5" fill="#222636" stroke="#2e3350" stroke-width="1.5"/>
+<rect x="12" y="42" width="60" height="42" rx="3" fill="#1a1d27"/>
+<line x1="22" y1="42" x2="22" y2="84" stroke="#2e3350" stroke-width="0.8"/><line x1="32" y1="42" x2="32" y2="84" stroke="#2e3350" stroke-width="0.8"/><line x1="42" y1="42" x2="42" y2="84" stroke="#2e3350" stroke-width="0.8"/><line x1="52" y1="42" x2="52" y2="84" stroke="#2e3350" stroke-width="0.8"/><line x1="62" y1="42" x2="62" y2="84" stroke="#2e3350" stroke-width="0.8"/>
+<line x1="12" y1="56" x2="72" y2="56" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="70" x2="72" y2="70" stroke="#2e3350" stroke-width="0.8"/>
+<text x="42" y="97" text-anchor="middle" font-family="monospace" fill="#e2e8f0" font-size="9">256×128</text>
+<text x="42" y="114" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">imagen</text>
+<line x1="78" y1="81" x2="92" y2="81" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar2)"/>
+<!-- 2 - Conv Stem -->
+<rect x="94" y="46" width="76" height="70" rx="5" fill="#222636" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="132" y="70" text-anchor="middle" font-family="sans-serif" fill="#00d4ff" font-size="10" font-weight="bold">Conv Stem</text>
+<text x="132" y="84" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">7×7, stride 2</text>
+<text x="132" y="98" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">64 canales</text>
+<line x1="170" y1="81" x2="186" y2="81" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar2)"/>
+<!-- 3 - OSBlock ×4 (tall, shows OSA branches) -->
+<rect x="188" y="10" width="168" height="142" rx="5" fill="#222636" stroke="#00d4ff" stroke-width="2"/>
+<text x="272" y="30" text-anchor="middle" font-family="sans-serif" fill="#00d4ff" font-size="10" font-weight="bold">OSBlock × 4</text>
+<text x="272" y="43" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">Omni-Scale Aggregation (OSA)</text>
+<!-- 3 parallel branches -->
+<rect x="196" y="50" width="40" height="26" rx="3" fill="#1a2040" stroke="#00d4ff" stroke-width="1" opacity="0.8"/>
+<text x="216" y="67" text-anchor="middle" font-family="monospace" fill="#00d4ff" font-size="9">1×1</text>
+<rect x="246" y="50" width="40" height="26" rx="3" fill="#1a2040" stroke="#00d4ff" stroke-width="1" opacity="0.8"/>
+<text x="266" y="67" text-anchor="middle" font-family="monospace" fill="#00d4ff" font-size="9">3×3</text>
+<rect x="296" y="50" width="40" height="26" rx="3" fill="#1a2040" stroke="#00d4ff" stroke-width="1" opacity="0.8"/>
+<text x="316" y="67" text-anchor="middle" font-family="monospace" fill="#00d4ff" font-size="9">5×5</text>
+<!-- Merge lines down to common point -->
+<line x1="216" y1="76" x2="216" y2="92" stroke="#44485a" stroke-width="1"/>
+<line x1="266" y1="76" x2="266" y2="92" stroke="#44485a" stroke-width="1"/>
+<line x1="316" y1="76" x2="316" y2="92" stroke="#44485a" stroke-width="1"/>
+<line x1="216" y1="92" x2="316" y2="92" stroke="#44485a" stroke-width="1"/>
+<line x1="266" y1="92" x2="266" y2="102" stroke="#44485a" stroke-width="1" marker-end="url(#ar2)"/>
+<!-- Aggregation box -->
+<rect x="230" y="103" width="84" height="26" rx="3" fill="#1a3040" stroke="#00d4ff" stroke-width="1"/>
+<text x="272" y="120" text-anchor="middle" font-family="sans-serif" fill="#00d4ff" font-size="9" font-weight="bold">Aggregation</text>
+<text x="272" y="140" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7.5">pesos aprendidos por escala</text>
+<text x="272" y="153" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7.5">múltiples receptive fields</text>
+<line x1="356" y1="81" x2="372" y2="81" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar2)"/>
+<!-- 4 - GAP -->
+<rect x="374" y="56" width="72" height="50" rx="5" fill="#222636" stroke="#2e3350" stroke-width="1.5"/>
+<text x="410" y="76" text-anchor="middle" font-family="sans-serif" fill="#e2e8f0" font-size="9" font-weight="bold">Global</text>
+<text x="410" y="89" text-anchor="middle" font-family="sans-serif" fill="#e2e8f0" font-size="9" font-weight="bold">Avg Pool</text>
+<text x="410" y="100" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="7.5">h×w → 1×1</text>
+<line x1="446" y1="81" x2="462" y2="81" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar2)"/>
+<!-- 5 - FC + BN -->
+<rect x="464" y="56" width="74" height="50" rx="5" fill="#222636" stroke="#2e3350" stroke-width="1.5"/>
+<text x="501" y="76" text-anchor="middle" font-family="sans-serif" fill="#e2e8f0" font-size="9" font-weight="bold">FC +</text>
+<text x="501" y="89" text-anchor="middle" font-family="sans-serif" fill="#e2e8f0" font-size="9" font-weight="bold">BatchNorm</text>
+<text x="501" y="100" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="7.5">→ 512d</text>
+<line x1="538" y1="81" x2="554" y2="81" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar2)"/>
+<!-- 6 - Output -->
+<rect x="556" y="36" width="84" height="90" rx="5" fill="#222636" stroke="#3ddc84" stroke-width="2"/>
+<text x="598" y="62" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="11" font-weight="bold">Feature</text>
+<text x="598" y="82" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="24" font-weight="bold">512</text>
+<text x="598" y="101" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">L2-normalizado</text>
+<text x="598" y="116" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="7.5">Market1501</text>
+</svg>
+</div>
+
+<!-- ═══════════════ ViT/DINO ═══════════════ -->
+<h4>ViT/DINO — Vision Transformer auto-supervisado → 768d</h4>
+<div style="overflow-x:auto;margin-bottom:1.6rem">
+<svg viewBox="0 0 690 135" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:520px;max-width:690px;display:block;border-radius:8px">
+<defs><marker id="ar3" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#44485a"/></marker></defs>
+<rect width="690" height="135" fill="#161b2e" rx="8"/>
+<!-- 1 - Imagen 224×224 (más cuadrada) -->
+<rect x="6" y="22" width="72" height="90" rx="5" fill="#222636" stroke="#2e3350" stroke-width="1.5"/>
+<rect x="12" y="28" width="60" height="60" rx="3" fill="#1a1d27"/>
+<line x1="22" y1="28" x2="22" y2="88" stroke="#2e3350" stroke-width="0.8"/><line x1="32" y1="28" x2="32" y2="88" stroke="#2e3350" stroke-width="0.8"/><line x1="42" y1="28" x2="42" y2="88" stroke="#2e3350" stroke-width="0.8"/><line x1="52" y1="28" x2="52" y2="88" stroke="#2e3350" stroke-width="0.8"/><line x1="62" y1="28" x2="62" y2="88" stroke="#2e3350" stroke-width="0.8"/>
+<line x1="12" y1="40" x2="72" y2="40" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="52" x2="72" y2="52" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="64" x2="72" y2="64" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="76" x2="72" y2="76" stroke="#2e3350" stroke-width="0.8"/>
+<text x="42" y="101" text-anchor="middle" font-family="monospace" fill="#e2e8f0" font-size="9">224×224</text>
+<text x="42" y="114" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">imagen</text>
+<line x1="78" y1="67" x2="92" y2="67" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar3)"/>
+<!-- 2 - Patch Split -->
+<rect x="94" y="22" width="84" height="90" rx="5" fill="#222636" stroke="#b39ddb" stroke-width="1.5"/>
+<text x="136" y="47" text-anchor="middle" font-family="sans-serif" fill="#b39ddb" font-size="10" font-weight="bold">Patch Split</text>
+<text x="136" y="61" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">196 parches</text>
+<text x="136" y="74" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">16×16 px c/u</text>
+<text x="136" y="87" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">→ 768d tokens</text>
+<text x="136" y="103" text-anchor="middle" font-family="monospace" fill="#b39ddb" font-size="8">Linear Proj</text>
+<line x1="178" y1="67" x2="192" y2="67" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar3)"/>
+<!-- 3 - [CLS] + PosEnc -->
+<rect x="194" y="22" width="78" height="90" rx="5" fill="#222636" stroke="#b39ddb" stroke-width="1.5"/>
+<text x="233" y="46" text-anchor="middle" font-family="sans-serif" fill="#00d4ff" font-size="11" font-weight="bold">[CLS]</text>
+<text x="233" y="61" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8.5">prepend token</text>
+<text x="233" y="75" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8.5">+ Pos. Enc.</text>
+<text x="233" y="90" text-anchor="middle" font-family="monospace" fill="#b39ddb" font-size="8">197 tokens</text>
+<text x="233" y="104" text-anchor="middle" font-family="monospace" fill="#b39ddb" font-size="8">× 768d</text>
+<line x1="272" y1="67" x2="286" y2="67" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar3)"/>
+<!-- 4 - Transformer ×12 (DINO) -->
+<rect x="288" y="14" width="96" height="106" rx="5" fill="#222636" stroke="#b39ddb" stroke-width="2"/>
+<text x="336" y="39" text-anchor="middle" font-family="sans-serif" fill="#b39ddb" font-size="10" font-weight="bold">Transformer</text>
+<text x="336" y="57" text-anchor="middle" font-family="sans-serif" fill="#b39ddb" font-size="20" font-weight="bold">×12</text>
+<text x="336" y="77" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">MH Attention</text>
+<text x="336" y="90" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">FFN + LayerNorm</text>
+<text x="336" y="106" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="8">DINO self-supervised</text>
+<line x1="384" y1="67" x2="398" y2="67" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar3)"/>
+<!-- 5 - CLS token -->
+<rect x="400" y="22" width="84" height="90" rx="5" fill="#222636" stroke="#b39ddb" stroke-width="1.5"/>
+<text x="442" y="46" text-anchor="middle" font-family="sans-serif" fill="#00d4ff" font-size="11" font-weight="bold">[CLS]</text>
+<text x="442" y="61" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="9">token output</text>
+<text x="442" y="75" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">(resto descartado)</text>
+<text x="442" y="90" text-anchor="middle" font-family="monospace" fill="#b39ddb" font-size="8">1 × 768d</text>
+<text x="442" y="104" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="7.5">sin etiquetas</text>
+<line x1="484" y1="67" x2="498" y2="67" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar3)"/>
+<!-- 6 - Output -->
+<rect x="500" y="22" width="82" height="90" rx="5" fill="#222636" stroke="#3ddc84" stroke-width="2"/>
+<text x="541" y="50" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="11" font-weight="bold">Feature</text>
+<text x="541" y="70" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="24" font-weight="bold">768</text>
+<text x="541" y="90" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">L2-normalizado</text>
+<text x="541" y="104" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="7.5">ImageNet21k</text>
+<!-- DINO nota flotante -->
+<rect x="592" y="22" width="90" height="90" rx="5" fill="#1a1d27" stroke="#ffd166" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="637" y="40" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="8" font-weight="bold">DINO training</text>
+<text x="637" y="54" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7.5">student/teacher EMA</text>
+<text x="637" y="67" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7.5">self-distillation</text>
+<text x="637" y="80" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7.5">sin etiquetas manuales</text>
+<text x="637" y="104" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="7.5">→ bueno vehículos</text>
+</svg>
+</div>
+
+<!-- ═══════════════ CLIP ViT-L/14 ═══════════════ -->
+<h4>CLIP ViT-L/14 — Contrastive Language-Image Pre-training → 768d</h4>
+<div style="overflow-x:auto;margin-bottom:1.6rem">
+<svg viewBox="0 0 770 152" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:540px;max-width:770px;display:block;border-radius:8px">
+<defs><marker id="ar4" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#44485a"/></marker></defs>
+<rect width="770" height="152" fill="#161b2e" rx="8"/>
+<!-- 1 - Imagen -->
+<rect x="6" y="31" width="72" height="90" rx="5" fill="#222636" stroke="#2e3350" stroke-width="1.5"/>
+<rect x="12" y="37" width="60" height="60" rx="3" fill="#1a1d27"/>
+<line x1="22" y1="37" x2="22" y2="97" stroke="#2e3350" stroke-width="0.8"/><line x1="32" y1="37" x2="32" y2="97" stroke="#2e3350" stroke-width="0.8"/><line x1="42" y1="37" x2="42" y2="97" stroke="#2e3350" stroke-width="0.8"/><line x1="52" y1="37" x2="52" y2="97" stroke="#2e3350" stroke-width="0.8"/><line x1="62" y1="37" x2="62" y2="97" stroke="#2e3350" stroke-width="0.8"/>
+<line x1="12" y1="49" x2="72" y2="49" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="61" x2="72" y2="61" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="73" x2="72" y2="73" stroke="#2e3350" stroke-width="0.8"/><line x1="12" y1="85" x2="72" y2="85" stroke="#2e3350" stroke-width="0.8"/>
+<text x="42" y="110" text-anchor="middle" font-family="monospace" fill="#e2e8f0" font-size="9">224×224</text>
+<text x="42" y="122" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">imagen</text>
+<line x1="78" y1="76" x2="92" y2="76" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar4)"/>
+<!-- 2 - Patch Split 14×14 -->
+<rect x="94" y="31" width="84" height="90" rx="5" fill="#222636" stroke="#ffd166" stroke-width="1.5"/>
+<text x="136" y="55" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="10" font-weight="bold">Patch Split</text>
+<text x="136" y="69" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">256 parches</text>
+<text x="136" y="82" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">14×14 px c/u</text>
+<text x="136" y="95" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">→ 1024d tokens</text>
+<text x="136" y="111" text-anchor="middle" font-family="monospace" fill="#ffd166" font-size="8">Linear Proj</text>
+<line x1="178" y1="76" x2="192" y2="76" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar4)"/>
+<!-- 3 - CLS + PosEnc -->
+<rect x="194" y="31" width="78" height="90" rx="5" fill="#222636" stroke="#ffd166" stroke-width="1.5"/>
+<text x="233" y="55" text-anchor="middle" font-family="sans-serif" fill="#00d4ff" font-size="11" font-weight="bold">[CLS]</text>
+<text x="233" y="70" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8.5">prepend token</text>
+<text x="233" y="84" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8.5">+ Pos. Enc.</text>
+<text x="233" y="99" text-anchor="middle" font-family="monospace" fill="#ffd166" font-size="8">257 tokens</text>
+<text x="233" y="112" text-anchor="middle" font-family="monospace" fill="#ffd166" font-size="8">× 1024d</text>
+<line x1="272" y1="76" x2="286" y2="76" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar4)"/>
+<!-- 4 - Transformer ×24 ViT-L -->
+<rect x="288" y="20" width="96" height="112" rx="5" fill="#222636" stroke="#ffd166" stroke-width="2"/>
+<text x="336" y="45" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="10" font-weight="bold">Transformer</text>
+<text x="336" y="64" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="20" font-weight="bold">×24</text>
+<text x="336" y="84" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">1024d · 16 heads</text>
+<text x="336" y="97" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">MH Attention</text>
+<text x="336" y="110" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">FFN + LayerNorm</text>
+<text x="336" y="124" text-anchor="middle" font-family="monospace" fill="#ffd166" font-size="8">ViT-Large</text>
+<line x1="384" y1="76" x2="398" y2="76" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar4)"/>
+<!-- 5 - Linear Proj 1024→768 -->
+<rect x="400" y="31" width="88" height="90" rx="5" fill="#222636" stroke="#ffd166" stroke-width="1.5"/>
+<text x="444" y="54" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="9" font-weight="bold">Proj. Lineal</text>
+<text x="444" y="67" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">1024d</text>
+<text x="444" y="79" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="13">↓</text>
+<text x="444" y="94" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">768d</text>
+<text x="444" y="107" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7.5">esp. multimodal</text>
+<line x1="488" y1="76" x2="502" y2="76" stroke="#44485a" stroke-width="1.5" marker-end="url(#ar4)"/>
+<!-- 6 - Output -->
+<rect x="504" y="31" width="84" height="90" rx="5" fill="#222636" stroke="#3ddc84" stroke-width="2"/>
+<text x="546" y="57" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="11" font-weight="bold">Feature</text>
+<text x="546" y="77" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="24" font-weight="bold">768</text>
+<text x="546" y="97" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="8">L2-normalizado</text>
+<text x="546" y="111" text-anchor="middle" font-family="monospace" fill="#8892a4" font-size="7.5">img + texto</text>
+<!-- CLIP: contrastive training note -->
+<rect x="598" y="20" width="164" height="112" rx="5" fill="#1a1d27" stroke="#ffd166" stroke-width="1" stroke-dasharray="5 3"/>
+<text x="680" y="40" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="9" font-weight="bold">Entrenamiento contrastivo</text>
+<text x="680" y="54" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="8">400M pares imagen-texto</text>
+<rect x="608" y="62" width="68" height="22" rx="3" fill="#1a2040" stroke="#ffd166" stroke-width="1" opacity="0.8"/>
+<text x="642" y="77" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="8">"camisa roja"</text>
+<line x1="676" y1="73" x2="686" y2="73" stroke="#ffd166" stroke-width="1.5" marker-end="url(#ar4)" opacity="0.7"/>
+<rect x="688" y="62" width="66" height="22" rx="3" fill="#1a2040" stroke="#3ddc84" stroke-width="1" opacity="0.8"/>
+<text x="721" y="77" text-anchor="middle" font-family="sans-serif" fill="#3ddc84" font-size="8">768d texto</text>
+<text x="680" y="103" text-anchor="middle" font-family="sans-serif" fill="#8892a4" font-size="7.5">minimiza dist(imagen, texto)</text>
+<text x="680" y="117" text-anchor="middle" font-family="sans-serif" fill="#ffd166" font-size="7.5">→ espacio semántico compartido</text>
+</svg>
+</div>
+
+<h3>Dimensiones del feature vector y significado de la fracción (f=)</h3>
+<p>El score <code>s=</code> es la similitud coseno promedio contra todos los features de galería. La fracción <code>f=</code> es el porcentaje de features de galería que superan <code>thr_feat</code> individualmente.</p>
+
+<table>
+  <thead><tr><th>Modelo</th><th>Dim</th><th>f=0%</th><th>f=25%</th><th>f=75%</th><th>f=100%</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">TransReID</td><td>3840</td><td>Ningún feature coincide</td><td>8/30 features coinciden (mínimo recomendado)</td><td>Match sólido</td><td class="t-lock">Match excelente — lock inmediato</td></tr>
+    <tr><td class="col-param">OSNet</td><td>512</td><td>Sin concordancia</td><td>Match posible</td><td>Match bueno</td><td class="t-lock">Match fuerte</td></tr>
+    <tr><td class="col-param">ViT/DINO</td><td>768</td><td>Sin concordancia</td><td>Match posible</td><td>Match bueno</td><td class="t-lock">Match fuerte</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════ 7. CONFIGS ══════════════ -->
+<section id="configs">
+<h2>7. Configuraciones Recomendadas por Tipo de Objetivo</h2>
+
+<h3>Enrollment (auto_enroll_v2.py)</h3>
+<table>
+  <thead><tr><th>Tipo objetivo</th><th>Modelo</th><th>aug</th><th>top</th><th>veh_ratio</th><th>search_f</th><th>clip_f</th><th>SR</th><th>Notación</th></tr></thead>
+  <tbody>
+    <tr class="best-row">
+      <td>Persona a pie</td>
+      <td class="col-param">transreid</td>
+      <td class="col-def">5</td><td class="col-def">5</td>
+      <td class="col-def">1.0</td><td class="col-def">120</td><td class="col-def">100</td>
+      <td class="col-def">x4 blend=0.5</td>
+      <td class="col-param">5-5-1-120-100-SR-4</td>
+    </tr>
+    <tr class="best-row">
+      <td>Moto con rider</td>
+      <td class="col-param">transreid</td>
+      <td class="col-def">5</td><td class="col-def">5</td>
+      <td class="col-def">1.5</td><td class="col-def">120</td><td class="col-def">100</td>
+      <td class="col-def">x4 blend=0.5</td>
+      <td class="col-param">5-5-1.5-120-100-SR-4</td>
+    </tr>
+    <tr>
+      <td>Carro / taxi</td>
+      <td class="col-param">vit</td>
+      <td class="col-def">5</td><td class="col-def">5</td>
+      <td class="col-def">1.0</td><td class="col-def">120</td><td class="col-def">100</td>
+      <td class="col-def">x4 blend=0.5</td>
+      <td class="col-param">5-5-1-120-100-SR-4</td>
+    </tr>
+    <tr>
+      <td>Bicicleta con ciclista</td>
+      <td class="col-param">transreid</td>
+      <td class="col-def">5</td><td class="col-def">5</td>
+      <td class="col-def">1.5</td><td class="col-def">120</td><td class="col-def">100</td>
+      <td class="col-def">x4 blend=0.5</td>
+      <td class="col-param">5-5-1.5-120-100-SR-4</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Búsqueda en videos (reid_viewer_v2_offline.py)</h3>
+<table>
+  <thead><tr><th>Tipo</th><th>--thr_feat</th><th>--min_fraction</th><th>--frame_skip</th><th>--yolo_batch</th><th>--feat_batch</th><th>YOLO contexto</th></tr></thead>
+  <tbody>
+    <tr class="best-row">
+      <td>Persona (TransReID)</td>
+      <td class="col-def">0.70</td><td class="col-def">0.25</td>
+      <td class="col-def">2</td><td class="col-def">8</td><td class="col-def">32</td>
+      <td>— (solo person=0)</td>
+    </tr>
+    <tr class="best-row">
+      <td>Moto (TransReID)</td>
+      <td class="col-def">0.60</td><td class="col-def">0.25</td>
+      <td class="col-def">2</td><td class="col-def">8</td><td class="col-def">32</td>
+      <td>motorcycle=3 en Contexto</td>
+    </tr>
+    <tr>
+      <td>Carro (ViT/DINO)</td>
+      <td class="col-def">0.60</td><td class="col-def">0.25</td>
+      <td class="col-def">2</td><td class="col-def">8</td><td class="col-def">32</td>
+      <td>car=2 en Contexto</td>
+    </tr>
+    <tr>
+      <td>Persona (OSNet)</td>
+      <td class="col-def">0.65</td><td class="col-def">0.30</td>
+      <td class="col-def">2</td><td class="col-def">8</td><td class="col-def">32</td>
+      <td>— (solo person=0)</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="card tip">
+  <strong>Ajuste fino de umbrales:</strong> Usar <code>[TOP]</code> como guía. Si el mejor score es <code>s=0.68</code> y usas <code>--thr_feat 0.70</code>, el sistema no detectará nada. Baja <code>thr_feat</code> a 0.60 o re-enrolla con mejor video.
+  Si <code>f=0%</code> constantemente, la galería fue enrollada con crops incorrectos — re-enrollar.
+</div>
+</section>
+
+<!-- ══════════════ 8. STATE MACHINE ══════════════ -->
+<section id="statemachine">
+<h2>8. Máquina de Estados: SEARCH → TRACK → LOST</h2>
+
+<div class="sm">
+  <div class="sm-state search">
+    <div class="sm-title">🔍 SEARCH</div>
+    <div class="sm-body">
+      YOLO detecta en frame completo.<br>
+      Para cada detección se calcula <code>score</code> y <code>frac_s</code>.<br>
+      Si <code>frac_s ≥ min_fraction</code> y no es rechazado por neg_feats → candidato.<br>
+      Se acumulan en <code>confirm_count</code> si el candidato permanece en zona <code>zone_thr</code> px.<br>
+      <br>
+      → <strong>TRACK</strong> cuando se cumple algún mecanismo de lock (ver abajo).
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--muted);padding:0 0.5rem">→</div>
+  <div class="sm-state track">
+    <div class="sm-title">🎯 TRACK</div>
+    <div class="sm-body">
+      YOLO detecta solo en la <em>zona bloqueada</em> (bounding box expandido).<br>
+      Umbral más permisivo: <code>thr_feat_track = thr_feat × 0.85</code>.<br>
+      Zona se desplaza según la detección activa (velocidad predictiva).<br>
+      <code>lost_count</code> sube cuando no hay detección válida.<br>
+      <br>
+      → <strong>SEARCH</strong> si <code>lost_count ≥ lost_max</code>.
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;font-size:1.5rem;color:var(--muted);padding:0 0.5rem">→</div>
+  <div class="sm-state lost">
+    <div class="sm-title">❌ LOST / SEARCH</div>
+    <div class="sm-body">
+      Zona perdida tras <code>lost_max</code> frames sin detección válida.<br>
+      El intervalo TRACK se cierra y se genera el clip de video.<br>
+      Se imprime <code>[LOST]</code> con avg_score y avg_frac del intervalo.<br>
+      <br>
+      → Vuelve a <strong>SEARCH</strong> inmediatamente.
+    </div>
+  </div>
+</div>
+
+<h3>Mecanismos de lock SEARCH → TRACK</h3>
+
+<table>
+  <thead><tr><th>Tipo</th><th>Condición</th><th>Cuándo se activa</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="badge model">[reg]</span> Regular</td>
+      <td><code>confirm_count ≥ lock_frames_eff</code> Y <code>regular_lock_spd_ok</code></td>
+      <td>Caso general: N frames consecutivos con buena confianza y/o movimiento detectado.</td>
+    </tr>
+    <tr>
+      <td><span class="badge best">[imm]</span> Inmediato</td>
+      <td><code>confirm_count ≥ 2</code> Y <code>frac ≥ 70%</code> Y <code>score ≥ thr × 1.10</code></td>
+      <td>Match muy alto en el frame actual. Evita que decoys de frac baja contaminen <code>confirm_min_frac</code>.</td>
+    </tr>
+    <tr>
+      <td><span class="badge stream">[dyn]</span> Dinámico</td>
+      <td><code>confirm_count ≥ 3</code> Y <code>frac ≥ 55%</code> Y <code>spd ≥ 2.0 px/f</code> Y <code>frac_ok</code></td>
+      <td>Objetivo en movimiento rápido con match razonable.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>lock_frames_eff — frames efectivos de confirmación</h4>
+<table>
+  <thead><tr><th>Condición</th><th>lock_frames_eff</th></tr></thead>
+  <tbody>
+    <tr><td><code>confirm_min_frac ≥ 99%</code> (con neg_feats)</td><td class="col-def">lock_frames (4)</td></tr>
+    <tr><td><code>confirm_min_frac ≥ 99%</code> (sin neg_feats)</td><td class="col-def">lock_frames × 5 (20)</td></tr>
+    <tr class="best-row"><td><code>frac_ok</code>: min_frac ≥ 70% ó best_frac ≥ 80%</td><td class="col-def">lock_frames (4)</td></tr>
+    <tr><td>ninguno de los anteriores</td><td class="col-def">lock_frames × 2 (8)</td></tr>
+  </tbody>
+</table>
+
+<div class="card warn">
+  <strong>Problema frecuente — "decoy envenenando confirm_min_frac":</strong><br>
+  Si hay otra persona con ropa similar (ej. también roja), puede aparecer en un frame intermedio de la ventana de confirmación con <code>frac=35%</code>. Esto baja <code>confirm_min_frac</code> a 35%, deshabilita <code>frac_ok</code> y duplica <code>lock_frames_eff</code> a 8. El lock inmediato <code>[imm]</code> fue diseñado para evitar esto: si el frame actual tiene <code>frac ≥ 70%</code> y <code>score ≥ thr × 1.10</code>, lockea en 2 frames sin importar el historial.
+</div>
+</section>
+
+<!-- ══════════════ 9. OUTPUT ══════════════ -->
+<section id="output">
+<h2>9. Interpretar la Salida de Consola</h2>
+
+<h3>Líneas típicas de reid_viewer_v2_offline.py</h3>
+<pre><span class="t-info">[GALLERY] 'Sueter_Rojo_Pantaon_20260604'  30×3840d  modelo=transreid/...  buscar=[0]  contexto=—  SR=x4 blend=0.5</span>
+<span class="t-info">[INFO] thr_feat=0.70  min_fraction=0.25</span>
+<span class="t-info">[INFO] thr_feat_track=0.595  min_fraction_track=0.125</span>
+<span class="t-info">[INFO] lock_frames=4  zone_thr=80.0  lost_max=15</span>
+
+━━━━ [1/8]  Normal0001.mp4 ━━━━
+<span class="t-info">[F1]  451f → 226 analizados  2078 dets  32.5s  (14fps)</span>
+<span class="t-neg">[NEG] 80 muestras negativas</span>
+<span class="t-top">[TOP]  mejor: s=0.854 f=83% en f=248   (thr=0.70/frac≥25%)  OK ≥ thr</span>
+
+<span class="t-search">  [SEARCH] f= 246  primer match  f=78%  center=(412,310)</span>
+<span class="t-search">  [SEARCH] f= 248  confirm= 2/4  f=83%  spd=1.8px/f  dist=12px</span>
+<span class="t-lock">  [LOCK] f= 248  64×128px  s=0.854 f=83%  cnt=2  spd=1.8  [imm]</span>
+<span class="t-track">  [TRACK] f= 250  250×320px  s=0.812 f=72%  lost=0</span>
+<span class="t-track">  [TRACK] f= 260  250×320px  s=0.798 f=68%  lost=0</span>
+<span class="t-lost">  [LOST]  f= 310  → SEARCH  |  intervalo cerrado: 31 frames  s_avg=0.821  f_avg=74%</span>
+
+<span class="t-result">══ [RESULTADO] ENCONTRADO 'Sueter_Rojo_Pantaon_20260604' ══</span>
+<span class="t-result">  1 intervalo(s) encontrados</span>
+<span class="t-result">  [1]  f= 248→ 310   16.5s→20.7s   (4.2s)  31 frames   s_avg=0.821  f_avg=74%</span></pre>
+
+<h4>Glosario de campos</h4>
+<table>
+  <thead><tr><th>Campo</th><th>Significado</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">s=0.854</td><td>Cosine similarity promedio del crop actual vs. todos los features de galería.</td></tr>
+    <tr><td class="col-param">f=83%</td><td>Fracción de features de galería que superan <code>thr_feat</code> individualmente. El objetivo real debe superar <code>min_fraction</code> (25% default).</td></tr>
+    <tr><td class="col-param">cnt=2</td><td>Número de frames consecutivos de confirmación acumulados cuando se disparó el lock.</td></tr>
+    <tr><td class="col-param">spd=1.8</td><td>Velocidad de la detección en px/frame (para calibrar <code>dynamic_lock</code>).</td></tr>
+    <tr><td class="col-param">[imm]</td><td>Lock disparado por el mecanismo inmediato (alta confianza en el frame actual).</td></tr>
+    <tr><td class="col-param">[dyn]</td><td>Lock disparado por movimiento rápido + frac mínima.</td></tr>
+    <tr><td class="col-param">[reg]</td><td>Lock regular: N frames confirmados + condición de velocidad.</td></tr>
+    <tr><td class="col-param">s_avg / f_avg</td><td>Score promedio y fracción promedio durante el intervalo TRACK (calidad del tracking).</td></tr>
+  </tbody>
+</table>
+
+<h3>Archivos de salida de búsqueda</h3>
+<table>
+  <thead><tr><th>Archivo</th><th>Descripción</th></tr></thead>
+  <tbody>
+    <tr><td class="col-param">reid_clips/{video}_{label}_f{start}.mp4</td><td>Clip de video recortado a la zona bloqueada durante el intervalo TRACK.</td></tr>
+    <tr><td class="col-param">reid_clips/{video}_{label}_f{start}_crop_fXXX.jpg</td><td>Crop del mejor frame del intervalo (mayor score).</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════ 10. TROUBLESHOOT ══════════════ -->
+<section id="troubleshoot">
+<h2>10. Problemas Comunes y Soluciones</h2>
+
+<div class="card warn">
+  <div class="card-title">❌ [TOP] muestra f=0% en todos los videos</div>
+  <p>La galería fue enrollada con crops incorrectos (portrait con relleno negro en lugar de el crop en crudo). Solución: re-enrollar con la versión corregida de auto_enroll_v2.py.</p>
+  <p>Diagnóstico: <code>python3 -c "import cv2; img=cv2.imread('Data/Frames/galeria_fXXXXXX.jpg'); print(img.shape)"</code> — si shape es (256,128,3) = portrait con letterbox, re-enrollar.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-title">❌ [TOP] OK ≥ thr pero NO ENCONTRADO</div>
+  <p>La fase 1 encontró detecciones buenas, pero la máquina de estados no lockea. Causas probables:</p>
+  <ul>
+    <li><strong>Decoy de frac baja</strong>: otro objeto con ropa similar aparece en frames intermedios y arrastra <code>confirm_min_frac</code> hacia abajo. El lock <code>[imm]</code> debería resolverlo si <code>score ≥ thr × 1.10</code>.</li>
+    <li><strong>Objetivo muy estático</strong>: <code>spd=0</code> y <code>confirm_min_frac &lt; 0.85</code>. Bajar <code>--lock_frames</code> a 2 o 3.</li>
+    <li><strong>zone_thr demasiado pequeño</strong>: el objetivo oscila entre frames y cae fuera de la zona de confirmación. Subir <code>--zone_thr</code> a 120.</li>
+    <li><strong>Umbral demasiado alto</strong>: bajar <code>--thr_feat</code> en 0.05 incrementos.</li>
+  </ul>
+</div>
+
+<div class="card warn">
+  <div class="card-title">❌ Muchos falsos positivos (lockea en personas incorrectas)</div>
+  <ul>
+    <li>Subir <code>--thr_feat</code> y/o <code>--min_fraction</code>.</li>
+    <li>Subir <code>--neg_frames</code> a 120 o más para que la galería negativa capture más decoys.</li>
+    <li>Re-enrollar con descripción más específica o video de mejor calidad.</li>
+  </ul>
+</div>
+
+<div class="card warn">
+  <div class="card-title">❌ Motocicleta no detectada / crops en portrait con relleno negro</div>
+  <p>Verificar que en el enrollment se marcó <code>motorcycle (3)</code> como clase de Contexto. El crop debe ser del bbox expandido de la moto (80% arriba, 30% laterales) y guardarse en crudo (sin letterbox). Si el crop sigue siendo 256×128, re-enrollar.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-title">❌ Error: expected floating-point number but got ""</div>
+  <p>Error de tkinter al limpiar el campo de Veh Ratio o Frames en enroll_launcher. El launcher ya maneja esto con try/except. Si persiste, actualizar enroll_launcher.py.</p>
+</div>
+
+<div class="card warn">
+  <div class="card-title">❌ PCA: ventana bloquea el enrollment</div>
+  <p>Si se invoca auto_enroll_v2.py directamente sin <code>--no_show_pca</code>, la ventana de PCA abre un <code>root.mainloop()</code> que bloquea hasta cerrarla. El launcher siempre pasa <code>--no_show_pca</code> automáticamente.</p>
+</div>
+
+<div class="card tip">
+  <div class="card-title">Flujo de diagnóstico rápido</div>
+  <ol class="pipeline">
+    <li>Ejecutar con <code>--debug</code> para ver el score y fracción de cada detección individual.</li>
+    <li>Revisar <code>[TOP]</code>: si <code>FALTA</code>, bajar <code>--thr_feat</code>. Si <code>f=0%</code>, re-enrollar.</li>
+    <li>Si <code>OK ≥ thr</code> pero no lockea, añadir <code>--debug</code> y buscar <code>[SEARCH] primer match</code>. Ver si <code>confirm</code> llega a 2 y si <code>[LOCK]</code> aparece.</li>
+    <li>Si sigue sin lockear con 2 confirmaciones, bajar <code>--lock_frames 2</code> y revisar <code>zone_thr</code>.</li>
+  </ol>
+</div>
+
+</section>
+
+<hr>
+<p style="text-align:center; color:var(--muted); font-size:0.82rem; margin-top:2rem;">
+  Arconte Detection Tools &nbsp;·&nbsp; Re-ID v2 &nbsp;·&nbsp; TransReID + YOLO11x + Real-ESRGAN
+  &nbsp;·&nbsp; Jonathan &nbsp;·&nbsp; 2026
+</p>
+
+</div>
+</body>
+</html>

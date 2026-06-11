@@ -1,0 +1,681 @@
+{
+  "arconte": {
+    "title": "Arconte",
+    "meta": {
+      "subtitle": "Vigilancia & Detección de Eventos",
+      "status": "dev",
+      "status_label": "En desarrollo",
+      "tags": [
+        {
+          "label": "Seguridad",
+          "cls": "tag-security"
+        }
+      ],
+      "tech": [
+        "Python 3.12",
+        "PyTorch",
+        "YOLOv11x",
+        "ByteTrack",
+        "CLIP ViT-L/14",
+        "FastAPI",
+        "PostGIS",
+        "TransReID",
+        "Docker",
+        "RTSP"
+      ],
+      "links": [
+        {
+          "label": "Arconte (producción)",
+          "url": "https://github.com/Celestial-Dynamics-AI/arconte"
+        },
+        {
+          "label": "Detección Zero-Shot",
+          "url": "https://github.com/Celestial-Dynamics-AI/ArconteDetection_ZeroShot"
+        },
+        {
+          "label": "Debug Tools",
+          "url": "https://github.com/Celestial-Dynamics-AI/ArconteDetection_DebugTools.git"
+        },
+        {
+          "label": "Sedna (Faces)",
+          "url": "https://github.com/Celestial-Dynamics-AI/Sedna"
+        }
+      ],
+      "description": "Sistema multi-modelo de visión computacional para detección de eventos de seguridad en entornos de vigilancia. Detecta choques, incendios, peleas, robos y reconocimiento facial en tiempo real sobre streams RTSP.",
+      "pipeline": [
+        "Planeación",
+        "Desarrollo",
+        "Implementación",
+        "Pruebas",
+        "QA",
+        "Lanzado"
+      ],
+      "pipeline_current": 1,
+      "_static": true
+    },
+    "phases": [],
+    "sprint_tasks": {},
+    "acuerdos": [],
+    "models": [],
+    "static_metrics": {
+      "choque": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "incendio_humo": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "pelea": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "robo_violencia": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "robo_autopartes": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "facial": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      }
+    }
+  },
+  "publicvector": {
+    "title": "PublicVector",
+    "meta": {
+      "subtitle": "Monitoreo de Medios TV / Radio — Detección de Menciones",
+      "status": "dev",
+      "status_label": "En desarrollo",
+      "tags": [
+        {
+          "label": "Media",
+          "cls": "tag-media"
+        }
+      ],
+      "tech": [
+        "Python",
+        "Whisper",
+        "NLP",
+        "FastAPI",
+        "PostgreSQL"
+      ],
+      "links": [],
+      "description": "Plataforma de monitoreo automático de medios de comunicación (TV y radio). Detecta y transcribe menciones de palabras clave, personas o marcas en streams de audio/video en tiempo real.",
+      "pipeline": [
+        "Planeación",
+        "Desarrollo",
+        "Pruebas",
+        "QA",
+        "Lanzado"
+      ],
+      "pipeline_current": 1,
+      "_static": true
+    },
+    "phases": [
+      {
+        "id": "ph_1781136743053_q3zg",
+        "title": "Fase 1",
+        "status": "active",
+        "start_iso": "2026-04-21",
+        "end_iso": "2026-04-30",
+        "tasks": [
+          {
+            "title": "Obtencion de requerimientos",
+            "description": "Con base en el inicio de mes establecido para el proyecto",
+            "area": "PM",
+            "responsible": "Abelardo",
+            "done": true,
+            "id": "t_1781136743053_v655"
+          },
+          {
+            "title": "Obtención de la data",
+            "description": "Ventana de recopilación programada del 28 al 30 de abril",
+            "area": "Datos",
+            "responsible": "Equipo IA",
+            "done": true,
+            "id": "t_1781136743053_8zfe"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_ijw6",
+        "title": "Fase 2",
+        "status": "active",
+        "start_iso": "2026-04-28",
+        "end_iso": "2026-05-04",
+        "tasks": [
+          {
+            "title": "Diseño de backend/frontend",
+            "description": "Estructuración lógica de las interfaces y servicios",
+            "area": "Frontend",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781136743053_4g96"
+          },
+          {
+            "title": "Diseño de modelo de reconocimiento de palabras",
+            "description": "Flujo de diseño continuo a lo largo del roadmap",
+            "area": "AI Eng",
+            "responsible": "Jonathan",
+            "done": true,
+            "id": "t_1781136743053_52c3"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_m6u1",
+        "title": "Fase 3",
+        "status": "active",
+        "start_iso": "2026-05-01",
+        "end_iso": "2026-05-08",
+        "tasks": [
+          {
+            "title": "Identificación de programación para video",
+            "description": "Módulo de análisis de flujos de televisión",
+            "area": "AI Eng",
+            "responsible": "Jonathan",
+            "done": true,
+            "id": "t_1781136743053_uos4"
+          },
+          {
+            "title": "Identificacion de programación para radio",
+            "description": "Módulo de procesamiento para señales de audio",
+            "area": "AI Eng",
+            "responsible": "Israel",
+            "done": true,
+            "id": "t_1781136743053_oigi"
+          },
+          {
+            "title": "Pruebas en el POD",
+            "description": "Garantizar que el POD esté operativo para procesamiento visual",
+            "area": "Infra",
+            "responsible": "Juan/Jonathan",
+            "done": true,
+            "id": "t_1781136743053_5c8k"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_ieqf",
+        "title": "Fase 4",
+        "status": "active",
+        "start_iso": "2026-06-02",
+        "end_iso": "2026-06-09",
+        "tasks": [
+          {
+            "title": "Etiquetado de datos",
+            "description": "Alimentación continua de la base de datos de entrenamiento",
+            "area": "Datos",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_1n3a"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_7s5t",
+        "title": "Fase 5",
+        "status": "active",
+        "start_iso": "2026-06-04",
+        "end_iso": "2026-06-12",
+        "tasks": [
+          {
+            "title": "Setup de servidores de procesamiento (GPU)",
+            "description": "Configuración y preparación de nodos de hardware dedicados",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781136743053_eerh"
+          },
+          {
+            "title": "Pruebas de conectividad y bandwidth",
+            "description": "Validación de la capacidad técnica de la red",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": true,
+            "id": "t_1781136743053_55m8"
+          },
+          {
+            "title": "Unificacion de la 1a version del modelo",
+            "description": "Consolidación e integración de los componentes base",
+            "area": "AI Eng",
+            "responsible": "Jonathan",
+            "done": false,
+            "id": "t_1781136743053_4enk"
+          },
+          {
+            "title": "Plataforma (1a version)",
+            "description": "Creación de la primera plataforma local",
+            "area": "Frontend",
+            "responsible": "Equipo IA",
+            "done": true,
+            "id": "t_1781136743053_q70x"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_mt15",
+        "title": "Fase 6",
+        "status": "active",
+        "start_iso": "2026-06-08",
+        "end_iso": "2026-06-12",
+        "tasks": [
+          {
+            "title": "Obtención de los datos de inferencia (1a version)",
+            "description": "Entrada continua de flujos multimedia para pruebas",
+            "area": "Datos",
+            "responsible": "Juan/Jonathan",
+            "done": true,
+            "id": "t_1781136743053_oosq"
+          },
+          {
+            "title": "Simulacion de escenarios",
+            "description": "Pruebas de control de entornos antes del despliegue",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_8b43"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_fu5d",
+        "title": "Fase 7",
+        "status": "active",
+        "start_iso": "2026-06-09",
+        "end_iso": "2026-06-12",
+        "tasks": [
+          {
+            "title": "Plataforma - POD",
+            "description": "Integracion de los modelos y primera version de PV en el pod",
+            "area": "Frontend",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_89v6"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_51ho",
+        "title": "Fase 8",
+        "status": "active",
+        "start_iso": "2026-06-10",
+        "end_iso": "2026-06-17",
+        "tasks": [
+          {
+            "title": "Pruebas de latencia y throughput",
+            "description": "Mediciones de tiempo de respuesta del sistema",
+            "area": "Infra",
+            "responsible": "Jonathan",
+            "done": false,
+            "id": "t_1781136743053_f2hf"
+          },
+          {
+            "title": "Testing de alertas y notificaciones",
+            "description": "Validación de canales de comunicación de eventos",
+            "area": "Frontend",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_u8qu"
+          },
+          {
+            "title": "Optimizacion del modelo",
+            "description": "Ajuste final del pipeline en la ventana de mayo",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_h2rv"
+          },
+          {
+            "title": "Optimización de false positives",
+            "description": "Reducción de ruido y calibración de umbrales",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_n4wx"
+          },
+          {
+            "title": "Ajuste de sensibilidad de alertas",
+            "description": "Calibración fina de la lógica de disparo",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_bxuh"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_xkbt",
+        "title": "Fase 9",
+        "status": "active",
+        "start_iso": "2026-06-15",
+        "end_iso": "2026-06-26",
+        "tasks": [
+          {
+            "title": "Deployment en ambiente de producción",
+            "description": "Puesta en marcha del sistema base",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": false,
+            "id": "t_1781136743053_zbbh"
+          },
+          {
+            "title": "Configuración de almacenamiento de video",
+            "description": "Estructuración del guardado de históricos",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": false,
+            "id": "t_1781136743053_7xlq"
+          },
+          {
+            "title": "Configuración de monitoreo 24/7",
+            "description": "Setup inicial del servicio de seguimiento continuo",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": false,
+            "id": "t_1781136743053_vx69"
+          },
+          {
+            "title": "Setup de backup y redundancia",
+            "description": "Mecanismos de recuperación ante fallos de nodos",
+            "area": "Infra",
+            "responsible": "Juan",
+            "done": false,
+            "id": "t_1781136743053_y6st"
+          },
+          {
+            "title": "Activación de alertas en vivo",
+            "description": "Puesta a punto de notificaciones en tiempo real",
+            "area": "Frontend",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_fhro"
+          },
+          {
+            "title": "Go-Live y handover",
+            "description": "Entrega técnica del sistema MVP operativos",
+            "area": "PM",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_2sge"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_uwov",
+        "title": "Fase 10",
+        "status": "active",
+        "start_iso": "2026-06-22",
+        "end_iso": "2026-06-26",
+        "tasks": [
+          {
+            "title": "Monitoreo de performance de modelos",
+            "description": "Evaluación y seguimiento de métricas en campo",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_q11u"
+          },
+          {
+            "title": "Actualización de datasets",
+            "description": "Inclusión continua de nuevas muestras de datos",
+            "area": "Datos",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_ws3o"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_9j0v",
+        "title": "Fase 19",
+        "status": "active",
+        "start_iso": "2026-06-22",
+        "end_iso": "2026-06-26",
+        "tasks": [
+          {
+            "title": "Optimización de detecciones",
+            "description": "Refinamiento continuo de bboxes y encodings lógicos",
+            "area": "AI Eng",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_rjy0"
+          }
+        ]
+      },
+      {
+        "id": "ph_1781136743053_ysfi",
+        "title": "Fase 11",
+        "status": "active",
+        "start_iso": "2026-06-12",
+        "end_iso": "2027-01-28",
+        "tasks": [
+          {
+            "title": "Soporte técnico",
+            "description": "Atención operativa continua del sistema",
+            "area": "Infra",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_gp39"
+          },
+          {
+            "title": "Mejoras y nuevas funcionalidades",
+            "description": "Ciclo continuo de desarrollo post-entrega",
+            "area": "Frontend",
+            "responsible": "Equipo IA",
+            "done": false,
+            "id": "t_1781136743053_k168"
+          }
+        ]
+      }
+    ],
+    "sprint_tasks": {},
+    "acuerdos": [],
+    "models": []
+  },
+  "stack_modelos": {
+    "title": "Stack de Modelos en Desarrollo",
+    "meta": {
+      "subtitle": "Catálogo de modelos experimentales del equipo CV",
+      "status": "research",
+      "status_label": "Investigación activa",
+      "tags": [
+        {
+          "label": "I+D",
+          "cls": "tag-research"
+        }
+      ],
+      "tech": [
+        "Python",
+        "PyTorch",
+        "YOLO11x",
+        "ByteTrack",
+        "CLIP",
+        "TransReID"
+      ],
+      "links": [
+        {
+          "label": "DebugTools (todos los modelos experimentales)",
+          "url": "https://github.com/Celestial-Dynamics-AI/ArconteDetection_DebugTools"
+        }
+      ],
+      "description": "Repositorio de modelos en distintas etapas de investigación y desarrollo. Incluye modelos de detección de objetos, re-identificación de personas, reconocimiento facial y análisis de escenas.",
+      "pipeline": [
+        "Research",
+        "Dataset",
+        "Entrenamiento",
+        "Validación",
+        "Producción"
+      ],
+      "pipeline_current": 2,
+      "_static": true
+    },
+    "phases": [],
+    "sprint_tasks": {},
+    "acuerdos": [],
+    "models": [
+      {
+        "id": "m_stack_reid_001",
+        "name": "Seguimiento y Búsqueda Semántica (Re-ID)",
+        "version": "",
+        "status": "poc",
+        "responsible": "Jonathan Flores",
+        "description": "Sistema de búsqueda y re-identificación de personas y vehículos. Opera en dos etapas: enrolamiento (construye galería de features desde video o foto del objetivo) y búsqueda (localiza al objetivo en streams RTSP o video). Usa descripción en lenguaje natural para localizar al objetivo en el primer frame válido.",
+        "tech": "LocateAnything-3B, SAMURAI (SAM2), YOLO11x, CLIP ViT-L/14, TransReID, ResNet50",
+        "notes": "Estado: Pruebas de integración local en curso.",
+        "created_at": "2026-06-01"
+      },
+      {
+        "id": "m_stack_parking_002",
+        "name": "Monitoreo de Estacionamiento",
+        "version": "",
+        "status": "poc",
+        "responsible": "Jonathan Flores",
+        "description": "Monitor de ocupación de cajones de estacionamiento en tiempo real. Detecta qué cajones están libres u ocupados usando YOLO11x sobre zonas configurables. Además verifica el vehículo registrado en cada cajón mediante similitud visual coseno (ResNet50), color dominante HSV y lectura de placa (en desarrollo).",
+        "tech": "YOLO11x, ResNet50, MobileNetV3, HSV Color, OCR Placas",
+        "notes": "Estado: Primera versión funcional, primeras pruebas.",
+        "created_at": "2026-06-01"
+      },
+      {
+        "id": "m_stack_crowd_003",
+        "name": "Conteo de Multitudes",
+        "version": "",
+        "status": "poc",
+        "responsible": "Jonathan Flores",
+        "description": "Conteo de personas en escenas densas desde cámaras altas (personas de 15–60 px). Divide el frame en un grid de patches (2×4), hace zoom individual por patch y corre YOLO en cada uno, luego aplica NMS global para eliminar duplicados en bordes solapados. Suavizado temporal con media móvil.",
+        "tech": "YOLO11x, Patch Grid 2×4, NMS Global, Temporal Smooth",
+        "notes": "Estado: Prueba de concepto, sin versión asignada.",
+        "created_at": "2026-06-01"
+      },
+      {
+        "id": "m_stack_fire_ir_004",
+        "name": "Detección de Incendio IR",
+        "version": "",
+        "status": "poc",
+        "responsible": "Jonathan Flores",
+        "description": "Versión especializada para cámaras infrarrojas y visión nocturna. A diferencia del modelo RGB, usa máscara HSV de brillo alto y zona amarillo-caliente, CLAHE para contraste IR, flickering gate temporal y prompts CLIP adaptados para imágenes termales. Score combinado: coherencia de keyframes + concentración espacial + coherencia temporal.",
+        "tech": "CLIP ViT-L/14, MOG2, CLAHE, KSM, WinCLIP, IR / Nocturno",
+        "notes": "Estado: Prueba de concepto, primeras pruebas locales.",
+        "created_at": "2026-06-01"
+      },
+      {
+        "id": "m_1781063286682_qwk",
+        "name": "Contador de Piezas",
+        "version": "",
+        "status": "poc",
+        "responsible": "Jonathan Flores",
+        "description": "El Contador de Piezas es un modelo de visión artificial en tiempo real (online) diseñado para automatizar la detección, clasificación y conteo de componentes industriales y de ferretería (como tuercas y tornillos) mediante el procesamiento de un flujo de video continuo. Como Prueba de Concepto (PoC), el sistema localiza visualmente cada objeto en movimiento, identifica su categoría específica sin importar su orientación y rastrea su trayectoria para asegurar que cada elemento sea contabilizado una única vez.",
+        "tech": "YOLO11x",
+        "notes": "",
+        "created_at": "2026-06-10"
+      }
+    ]
+  },
+  "arconte_retail": {
+    "title": "Arconte Retail",
+    "meta": {
+      "subtitle": "Visión Computacional para Retail · Multi-tenant",
+      "status": "dev",
+      "status_label": "En desarrollo",
+      "tags": [
+        {
+          "label": "Retail",
+          "cls": "tag-retail"
+        }
+      ],
+      "tech": [
+        "Python",
+        "YOLO",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "links": [],
+      "description": "Sistema de visión computacional para tiendas de conveniencia. Detecta fardeo, identifica empleados por rostro, segmenta zonas ROI, monitorea cajas y horarios de apertura/cierre.",
+      "pipeline": [
+        "Planeación",
+        "Desarrollo",
+        "Implementación",
+        "Pruebas",
+        "QA",
+        "Lanzado"
+      ],
+      "pipeline_current": 1,
+      "_static": true
+    },
+    "phases": [],
+    "sprint_tasks": {},
+    "acuerdos": [],
+    "models": [],
+    "static_metrics": {
+      "fardeo": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "empleados": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "zonas": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "caja": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      },
+      "apertura": {
+        "version": "—",
+        "accuracy": "—",
+        "recall": "—",
+        "fps": "—",
+        "gflops": "—",
+        "vram": "—"
+      }
+    }
+  }
+}

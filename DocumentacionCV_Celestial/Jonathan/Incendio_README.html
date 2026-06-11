@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fire & Smoke Detector — Arconte Detection Tools</title>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --bg2:       #1a1d27;
+      --bg3:       #222636;
+      --border:    #2e3350;
+      --accent:    #ff6b35;
+      --accent2:   #00d4ff;
+      --green:     #3ddc84;
+      --yellow:    #ffd166;
+      --purple:    #b39ddb;
+      --text:      #e2e8f0;
+      --muted:     #8892a4;
+      --code-bg:   #161b2e;
+      --tag-fire:  rgba(255, 80, 40, 0.15);
+      --tag-smoke: rgba(0, 180, 220, 0.15);
+      --tag-ir:    rgba(160, 130, 255, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* ── Header ── */
+    header {
+      border-left: 4px solid var(--accent);
+      padding: 1.2rem 1.5rem;
+      background: var(--bg2);
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 2.5rem;
+    }
+    header h1 { font-size: 1.8rem; color: var(--accent); letter-spacing: -0.5px; }
+    header p  { color: var(--muted); margin-top: 0.4rem; font-size: 0.95rem; }
+
+    /* ── Section titles ── */
+    h2 {
+      font-size: 1.2rem;
+      color: var(--accent2);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin: 2.5rem 0 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    h3 { font-size: 1.05rem; color: var(--yellow); margin: 1.8rem 0 0.7rem; }
+    h4 { font-size: 0.95rem; color: var(--purple); margin: 1.2rem 0 0.5rem; }
+
+    /* ── Script cards ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+    }
+    .card.fire::before   { background: var(--accent); }
+    .card.smoke::before  { background: var(--accent2); }
+    .card.ir::before     { background: var(--purple); }
+    .card.debug::before  { background: var(--green); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge.prod  { background: var(--tag-fire);  color: var(--accent);  border: 1px solid var(--accent); }
+    .badge.dbg   { background: rgba(61,220,132,.12); color: var(--green); border: 1px solid var(--green); }
+    .badge.ir    { background: var(--tag-ir);    color: var(--purple);  border: 1px solid var(--purple); }
+
+    .filename {
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    /* ── Code blocks ── */
+    pre, code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.84rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      color: #c9d1d9;
+    }
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.82rem;
+      color: var(--accent2);
+    }
+    pre code { background: none; border: none; padding: 0; color: inherit; }
+
+    /* ── Pipeline steps ── */
+    .pipeline {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+    .pipeline li {
+      counter-increment: step;
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 0.5rem;
+      align-items: flex-start;
+      font-size: 0.93rem;
+    }
+    .pipeline li::before {
+      content: counter(step);
+      min-width: 24px;
+      height: 24px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent2);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .pipeline li strong { color: var(--yellow); }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.8rem 0;
+    }
+    th {
+      background: var(--bg3);
+      color: var(--accent2);
+      text-align: left;
+      padding: 0.55rem 0.9rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 0.5rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td { background: var(--bg3); }
+    td:first-child { font-family: 'Cascadia Code','Fira Code',monospace; color: var(--accent2); font-size: 0.82rem; }
+    .best td { color: var(--green) !important; font-weight: 600; }
+    .best td:first-child { color: var(--green) !important; }
+
+    /* ── Dashboard layout ── */
+    .dashboard-grid {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.8rem;
+      line-height: 1.9;
+      color: #a0aec0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* ── Score legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin: 0.6rem 0;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+    }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Diff table IR vs RGB ── */
+    .diff-yes { color: var(--green); }
+    .diff-no  { color: #666; text-decoration: line-through; }
+
+    /* ── Formula ── */
+    .formula {
+      background: var(--bg3);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 6px 6px 0;
+      padding: 0.6rem 1rem;
+      margin: 0.7rem 0;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.9rem;
+      color: var(--yellow);
+    }
+
+    /* ── Callout ── */
+    .callout {
+      background: rgba(61,220,132,.08);
+      border: 1px solid rgba(61,220,132,.3);
+      border-radius: 8px;
+      padding: 0.8rem 1.1rem;
+      font-size: 0.9rem;
+      color: var(--green);
+      margin: 1rem 0;
+    }
+    .callout strong { color: #fff; }
+
+    /* ── Directory tree ── */
+    .tree {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9rem 1.2rem;
+      font-family: 'Cascadia Code','Fira Code',monospace;
+      font-size: 0.83rem;
+      color: #a0aec0;
+      line-height: 1.8;
+    }
+    .tree .dir  { color: var(--accent2); }
+    .tree .file { color: var(--muted); }
+    .tree .note { color: #555; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Misc ── */
+    ul { padding-left: 1.4rem; }
+    ul li { margin-bottom: 0.25rem; font-size: 0.93rem; }
+    p { margin-bottom: 0.6rem; font-size: 0.93rem; }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══════════════════ HEADER ══════════════════ -->
+  <header>
+    <h1>Fire &amp; Smoke Detector</h1>
+    <p>Arconte Detection Tools &mdash; JonathanTools / Fire &nbsp;&bull;&nbsp; Detección en tiempo real para cámaras RGB e IR</p>
+  </header>
+
+  <!-- ══════════════════ DESCRIPCIÓN ══════════════════ -->
+  <h2>¿Qué hace este módulo?</h2>
+  <p>
+    Detecta <strong>incendios y humo</strong> en video en tiempo real (archivo local o stream RTSP)
+    usando un pipeline de dos etapas diseñado para minimizar falsas alarmas en entornos urbanos
+    donde existen fuentes de confusión como faros, taxis amarillos, reflejos de vidrio y luces de obra.
+  </p>
+  <ul>
+    <li><strong>Etapa 1 — Gate rápido:</strong> YOLO + HSV + frame-diff / MOG2 descarta la mayoría de frames sin coste CLIP.</li>
+    <li><strong>Etapa 2 — Verificación semántica:</strong> CLIP evalúa lotes de 20 frames con prompts positivos y negativos antes de disparar una alerta.</li>
+    <li><strong>Alertas:</strong> screenshots guardados automáticamente en <code>ALERTAS_FIRE/</code> y <code>ALERTAS_SMOKE/</code>.</li>
+  </ul>
+
+  <!-- ══════════════════ MODELOS ══════════════════ -->
+  <h2>Modelos</h2>
+  <table>
+    <thead><tr><th>Archivo</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>.checkpoints/best_large.pt</td><td>YOLOv11x entrenado en fuego/humo — 25.3 M parámetros</td></tr>
+      <tr><td>.checkpoints/ViT-B-16-32-f.pt</td><td>CLIP ViT-B/32</td></tr>
+      <tr><td>.checkpoints/ViT-B-16.pt</td><td>CLIP ViT-B/16</td></tr>
+      <tr><td>.checkpoints/ViT-L-14.pt</td><td>CLIP ViT-L/14</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════ SCRIPTS ══════════════════ -->
+  <h2>Scripts</h2>
+
+  <!-- ── PRODUCCIÓN ── -->
+  <div class="card fire">
+    <div class="card-header">
+      <span class="badge prod">Producción</span>
+      <span class="filename">FireDetector_Production_V2.py</span>
+    </div>
+    <p>Versión de despliegue. Overlay mínimo sobre el video original, sin dashboard de debug.
+       Optimizada para correr headless en un servidor o NVR.</p>
+
+    <h4>Novedad V2 — <code>--detect-scale</code></h4>
+    <p>
+      Permite correr HSV, MOG2 y YOLO sobre el frame reducido (p.ej. 0.5 → 960×540 en fuente 1920×1080)
+      mientras el display y los crops CLIP mantienen resolución nativa. Ganancia esperada en el gate rápido: hasta <strong>4×</strong>.
+    </p>
+
+    <h4>Pipeline fuego</h4>
+    <ol class="pipeline">
+      <li><strong>HSV + frame-diff</strong> — máscara naranja/rojo <code>[0-40, 60-255, 120-255]</code> con movimiento → contornos candidatos.</li>
+      <li><strong>YOLO</strong> — <code>best_large.pt</code> sobre cada patch candidato (conf ≥ 0.05).</li>
+      <li><strong>Flickering gate</strong> — varianza temporal del patch en ventana de 8 frames. Si <code>std &lt; 7.0</code> → no parpadea → descartado (filtra autos, luces estáticas).</li>
+      <li><strong>Saturation diversity gate</strong> — si <code>std(saturación) &lt; 15</code> → patch monocromo → descartado (filtra reflejos).</li>
+      <li><strong>Buffer CLIP</strong> — se acumulan 20 frames con hits → lote enviado al worker asíncrono.</li>
+      <li><strong>KSM</strong> — Key-frame Similarity Matching: selecciona el frame más similar al prompt <em>"a fire with visible flames burning"</em> y 5 frames distribuidos.</li>
+      <li><strong>score_kf</strong> — diff pos/neg CLIP sobre k̂, sigmoide → <code>[0, 1]</code>. Prompts: 10 positivos (llamas reales) · 17 negativos (taxi amarillo, faros, pintura naranja…).</li>
+      <li><strong>score_pc</strong> (Patch Concentration) — WinCLIP multi-escala 3 ventanas (48×48, 80×80, 120×120) sobre k̂ a 240×240. Concentración espacial de activación → <code>[0, 1]</code>.</li>
+      <li><strong>score_tc</strong> (Temporal Coherence) — grid 2×3 con los 6 key frames por cada escala/celda. Coherencia del patrón entre frames → <code>[0, 1]</code>.</li>
+      <li><strong>ascore agregado</strong></li>
+    </ol>
+
+    <div class="formula">ascore = 0.55 · score_kf &nbsp;+&nbsp; 0.30 · score_pc &nbsp;+&nbsp; 0.15 · score_tc</div>
+
+    <ol class="pipeline" style="counter-reset: step 10">
+      <li><strong>Gaussian smoothing</strong> — σ=2, historial de 12 batches → <code>smooth_score</code>.</li>
+      <li><strong>Umbral + consecutivos</strong> → <strong style="color:var(--accent)">ALERTA FUEGO</strong> + TTL 90 frames.</li>
+    </ol>
+
+    <p style="margin-top:0.6rem" class="muted">
+      Thresholds adaptativos: ViT-B/32 y ViT-B/16 usan <code>alert=0.50, consec_min=2</code> /
+      ViT-L/14 usa <code>alert=0.54, consec_min=4</code>.
+    </p>
+
+    <h4>Pipeline humo</h4>
+    <ol class="pipeline">
+      <li><strong>HSV acromático</strong> — dos rangos: gris oscuro <code>[0-179, 0-50, 20-160]</code> + gris claro <code>[0-179, 0-35, 140-230]</code>.</li>
+      <li><strong>MOG2</strong> — substractor de fondo (history=200) → movimiento de humo.</li>
+      <li><strong>Patch grid 4×4</strong> — evalúa ratio de píxeles activos por celda. Foco en el patch con mayor ratio. Bloqueo de ROI cuando humo ya detectado.</li>
+      <li><strong>Buffer CLIP</strong> — 20 frames del crop del patch → worker asíncrono.</li>
+      <li><strong>CLIP smoke expert</strong> — top-4 mean de diffs pos/neg, stride=2. Detecta si <code>hits ≥ 3</code> y <code>score &gt; 2.0</code>.</li>
+      <li><strong>consec_pos ≥ 2</strong> → <strong style="color:var(--accent2)">ALERTA HUMO</strong> + TTL 120 frames.</li>
+    </ol>
+
+    <h4>Display overlay</h4>
+    <ul>
+      <li>Banner superior 50 px: <span style="color:var(--green)">NORMAL</span> / <span style="color:var(--accent)">FUEGO DETECTADO</span> / <span style="color:var(--accent2)">HUMO DETECTADO</span></li>
+      <li>Bounding boxes naranja sobre candidatos YOLO de fuego.</li>
+      <li>Rectángulo del patch activo de humo.</li>
+      <li>Info bar inferior 30 px: FPS, skip, dscale, modelo CLIP, tiempos YOLO/CLIP, VRAM.</li>
+    </ul>
+
+    <h4>Uso</h4>
+    <pre><code>python FireDetector_Production_V2.py &lt;video_path&gt;
+python FireDetector_Production_V2.py video.mp4 --frame-skip 2 --detect-scale 0.5
+python FireDetector_Production_V2.py video.mp4 --clip-model ViT-B/32 --quant
+python FireDetector_Production_V2.py rtsp://... --no-display --frame-skip 2 --detect-scale 0.5</code></pre>
+
+    <table style="margin-top:0.6rem">
+      <thead><tr><th>Flag</th><th>Default</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>--clip-model</td><td>ViT-B/32</td><td>Modelo CLIP: ViT-B/32 · ViT-B/16 · ViT-L/14</td></tr>
+        <tr><td>--frame-skip N</td><td>1</td><td>Procesar 1 de cada N frames</td></tr>
+        <tr><td>--detect-scale F</td><td>1.0</td><td>Resolución de detección (ej. 0.5 → mitad)</td></tr>
+        <tr><td>--quant</td><td>off</td><td>SmoothQuant + BNB INT8 sobre CLIP</td></tr>
+        <tr><td>--resize WxH</td><td>nativo</td><td>Redimensionar frame antes de procesar</td></tr>
+        <tr><td>--save</td><td>off</td><td>Guardar video con overlay en <code>grabaciones/</code></td></tr>
+        <tr><td>--no-display</td><td>off</td><td>Headless, sin ventana OpenCV</td></tr>
+        <tr><td>--no-summary</td><td>off</td><td>Omitir tabla de resumen final</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── DEBUG V7 ── -->
+  <div class="card debug">
+    <div class="card-header">
+      <span class="badge dbg">Debug RGB</span>
+      <span class="filename">FireDetector_Debug_V7.py</span>
+    </div>
+    <p>Versión de desarrollo. Mismo pipeline que Producción V2, más un dashboard visual completo para analizar el comportamiento del detector frame a frame.</p>
+
+    <h4>Dashboard</h4>
+    <div class="dashboard-grid">┌─────────────────┬─────────────────┐  frame completo + bboxes YOLO
+│  frame + BB     │  crop fuego     │  crop del candidato de fuego
+├─────────────────┴─────────────────┤
+│  FIRE HSV mask  │  FIRE HSV+motion│  máscaras intermedias fuego
+├─────────────────┴─────────────────┤
+│  SMOKE HSV mask │  SMOKE HSV+MOG2 │  máscaras intermedias humo
+├───────────────────────────────────┤
+│    GRID TESTIGOS CLIP FUEGO       │  últimos crops enviados a CLIP fire
+├───────────────────────────────────┤
+│    GRID TESTIGOS CLIP HUMO        │  últimos crops enviados a CLIP smoke
+├───────────────────────────────────┤
+│           INFO BAR                │  scores numéricos en tiempo real
+├───────────────────────────────────┤  ← NUEVO V7
+│        SCORE TIMELINE             │  historial rolling de scores
+└───────────────────────────────────┘</div>
+
+    <h4>Score Timeline (nuevo en V7)</h4>
+    <p>Franja de 70 px con historial de los últimos 400 frames procesados. Permite evaluar visualmente si el modelo infirió bien en el video de prueba sin revisar logs.</p>
+    <div class="legend">
+      <div class="legend-item"><div class="dot" style="background:#ff6b35"></div><span>fire_smooth_score</span></div>
+      <div class="legend-item"><div class="dot" style="background:#00d4ff"></div><span>smoke_score (normalizado)</span></div>
+      <div class="legend-item"><div class="dot" style="background:#ffd166"></div><span>umbral FIRE_ALERT_THRESHOLD</span></div>
+      <div class="legend-item"><div class="dot" style="background:rgba(255,80,40,.4); border:1px solid #ff6b35"></div><span>frames con FUEGO confirmado</span></div>
+      <div class="legend-item"><div class="dot" style="background:rgba(0,180,220,.3); border:1px solid #00d4ff"></div><span>frames con HUMO confirmado</span></div>
+    </div>
+
+    <div class="callout">
+      <strong>Modelo CLIP por defecto: ViT-B/32</strong> — Ganador de los benchmarks de Mayo-26.
+      Mejor balance velocidad / precisión: 119 ms/batch vs 282 ms del ViT-L/14 con igual FPS.
+    </div>
+
+    <h4>Uso</h4>
+    <pre><code>python FireDetector_Debug_V7.py video.mp4
+python FireDetector_Debug_V7.py video.mp4 --frame-skip 2 --detect-scale 0.5
+python FireDetector_Debug_V7.py video.mp4 --clip-model ViT-B/32 --quant
+python FireDetector_Debug_V7.py rtsp://...</code></pre>
+  </div>
+
+  <!-- ── IR ── -->
+  <div class="card ir">
+    <div class="card-header">
+      <span class="badge ir">Debug IR</span>
+      <span class="filename">FireDetector_Debug_V5_1_IR.py</span>
+    </div>
+    <p>Adaptación para cámaras IR (termales / night-vision). Misma arquitectura base (KSM + KF + PC + TC)
+       pero con máscara de detección completamente diferente y preproceso CLAHE para CLIP.</p>
+
+    <h4>Diferencias IR vs RGB</h4>
+    <table>
+      <thead><tr><th>Aspecto</th><th>RGB (V7)</th><th>IR (V5.1)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Máscara fuego</td>
+          <td>HSV naranja/rojo<br><code>[0-40, 60-255, 120-255]</code></td>
+          <td>HSV brillo-alto (white-hot) <code>[0-179, 0-70, 195-255]</code><br>+ HSV amarillo-caliente (yellow-hot) <code>[13-38, 100-255, 175-255]</code></td>
+        </tr>
+        <tr>
+          <td>Fallback color</td>
+          <td class="diff-no">—</td>
+          <td class="diff-yes">RGB naranja/rojo cuando la cámara IR cambia a modo color</td>
+        </tr>
+        <tr>
+          <td>MOG2 para fuego</td>
+          <td class="diff-no">No (solo humo)</td>
+          <td class="diff-yes">Sí, informativo (blob persistente absorbido por bg)</td>
+        </tr>
+        <tr>
+          <td>Saturation gate</td>
+          <td>std(sat) &lt; 15 → descartado</td>
+          <td class="diff-no">Eliminado (IR es acromático)</td>
+        </tr>
+        <tr>
+          <td>Preproceso CLIP</td>
+          <td class="diff-no">Sin procesar</td>
+          <td class="diff-yes"><strong>CLAHE</strong> antes de CLIP si mean(V) ≤ 200</td>
+        </tr>
+        <tr>
+          <td>Sobreexposición</td>
+          <td class="diff-no">—</td>
+          <td class="diff-yes">Si mean(V) &gt; 200 → colormap caliente en vez de CLAHE</td>
+        </tr>
+        <tr>
+          <td>Flickering threshold</td>
+          <td>std &lt; 7.0</td>
+          <td class="diff-yes">std &lt; 6.0 (más permisivo, IR es más ruidoso)</td>
+        </tr>
+        <tr>
+          <td>Blob grande</td>
+          <td class="diff-no">—</td>
+          <td class="diff-yes">Si área &gt; 4 000 px² @ 1280×720 → candidato directo sin MOG2</td>
+        </tr>
+        <tr>
+          <td>Prompts CLIP</td>
+          <td>Escenas RGB estándar</td>
+          <td class="diff-yes">Prompts adaptados para imágenes termales / IR</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Uso</h4>
+    <pre><code>python FireDetector_Debug_V5_1_IR.py video_ir.mp4
+python FireDetector_Debug_V5_1_IR.py video_ir.mp4 --resize 640x420
+python FireDetector_Debug_V5_1_IR.py rtsp://camara_ir...</code></pre>
+  </div>
+
+  <!-- ══════════════════ CUANTIZACIÓN ══════════════════ -->
+  <h2>Cuantización CLIP (SmoothQuant + BNB INT8)</h2>
+  <p>Disponible con el flag <code>--quant</code> en los scripts RGB.</p>
+  <ol class="pipeline">
+    <li><strong>Calibración</strong> — 64 imágenes aleatorias para medir escalas máximas de activación por canal en cada LayerNorm del encoder visual.</li>
+    <li><strong>SmoothQuant</strong> — suaviza LayerNorm + proyecciones de atención redistribuyendo la magnitud entre activaciones y pesos (α=0.5 por defecto).</li>
+    <li><strong>BNB INT8</strong> — reemplaza capas <code>Linear</code> por <code>Linear8bitLt</code> (bitsandbytes). 72 capas en ViT-L/14 · 36 capas en ViT-B/32.</li>
+  </ol>
+  <p class="muted" style="margin-top:0.4rem">
+    Con ViT-B/32 la cuantización <em>aumenta</em> la latencia (119→204 ms/batch) sin ganancia de FPS.
+    Recomendada solo con ViT-L/14 para reducir VRAM (~200 MB menos).
+  </p>
+
+  <!-- ══════════════════ BENCHMARKS ══════════════════ -->
+  <h2>Benchmarks (Mayo-26, mismo video 1815 frames)</h2>
+  <table>
+    <thead><tr><th>Configuración</th><th>FPS proc.</th><th>FPS equiv.</th><th>CLIP fire ms/batch</th><th>VRAM alloc</th></tr></thead>
+    <tbody>
+      <tr><td>ViT-L/14 FP16</td><td>7.5</td><td>7.5</td><td>282 ms</td><td>1 194 MB</td></tr>
+      <tr><td>ViT-L/14 SQ+INT8</td><td>7.4</td><td>7.4</td><td>464 ms</td><td>1 003 MB</td></tr>
+      <tr><td>ViT-B/32 FP16</td><td>7.5</td><td>7.5</td><td>119 ms</td><td>639 MB</td></tr>
+      <tr><td>ViT-B/32 SQ+INT8</td><td>7.5</td><td>7.5</td><td>204 ms</td><td>580 MB</td></tr>
+      <tr class="best"><td>ViT-B/32 FP16 + skip=2</td><td>7.3</td><td>14.5</td><td>120 ms</td><td>639 MB</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:0.8rem">
+    <strong>Configuración recomendada para producción:</strong>
+    <code>--clip-model ViT-B/32 --frame-skip 2 --detect-scale 0.5 --no-display</code>
+  </div>
+
+  <!-- ══════════════════ ESTRUCTURA ══════════════════ -->
+  <h2>Estructura de salida</h2>
+  <div class="tree">
+<span class="dir">Fire/</span>
+├── <span class="dir">ALERTAS_FIRE/</span>          <span class="note"># snapshots de alertas de fuego</span>
+│   └── <span class="file">FIRE_YYYYMMDD_HHMMSS.jpg</span>
+├── <span class="dir">ALERTAS_SMOKE/</span>         <span class="note"># snapshots de alertas de humo</span>
+│   └── <span class="file">SMOKE_YYYYMMDD_HHMMSS.jpg</span>
+└── <span class="dir">grabaciones/</span>           <span class="note"># video con overlay (solo con --save)</span>
+    └── <span class="file">PROD_V2_YYYYMMDD_HHMMSS.avi</span>
+  </div>
+
+  <!-- ══════════════════ DEPS ══════════════════ -->
+  <h2>Dependencias</h2>
+  <pre><code>opencv-python
+ultralytics        # YOLOv11
+torch
+clip               # openai/CLIP
+scipy
+Pillow
+bitsandbytes       # opcional — para --quant
+thop               # opcional — medir GFLOPs CLIP en debug</code></pre>
+
+  <footer>
+    Arconte Detection Tools &mdash; JonathanTools &bull; 2026
+  </footer>
+
+</div>
+</body>
+</html>

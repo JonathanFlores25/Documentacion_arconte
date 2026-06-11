@@ -1,0 +1,79 @@
+{
+  "proposals": [
+    {
+      "id": "v_1781135806",
+      "project": "publicvector",
+      "reason": "Reinicio",
+      "proposed_by": "Jonathan",
+      "proposed_at": "2026-06-10 17:56",
+      "votes": [
+        {
+          "user": "Jonathan",
+          "voted_at": "2026-06-10 17:56"
+        },
+        {
+          "user": "Akma",
+          "voted_at": "2026-06-10 18:04"
+        },
+        {
+          "user": "Juan",
+          "voted_at": "2026-06-10 18:05"
+        }
+      ],
+      "needed": 3,
+      "total_users": 4,
+      "status": "approved",
+      "approved_at": "2026-06-10 18:05"
+    },
+    {
+      "id": "v_1781136335",
+      "project": "arconte_retail",
+      "reason": "Reinicio",
+      "proposed_by": "Juan",
+      "proposed_at": "2026-06-10 18:05",
+      "votes": [
+        {
+          "user": "Juan",
+          "voted_at": "2026-06-10 18:05"
+        },
+        {
+          "user": "Akma",
+          "voted_at": "2026-06-10 18:06"
+        },
+        {
+          "user": "Abelardo",
+          "voted_at": "2026-06-10 18:06"
+        }
+      ],
+      "needed": 3,
+      "total_users": 4,
+      "status": "approved",
+      "approved_at": "2026-06-10 18:06"
+    },
+    {
+      "id": "v_1781136682",
+      "project": "publicvector",
+      "reason": "Errors",
+      "proposed_by": "Jonathan",
+      "proposed_at": "2026-06-10 18:11",
+      "votes": [
+        {
+          "user": "Jonathan",
+          "voted_at": "2026-06-10 18:11"
+        },
+        {
+          "user": "Abelardo",
+          "voted_at": "2026-06-10 18:11"
+        },
+        {
+          "user": "Akma",
+          "voted_at": "2026-06-10 18:12"
+        }
+      ],
+      "needed": 3,
+      "total_users": 4,
+      "status": "approved",
+      "approved_at": "2026-06-10 18:12"
+    }
+  ]
+}

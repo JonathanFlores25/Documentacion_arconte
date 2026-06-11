@@ -1,0 +1,10 @@
+{
+  "users": {
+    "Jonathan": "tok-jonathan",
+    "Abelardo": "tok-abelardo",
+    "Akma":     "tok-alma",
+    "Juan":     "tok-juan"
+  },
+  "notify_emails": ["jonathan123987j@gmail.com"],
+  "resend_api_key": "re_CNpNreTW_6SEC5o7jSEZFtLcor62pgjmo"
+}

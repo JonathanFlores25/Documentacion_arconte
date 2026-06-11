@@ -1,0 +1,32 @@
+tipo,proyecto,fecha_inicio,fecha_fin,Fases,titulo,descripcion,area,responsable,status
+tarea,public_vector,21/04/2026,27/04/2026,1,Obtencion de requerimientos,Con base en el inicio de mes establecido para el proyecto,PM,Abelardo,COMPLETADO
+tarea,public_vector,28/04/2026,30/04/2026,1,Obtención de la data,Ventana de recopilación programada del 28 al 30 de abril,Datos,Equipo IA,COMPLETADO
+tarea,public_vector,28/04/2026,30/04/2026,2,Diseño de backend/frontend,Estructuración lógica de las interfaces y servicios,Frontend,Juan,COMPLETADO
+tarea,public_vector,28/04/2026,04/05/2026,2,Diseño de modelo de reconocimiento de palabras,Flujo de diseño continuo a lo largo del roadmap,AI Eng,Jonathan,COMPLETADO
+tarea,public_vector,01/05/2026,04/05/2026,5,Identificación de programación para video,Módulo de análisis de flujos de televisión,AI Eng,Jonathan,COMPLETADO
+tarea,public_vector,04/05/2026,06/05/2026,5,Identificacion de programación para radio,Módulo de procesamiento para señales de audio,AI Eng,Israel,COMPLETADO
+tarea,public_vector,05/05/2026,12/05/2026,4,Etiquetado de datos,Alimentación continua de la base de datos de entrenamiento,Datos,Equipo IA,EN PROCESO
+tarea,public_vector,07/05/2026,07/05/2026,3,Setup de servidores de procesamiento (GPU),Configuración y preparación de nodos de hardware dedicados,Infra,Juan,COMPLETADO
+tarea,public_vector,07/05/2026,07/05/2026,3,Pruebas de conectividad y bandwidth,Validación de la capacidad técnica de la red,Infra,Juan,COMPLETADO
+tarea,public_vector,07/05/2026,08/05/2026,3,Pruebas en el POD,Garantizar que el POD esté operativo para procesamiento visual,Infra,Juan/Jonathan,COMPLETADO
+tarea,public_vector,08/05/2026,11/05/2026,5,Unificacion de la 1a version del modelo,Consolidación e integración de los componentes base,AI Eng,Jonathan,EN PROCESO
+tarea,public_vector,08/05/2026,15/05/2026,5,Plataforma (1a version),Creación de la primera plataforma local,Frontend,Equipo IA,COMPLETADO
+tarea,public_vector,11/05/2026,15/05/2026,4,Obtención de los datos de inferencia (1a version),Entrada continua de flujos multimedia para pruebas,Datos,Juan/Jonathan,COMPLETADO
+tarea,public_vector,12/05/2026,15/05/2026,4,Simulacion de escenarios,Pruebas de control de entornos antes del despliegue,AI Eng,Equipo IA,EN PROCESO
+tarea,public_vector,12/05/2026,15/05/2026,6,Plataforma - POD,Integracion de los modelos y primera version de PV en el pod,Frontend,Equipo IA,PENDIENTE
+tarea,public_vector,13/05/2026,15/05/2026,1,Pruebas de latencia y throughput,Mediciones de tiempo de respuesta del sistema,Infra,Jonathan,PENDIENTE
+tarea,public_vector,13/05/2026,18/05/2026,7,Testing de alertas y notificaciones,Validación de canales de comunicación de eventos,Frontend,Equipo IA,PENDIENTE
+tarea,public_vector,14/05/2026,20/05/2026,7,Optimizacion del modelo,Ajuste final del pipeline en la ventana de mayo,AI Eng,Equipo IA,PENDIENTE
+tarea,public_vector,14/05/2026,20/05/2026,7,Optimización de false positives,Reducción de ruido y calibración de umbrales,AI Eng,Equipo IA,PENDIENTE
+tarea,public_vector,15/05/2026,20/05/2026,7,Ajuste de sensibilidad de alertas,Calibración fina de la lógica de disparo,AI Eng,Equipo IA,PENDIENTE
+tarea,public_vector,18/05/2026,22/05/2026,8,Deployment en ambiente de producción,Puesta en marcha del sistema base,Infra,Juan,PENDIENTE
+tarea,public_vector,18/05/2026,22/05/2026,8,Configuración de almacenamiento de video,Estructuración del guardado de históricos,Infra,Juan,PENDIENTE
+tarea,public_vector,22/05/2026,26/05/2026,8,Configuración de monitoreo 24/7,Setup inicial del servicio de seguimiento continuo,Infra,Juan,PENDIENTE
+tarea,public_vector,22/05/2026,26/05/2026,8,Setup de backup y redundancia,Mecanismos de recuperación ante fallos de nodos,Infra,Juan,PENDIENTE
+tarea,public_vector,25/05/2026,28/05/2026,8,Activación de alertas en vivo,Puesta a punto de notificaciones en tiempo real,Frontend,Equipo IA,PENDIENTE
+tarea,public_vector,25/05/2026,29/05/2026,8,Go-Live y handover,Entrega técnica del sistema MVP operativos,PM,Equipo IA,PENDIENTE
+tarea,public_vector,25/05/2026,29/05/2026,9,Monitoreo de performance de modelos,Evaluación y seguimiento de métricas en campo,AI Eng,Equipo IA,PENDIENTE
+tarea,public_vector,25/05/2026,29/05/2026,9,Actualización de datasets,Inclusión continua de nuevas muestras de datos,Datos,Equipo IA,PENDIENTE
+tarea,public_vector,25/05/2026,29/05/2026,9,Optimización de detecciones,Refinamiento continuo de bboxes y encodings lógicos,AI Eng,Equipo IA,PENDIENTE
+tarea,public_vector,15/05/2026,31/12/2026,10,Soporte técnico,Atención operativa continua del sistema,Infra,Equipo IA,PENDIENTE
+tarea,public_vector,15/05/2026,31/12/2026,10,Mejoras y nuevas funcionalidades,Ciclo continuo de desarrollo post-entrega,Frontend,Equipo IA,PENDIENTE

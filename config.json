@@ -1,11 +1,8 @@
 {
   "users": {
-    "Jonathan": "tok-jonathan",
-    "Abelardo": "tok-abelardo",
-    "Akma":     "tok-alma",
-    "Juan":     "tok-juan"
+    "Admin": "cv2026"
   },
-  "notify_emails": ["jonathan123987j@gmail.com"],
-  "votes_needed_override": 1,
-  "resend_api_key": "re_CNpNreTW_6SEC5o7jSEZFtLcor62pgjmo"
+  "admin_token": "cv2026",
+  "notify_emails": [],
+  "resend_api_key": ""
 }

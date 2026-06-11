@@ -891,6 +891,29 @@
     .wk-total-bar { display:flex; justify-content:flex-end; padding-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:4px; }
     .wk-total-badge { font-size:10px; font-weight:700; color:var(--accent); background:rgba(91,127,255,0.12); padding:2px 9px; border-radius:10px; }
     .wk-blocked-note { font-size:10px; color:var(--yellow); background:rgba(251,191,36,0.07); border:1px solid rgba(251,191,36,0.2); border-radius:6px; padding:3px 8px; margin-top:2px; }
+    /* ─── Bitácora ─── */
+    .bitacora-toolbar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    .bitacora-search { flex:1; min-width:160px; padding:7px 11px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:12px; font-family:inherit; }
+    .bitacora-search:focus { outline:none; border-color:rgba(91,127,255,0.5); }
+    .bitacora-filter { padding:7px 9px; background:#1a1e35; border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:12px; cursor:pointer; }
+    .bitacora-list { display:flex; flex-direction:column; gap:6px; }
+    .bita-row { display:flex; align-items:flex-start; gap:10px; padding:8px 12px; background:rgba(255,255,255,0.025); border:1px solid var(--border); border-left-width:3px; border-radius:8px; font-size:12px; }
+    .bita-row.delete { border-left-color:var(--red); }
+    .bita-row.add    { border-left-color:var(--green); }
+    .bita-row.move   { border-left-color:var(--yellow); }
+    .bita-row.edit   { border-left-color:var(--accent); }
+    .bita-row.evidence { border-left-color:#38bdf8; }
+    .bita-ts { color:var(--text-muted); font-size:10px; white-space:nowrap; min-width:118px; font-family:monospace; }
+    .bita-act { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:1px 7px; border-radius:10px; white-space:nowrap; }
+    .bita-act.delete { background:rgba(248,113,113,.15); color:var(--red); }
+    .bita-act.add    { background:rgba(52,211,153,.15); color:var(--green); }
+    .bita-act.move   { background:rgba(251,191,36,.15); color:var(--yellow); }
+    .bita-act.edit   { background:rgba(91,127,255,.15); color:var(--accent); }
+    .bita-act.evidence { background:rgba(56,189,248,.15); color:#38bdf8; }
+    .bita-main { flex:1; min-width:0; }
+    .bita-detail { color:var(--text); word-break:break-word; }
+    .bita-meta { color:var(--text-muted); font-size:10px; margin-top:2px; }
+    .bita-backfill { font-style:italic; opacity:.55; font-size:9px; margin-left:4px; }
     .wk-acuerdo { display:flex; align-items:flex-start; gap:6px; padding:2px 0; font-size:11px; color:var(--text); }
     .wk-acuerdo-badge { font-size:10px; padding:1px 6px; border-radius:4px; flex-shrink:0; white-space:nowrap; }
     .wk-acuerdo-badge.COMPLETADO  { background:rgba(52,211,153,0.12); color:var(--green); }
@@ -1030,6 +1053,7 @@
     <a href="#sec-proyectos">Proyectos</a>
     <a href="#sec-tareas">Tareas por semana</a>
     <a href="#sec-planificador">Planificador Semanal</a>
+    <a href="#sec-bitacora" id="nav-bitacora" style="display:none;">Bitácora</a>
     <div style="margin-left:auto;display:flex;align-items:center;gap:8px;padding:0 4px;">
       <button class="admin-lock-btn" id="admin-lock-btn" onclick="openAdminModal()" title="Acceso admin">
         🔒 <span id="admin-lock-label">Admin</span>
@@ -1972,6 +1996,32 @@
       </div>
     </div><!-- /section 05 -->
 
+    <!-- ═══════════════════ SECCIÓN 6: BITÁCORA (solo admin) ═══════════════════ -->
+    <div class="section" id="sec-bitacora" style="display:none;">
+      <div class="section-title">06 — Bitácora · Historial de cambios</div>
+      <div id="bitacora-locked" style="font-size:12px;color:var(--text-muted);padding:10px;">
+        🔒 Sección solo para administradores. Desbloquea con tu token de admin (botón 🔒 Admin arriba).
+      </div>
+      <div id="bitacora-body" style="display:none;">
+        <div class="bitacora-toolbar">
+          <input type="text" id="bitacora-search" class="bitacora-search" placeholder="Buscar (proyecto, usuario, detalle)…" oninput="renderAudit()">
+          <select id="bitacora-action" class="bitacora-filter" onchange="renderAudit()">
+            <option value="">Toda acción</option>
+            <option value="delete">Eliminaciones</option>
+            <option value="add">Agregaciones</option>
+            <option value="move">Movimientos</option>
+            <option value="edit">Ediciones/estados</option>
+            <option value="evidence">Evidencias</option>
+          </select>
+          <button class="rm-tool-btn" onclick="loadAudit()" title="Recargar">🔄</button>
+          <span id="bitacora-count" style="font-size:11px;color:var(--text-muted);"></span>
+        </div>
+        <div id="bitacora-list" class="bitacora-list">
+          <div style="font-size:12px;color:var(--text-muted);padding:10px;">Cargando bitácora…</div>
+        </div>
+      </div>
+    </div><!-- /section 06 -->
+
   </div><!-- /container -->
 
   <!-- ─── Footer ─── -->
@@ -2285,6 +2335,18 @@
       if (logout) logout.style.display = 'none';
     }
     document.body.classList.toggle('admin-active', isAdmin());
+
+    // Bitácora: visible solo para admin
+    const admin     = isAdmin();
+    const navBita   = document.getElementById('nav-bitacora');
+    const secBita   = document.getElementById('sec-bitacora');
+    const bitaBody  = document.getElementById('bitacora-body');
+    const bitaLock  = document.getElementById('bitacora-locked');
+    if (navBita)  navBita.style.display = admin ? '' : 'none';
+    if (secBita)  secBita.style.display = admin ? '' : 'none';
+    if (bitaBody) bitaBody.style.display = admin ? '' : 'none';
+    if (bitaLock) bitaLock.style.display = admin ? 'none' : '';
+    if (admin) loadAudit();
   }
 
   function openAdminModal() {
@@ -2454,6 +2516,61 @@
         body: JSON.stringify({ token: _adminToken, action, type, project, detail })
       });
     } catch(e) {} // silencioso si no hay email configurado
+    // Si la bitácora está visible (admin), refréscala para reflejar el evento.
+    if (isAdmin() && document.getElementById('bitacora-body')?.style.display !== 'none') {
+      loadAudit();
+    }
+  }
+
+  // ── Bitácora / Historial ────────────────────────────────────────────────────
+  let _auditEvents = [];
+
+  async function loadAudit() {
+    if (!isAdmin()) return;
+    try {
+      const r = await fetch('/api/audit?token=' + encodeURIComponent(_adminToken));
+      if (!r.ok) throw new Error(r.status);
+      const data = await r.json();
+      _auditEvents = data.events || [];
+      renderAudit();
+    } catch (e) {
+      const list = document.getElementById('bitacora-list');
+      if (list) list.innerHTML = `<div style="font-size:12px;color:var(--red);padding:10px;">No se pudo cargar la bitácora (${e.message || e}).</div>`;
+    }
+  }
+
+  function renderAudit() {
+    const list = document.getElementById('bitacora-list');
+    if (!list) return;
+    const q       = (document.getElementById('bitacora-search')?.value || '').toLowerCase().trim();
+    const actFilt = document.getElementById('bitacora-action')?.value || '';
+    const ACT_LABEL = { delete:'Eliminó', add:'Agregó', move:'Movió', edit:'Editó', evidence:'Evidencia' };
+    const ESC = s => String(s == null ? '' : s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const filtered = _auditEvents.filter(ev => {
+      if (actFilt && (ev.action || '') !== actFilt) return false;
+      if (q) {
+        const hay = `${ev.user||''} ${ev.action||''} ${ev.type||''} ${ev.project||''} ${ev.detail||''}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+    document.getElementById('bitacora-count').textContent = `${filtered.length} evento${filtered.length !== 1 ? 's' : ''}`;
+    if (!filtered.length) {
+      list.innerHTML = `<div style="font-size:12px;color:var(--text-muted);padding:10px;">Sin eventos para este filtro.</div>`;
+      return;
+    }
+    list.innerHTML = filtered.map(ev => {
+      const act = ev.action || 'edit';
+      const cls = ['delete','add','move','edit','evidence'].includes(act) ? act : 'edit';
+      return `<div class="bita-row ${cls}">
+        <span class="bita-ts">${ESC(ev.ts) || '—'}</span>
+        <span class="bita-act ${cls}">${ACT_LABEL[act] || ESC(act)}</span>
+        <div class="bita-main">
+          <div class="bita-detail"><strong>${ESC(ev.type)}</strong>${ev.project ? ' · ' + ESC(ev.project) : ''} — ${ESC(ev.detail)}</div>
+          <div class="bita-meta">👤 ${ESC(ev.user) || '?'}${ev.source === 'backfill' ? '<span class="bita-backfill">(histórico reconstruido)</span>' : ''}</div>
+        </div>
+      </div>`;
+    }).join('');
   }
 
   // Carga inicial
@@ -2742,6 +2859,7 @@
         }
       }
       await persistEdits();
+      notifyChange('move', 'fase', 'Arconte Retail', `${phaseNames}: ${dir}d — ${reason}`);
       rerender();
       refreshWeekView();
       const wrap   = document.querySelector('#rm-retail-roadmap .rm-cal-wrap');
@@ -2765,6 +2883,7 @@
         e.task_shifts[taskId] = { shift: newShift, reason: rsn || '' };
       }
       await persistEdits();
+      if (newShift !== 0) notifyChange('move', 'tarea', 'Arconte Retail', `${taskId}: ${days > 0 ? '+' + days : days}d — ${rsn || ''}`);
       rerender();
       refreshWeekView();
       if (phaseIdx != null) rmRoadmapDayClick(null, phaseIdx, true);
@@ -2796,6 +2915,7 @@
       delete e.task_text_overrides[taskId];
     }
     await persistEdits();
+    notifyChange('edit', 'tarea', 'Arconte Retail', `Texto de ${taskId}: "${trimmed}"`);
     rerender();
     refreshWeekView();
     rmRoadmapDayClick(null, null, true);
@@ -4938,10 +5058,17 @@
       dayAcuerdos.forEach(session => {
         const sessionLabel = session.display || session.session || iso;
         acBlock += `<div style="font-size:11px;font-weight:600;color:var(--text-muted);margin:4px 0 2px;">📋 ${sessionLabel}</div>`;
-        (session.items || []).filter(it => !it.deleted).forEach(item => {
+        (session.items || []).filter(it => !it.deleted).forEach((item, idx) => {
           const itemLabel  = item.title || item.text || '(sin texto)';
           const itemDetail = item.title && item.description ? item.description : '';
           const stCls      = { COMPLETADO:'done', 'EN PROCESO':'active', PENDIENTE:'paused', CANCELADO:'' }[item.status] || '';
+          // Evidencias del acuerdo (mismo sistema que las tareas)
+          const acKey      = `acuerdo_${pid}_${item.id || (iso + '_' + idx)}`;
+          const acSolList  = Array.isArray(_solutionsMeta[acKey]) ? _solutionsMeta[acKey] : (_solutionsMeta[acKey] ? [_solutionsMeta[acKey]] : []);
+          const acSolHtml  = acSolList.length
+            ? `<div style="margin-top:3px;display:flex;flex-direction:column;gap:1px;">${acSolList.map(e => `<a href="${e.url}" target="_blank" style="font-size:9px;color:var(--green,#4ade80);text-decoration:none;border-bottom:1px dotted rgba(74,222,128,0.4);" title="${(e.uploaded_by||'').replace(/"/g,'&quot;')} · ${e.uploaded_at||''}">📄 ${(e.filename||'Evidencia').replace(/</g,'&lt;')} ↗</a>`).join('')}</div>`
+            : '';
+          const acUploadBtn = `<label style="cursor:pointer;font-size:9px;color:var(--text-muted);display:inline-flex;align-items:center;gap:2px;margin-top:2px;" title="Agregar evidencia al acuerdo">📎 Evidencia<input type="file" style="display:none;" onchange="uploadTaskSolution('${acKey}',this)"></label>`;
           acBlock += `<div class="pf-task-row" style="padding:3px 0;">
             <div style="flex:1;">
               <div style="font-size:11px;">${itemLabel}</div>
@@ -4950,6 +5077,7 @@
                 <span class="rm-phase-badge ${stCls}" style="font-size:9px;padding:1px 5px;">${item.status||'PENDIENTE'}</span>
                 ${item.responsible ? `<span class="rm-resp"> ${item.responsible}</span>` : ''}
               </div>
+              ${acSolHtml}${acUploadBtn}
             </div>
           </div>`;
         });
@@ -5124,6 +5252,9 @@
         }
         cascadePhases.forEach(ph => shiftWholePhase(ph, reason, stamp, by));
         await savePlatformProject(pid);
+        const projTitle = _projects[pid]?.title || pid;
+        const movedTxt  = anchor ? `desde ${anchor}` : 'bloque completo';
+        notifyChange('move', 'fase', projTitle, `${phase.title} (${movedTxt})${cascadeTxt}: ${dir}d — ${reason}`);
         renderPlatformRoadmap(pid);
         refreshWeekView();
       });
@@ -5329,6 +5460,7 @@
           for (let i = phIdx + 1; i < phases.length; i++) { if (!phases[i].deleted) _shiftPhFull(phases[i]); }
         }
         await savePlatformProject(pid);
+        notifyChange('move', 'tarea', _projects[pid]?.title || pid, `${label}: ${dir} — ${reason}`);
         renderPlatformRoadmap(pid); refreshWeekView();
       } else {
         // retail: delegar a shiftTask con el motivo ya capturado (evita doble modal)
@@ -5368,6 +5500,7 @@
     if (!task) return;
     task[field] = value.trim();
     await savePlatformProject(pid);
+    notifyChange('edit', 'tarea', _projects[pid]?.title || pid, `${field} de "${task.title || taskId}": "${value.trim()}"`);
     renderPlatformRoadmap(pid);
   }
 
@@ -5628,6 +5761,7 @@
       // Agregar al historial local (array)
       if (!Array.isArray(_solutionsMeta[key])) _solutionsMeta[key] = [];
       _solutionsMeta[key].push(data.entry);
+      notifyChange('evidence', key.startsWith('acuerdo_') ? 'acuerdo' : 'tarea', '', `Evidencia: ${file.name} (${key})`);
       refreshWeekView();
       window.open(data.url, '_blank');
     } catch(e) {
@@ -5960,6 +6094,13 @@
       }
       refreshWeekView(); renderPlatformRoadmap(pid);
     }
+    // Registrar la terminación/reapertura en la bitácora
+    const _doneVerb = done ? 'completó' : 'reabrió';
+    const _proj = type === 'retail' ? 'Arconte Retail' : (_projects[pid]?.title || pid);
+    let _lbl = taskId || key;
+    if (type === 'plan') _lbl = (_projects[pid]?.sprint_tasks?.[sprintName]?.[planIdx]?.title) || _lbl;
+    else if (type === 'platform') _lbl = (((_projects[pid]?.phases || []).find(p => p.id === phaseId)?.tasks) || []).find(t => t.id === taskId)?.title || _lbl;
+    notifyChange('edit', 'tarea', _proj, `${_doneVerb} "${_lbl}"${done && note ? ' — ' + note : ''}`);
   }
 
   // Alias para compatibilidad con código existente que llame toggleWeekTask
@@ -6227,9 +6368,10 @@
       _projects[pid].acuerdos.push(session);
     }
     if (!session.items) session.items = [];
-    session.items.push({ title, description: desc, responsible: resp, status, date: iso });
+    session.items.push({ id: 'ac_' + Date.now(), title, description: desc, responsible: resp, status, date: iso });
 
     await savePlatformProject(pid);
+    notifyChange('add', 'acuerdo', _projects[pid]?.title || pid, `${sessionName}: ${title}${resp && resp !== '—' ? ' · ' + resp : ''}`);
     renderPlatformRoadmap(pid);
     refreshWeekView();
   }

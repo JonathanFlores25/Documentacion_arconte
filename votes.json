@@ -1,3 +1,72 @@
 {
-  "proposals": []
+  "proposals": [
+    {
+      "id": "v_1781420309",
+      "project": "publicvector",
+      "reason": "pruebA",
+      "proposed_by": "Admin",
+      "proposed_at": "2026-06-14 00:58",
+      "votes": [
+        {
+          "user": "Admin",
+          "voted_at": "2026-06-14 00:58"
+        }
+      ],
+      "needed": 1,
+      "total_users": 1,
+      "status": "approved",
+      "approved_at": "2026-06-14 00:58"
+    },
+    {
+      "id": "v_1781420319",
+      "project": "arconte_retail",
+      "reason": "PRUEB",
+      "proposed_by": "Admin",
+      "proposed_at": "2026-06-14 00:58",
+      "votes": [
+        {
+          "user": "Admin",
+          "voted_at": "2026-06-14 00:58"
+        }
+      ],
+      "needed": 1,
+      "total_users": 1,
+      "status": "approved",
+      "approved_at": "2026-06-14 00:58"
+    },
+    {
+      "id": "v_1781544531",
+      "project": "arconte_retail",
+      "reason": "prueba",
+      "proposed_by": "Admin",
+      "proposed_at": "2026-06-15 11:28",
+      "votes": [
+        {
+          "user": "Admin",
+          "voted_at": "2026-06-15 11:28"
+        }
+      ],
+      "needed": 1,
+      "total_users": 1,
+      "status": "approved",
+      "approved_at": "2026-06-15 11:28"
+    },
+    {
+      "id": "v_1781559919",
+      "project": "publicvector",
+      "reason": "Error",
+      "proposed_by": "Admin",
+      "proposed_at": "2026-06-15 15:45",
+      "votes": [
+        {
+          "user": "Admin",
+          "voted_at": "2026-06-15 15:45"
+        }
+      ],
+      "needed": 1,
+      "total_users": 1,
+      "status": "approved",
+      "approved_at": "2026-06-15 15:45"
+    }
+  ]
 }

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Celestial — Proyectos</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body data-page="proyectos">
+  <div id="app-top"></div>
+
+  <div class="container">
+<div class="section" id="sec-proyectos">
+      <div class="section-title">03 — Proyectos</div>
+
+      <div class="projects-grid">
+
+        <!-- ─── Arconte (Security) ─── -->
+        <div class="project-card project-card-wide">
+
+          <!-- Pipeline de fases -->
+          <div class="project-pipeline">
+            <div class="pipeline-steps">
+              <span class="pipeline-step done">Planeación</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Desarrollo</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Implementación</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Pruebas</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">QA</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">Lanzado</span>
+            </div>
+            <span class="pipeline-status-badge waiting">⏸ En espera</span>
+          </div>
+
+          <!-- Header -->
+          <div class="project-card-header">
+            <div>
+              <div class="project-card-title">Arconte</div>
+              <div class="project-card-subtitle">Vigilancia &amp; Detección de Eventos</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span class="version-badge">v1.0.0</span>
+              <span class="project-tag tag-security">Security</span>
+            </div>
+          </div>
+
+          <!-- Body 2 columnas -->
+          <div class="project-card-body body-2col">
+
+            <!-- ─ Columna izquierda ─ -->
+            <div style="display:flex; flex-direction:column; gap:18px;">
+
+              <!-- Objetivos -->
+              <div>
+                <div class="sub-label-sm">Objetivos</div>
+                <ul class="obj-list">
+                  <li>Detección en tiempo real de eventos críticos sobre streams RTSP multi-cámara</li>
+                  <li>Escenarios cubiertos: Choques, Incendios, Humo, Peleas, Robo con Violencia, Robo de Autopartes</li>
+                  <li>Re-identificación de personas (ReID) y restricción de zonas configurables</li>
+                  <li>API REST para consulta, filtros avanzados y exportación de eventos</li>
+                  <li>Dashboard de alertas con evidencia de video asociada por evento</li>
+                </ul>
+              </div>
+
+              <!-- Despliegue -->
+              <div>
+                <div class="sub-label-sm">Despliegue</div>
+                <div class="deployment-card">
+                  <div class="deploy-location">
+                    <span class="deploy-icon">⬡</span>
+                    <span class="deploy-name">Pod Cisco</span>
+                    <span class="deploy-badge inactive">Inactivo</span>
+                  </div>
+                  <div class="deploy-reason">
+                    El pod no está configurado — en espera de setup de infraestructura
+                  </div>
+                </div>
+              </div>
+
+              <!-- Visto bueno -->
+              <div>
+                <div class="sub-label-sm">Visto bueno</div>
+                <div class="approval-grid">
+                  <div class="approval-card pending">
+                    <div class="approval-name">Itzul</div>
+                    <div class="approval-role">CEO</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Abelardo</div>
+                    <div class="approval-role">CTO - Jefe de Sección</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Jonathan</div>
+                    <div class="approval-role">Head of CV</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Juan</div>
+                    <div class="approval-role">Backend &amp; Eng</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /col-izquierda -->
+
+            <!-- ─ Columna derecha ─ -->
+            <div style="display:flex; flex-direction:column; gap:18px;">
+
+              <!-- Cámaras + Modelos y métricas -->
+              <div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:10px;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="sub-label-sm" style="margin-bottom:0;">Modelos probados · Métricas</div>
+                    <button id="sm-edit-btn-arconte" class="admin-only rm-tool-btn" style="font-size:10px;padding:3px 10px;" onclick="toggleStaticMetricsEdit('arconte')">✏ Editar métricas</button>
+                  </div>
+                  <div class="stat-box cameras-box" id="cameras-box-arconte" style="padding:7px 16px;" onclick="editCamerasCount('arconte')" title="Click para editar (admin)">
+                    <div class="stat-label">Cámaras probadas</div>
+                    <div class="stat-value" id="cameras-val-arconte">—</div>
+                  </div>
+                </div>
+                <div class="metrics-table-wrap">
+                  <table id="sm-table-arconte" class="metrics-table">
+                    <thead>
+                      <tr>
+                        <th>Modelo</th>
+                        <th>Versión</th>
+                        <th>Accuracy</th>
+                        <th>Recall</th>
+                        <th>FPS</th>
+                        <th>GFLOPS</th>
+                        <th>VRAM</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-sm-project="arconte" data-sm-key="choque">
+                        <td>Choque
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta colisiones o impactos mecánicos exclusivamente entre vehículos en movimiento o estacionados.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver-rw">Vanilla V1 Real World</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="arconte" data-sm-key="incendio_humo">
+                        <td>Incendio-Humo
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta fuego activo o columnas de humo que representen incendios de gran tamaño y descontrolados.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver-rw">Vanilla V1 Real World</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="arconte" data-sm-key="pelea">
+                        <td>Pelea
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta a dos o más personas involucradas en interacciones físicas violentas, forcejeos o agresiones mutuas.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver-rw">Vanilla V1 Real World</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="arconte" data-sm-key="robo_violencia">
+                        <td>Robo con Violencia
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta asaltos o despojos de pertenencias a personas mediante el uso de armas, amenazas o fuerza física.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver-rw">Vanilla V1 Real World</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="arconte" data-sm-key="robo_autopartes">
+                        <td>Robo de Autopartes
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta la manipulación sospechosa, desmontaje o hurto de componentes en vehículos estacionados.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver-rw">Vanilla V1 Real World</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="arconte" data-sm-key="facial">
+                        <td>
+                          <span style="display:block; font-weight:600; color:var(--text);">Reconocimiento Facial</span>
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta e identifica rostros en tiempo real usando embeddings faciales de alta dimensión.
+                            Construye una galería de individuos conocidos (reincidentes / autorizados) y los re-identifica
+                            en streams RTSP mediante similitud coseno. Soporta enrolamiento desde foto o video.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver-rw">Vanilla V1 Real World</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:6px; font-style:italic;">
+                  Métricas pendientes de medición formal sobre hardware objetivo.
+                </div>
+              </div>
+
+              <!-- Stack -->
+              <div>
+                <div class="sub-label-sm">Stack</div>
+                <div class="project-tech-list">
+                  <span class="tech-badge">Python 3.12</span>
+                  <span class="tech-badge">Pytorch</span>
+                  <span class="tech-badge">Heuristicas</span>
+                  <span class="tech-badge">YOLOv11x</span>
+                  <span class="tech-badge">ByteTrack</span>
+                  <span class="tech-badge">CLIP ViT-L/14</span>
+                  <span class="tech-badge">CLIP ViT-B/32</span>
+                  <span class="tech-badge">FastAPI</span>
+                  <span class="tech-badge">PostGIS</span>
+                  <span class="tech-badge">TransReID</span>
+                  <span class="tech-badge">Docker</span>
+                  <span class="tech-badge">RTSP</span>
+                </div>
+              </div>
+
+            </div><!-- /col-derecha -->
+
+          </div><!-- /body-2col -->
+
+          <!-- Sección de modelos dinámica -->
+          <div id="models-direct-arconte"></div>
+
+          <div class="rm-section">
+            <button class="rm-toggle" onclick="toggleRm(this,'rm-arconte')">
+              <span>📋 Roadmap &amp; Tareas</span>
+              <span class="rm-toggle-arrow">▼</span>
+            </button>
+            <div class="rm-content" id="rm-arconte" style="display:none;">
+              <div id="rm-arconte-panel" class="rm-panel active">
+                <div class="rm-loading" style="font-size:12px;color:var(--text-muted);padding:8px 0;">Cargando...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card-footer">
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/arconte" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              Arconte (producción)
+            </a>
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/ArconteDetection_ZeroShot" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              Detección Zero-Shot (Modelos en Producción)
+            </a>
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/ArconteDetection_DebugTools.git" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              Debug Tools (Modelos en debug y herramientas de etiquetado)
+            </a>
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/Sedna" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              Sedna (Faces)
+            </a>
+            <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/avances-arconte.html" target="_blank">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/><path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/></svg>
+              Ver avances
+            </a>
+          </div>
+
+        </div><!-- /arconte -->
+
+        <!-- ─── Arconte Retail ─── -->
+        <div class="project-card project-card-wide">
+
+          <!-- Pipeline de fases -->
+          <div class="project-pipeline">
+            <div class="pipeline-steps">
+              <span class="pipeline-step done">Planeación</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Desarrollo</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">Implementación</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">Pruebas</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">QA</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">Lanzado</span>
+            </div>
+            <span class="pipeline-status-badge waiting">🔧 En desarrollo</span>
+          </div>
+
+          <!-- Header -->
+          <div class="project-card-header">
+            <div>
+              <div class="project-card-title">Arconte Retail</div>
+              <div class="project-card-subtitle">Visión Computacional para Retail · Multi-tenant</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span class="project-tag tag-retail">Retail</span>
+            </div>
+          </div>
+
+          <!-- Body 2 columnas -->
+          <div class="project-card-body body-2col">
+
+            <!-- ─ Columna izquierda ─ -->
+            <div style="display:flex; flex-direction:column; gap:18px;">
+
+              <!-- Objetivos -->
+              <div>
+                <div class="sub-label-sm">Objetivos</div>
+                <ul class="obj-list">
+                  <li>Detección en tiempo real de eventos críticos en establecimientos retail sobre streams RTSP</li>
+                  <li>Plataforma multi-tenant con control plane centralizado e inference edge-first por sucursal</li>
+                  <li>Control operativo: fardeo, empleados, zonas, cajas y apertura/cierre de tienda</li>
+                  <li>Billing, aprobación por platform_superadmin y compliance LFPDPPP/RGPD integrado</li>
+                  <li>Frontend operacional con floorplans, alertas SSE en vivo e incidentes</li>
+                </ul>
+              </div>
+
+              <!-- Despliegue -->
+              <div>
+                <div class="sub-label-sm">Despliegue</div>
+                <div class="deployment-card">
+                  <div class="deploy-location">
+                    <span class="deploy-icon">⬡</span>
+                    <span class="deploy-name">Pod Cisco</span>
+                    <span class="deploy-badge inactive">Pendiente</span>
+                  </div>
+                  <div class="deploy-reason">
+                    El pod no está configurado — en espera de setup de infraestructura
+                  </div>
+                </div>
+              </div>
+
+              <!-- Visto bueno -->
+              <div>
+                <div class="sub-label-sm">Visto bueno</div>
+                <div class="approval-grid">
+                  <div class="approval-card pending">
+                    <div class="approval-name">Itzul</div>
+                    <div class="approval-role">CEO</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Abelardo</div>
+                    <div class="approval-role">CTO</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Jonathan</div>
+                    <div class="approval-role">Head of CV</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Juan</div>
+                    <div class="approval-role">Backend &amp; Eng</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /col-izquierda -->
+
+            <!-- ─ Columna derecha ─ -->
+            <div style="display:flex; flex-direction:column; gap:18px;">
+
+              <!-- Modelos y métricas -->
+              <div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:10px;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="sub-label-sm" style="margin-bottom:0;">Modelos · Métricas</div>
+                    <button id="sm-edit-btn-arconte_retail" class="admin-only rm-tool-btn" style="font-size:10px;padding:3px 10px;" onclick="toggleStaticMetricsEdit('arconte_retail')">✏ Editar métricas</button>
+                  </div>
+                  <div class="stat-box cameras-box" id="cameras-box-arconte_retail" style="padding:7px 16px;" onclick="editCamerasCount('arconte_retail')" title="Click para editar (admin)">
+                    <div class="stat-label">Cámaras probadas</div>
+                    <div class="stat-value" id="cameras-val-arconte_retail">—</div>
+                  </div>
+                </div>
+                <div class="metrics-table-wrap">
+                  <table id="sm-table-arconte_retail" class="metrics-table">
+                    <thead>
+                      <tr>
+                        <th>Modelo</th>
+                        <th>Versión</th>
+                        <th>Accuracy</th>
+                        <th>Recall</th>
+                        <th>FPS</th>
+                        <th>GFLOPS</th>
+                        <th>VRAM</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-sm-project="arconte_retail" data-sm-key="fardeo">
+                        <td>
+                          Fardeo
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta el ocultamiento o sustracción no autorizada de mercancía en anaquel, cuando el individuo introduce artículos bajo prendas o en bolsas propias.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver">Vanilla V1</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="arconte_retail" data-sm-key="empleados">
+                        <td>
+                          Control de Empleados
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Supervisa presencia y actividad del personal en zonas asignadas. Detecta ausencias en puestos activos, accesos a áreas restringidas y comportamientos fuera de protocolo.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver">Vanilla V1</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="arconte_retail" data-sm-key="zonas">
+                        <td>
+                          Control de Zonas Prohibidas
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta ingreso de personas no autorizadas a áreas restringidas (bodegas, cajas, oficinas, carga). Genera alerta en tiempo real al cruzar el perímetro configurado.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver">Vanilla V1</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr style="opacity:0.55;" data-sm-project="arconte_retail" data-sm-key="caja">
+                        <td>
+                          Control de Caja Abierta / Cerrada
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Supervisa el estado operativo de las cajas registradoras. Detecta si hay cajero presente, (caja activa) o no (caja inactiva).
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-nodev">No desarrollado</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr style="opacity:0.55;" data-sm-project="arconte_retail" data-sm-key="apertura">
+                        <td>
+                          Control de Apertura / Cierre de Tienda
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Verifica el protocolo de apertura y cierre del establecimiento. Detecta accesos fuera de horario, presencia antes o después del turno y registra eventos con evidencia de video.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-nodev">No desarrollado</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:6px; font-style:italic;">
+                  Métricas pendientes — modelos ONNX reales en Phase 4.
+                </div>
+              </div>
+
+              <!-- Stack -->
+              <div>
+                <div class="sub-label-sm">Stack</div>
+                <div class="project-tech-list">
+                  <span class="tech-badge">FastAPI</span>
+                  <span class="tech-badge">React + Vite</span>
+                  <span class="tech-badge">CLIP ViT-L/14</span>
+                  <span class="tech-badge">CLIP ViT-B/32</span>
+                  <span class="tech-badge">YOLOv11x</span>
+                  <span class="tech-badge">ByteTrack</span>
+                  <span class="tech-badge">pgvector</span>
+                  <span class="tech-badge">PostGIS</span>
+                  <span class="tech-badge">MinIO</span>
+                  <span class="tech-badge">Milvus</span>
+                  <span class="tech-badge">ONNX</span>
+                  <span class="tech-badge">Docker</span>
+                  <span class="tech-badge">RTSP</span>
+                </div>
+              </div>
+
+            </div><!-- /col-derecha -->
+
+          </div><!-- /body-2col -->
+
+          <!-- Sección de modelos dinámica -->
+          <div id="models-direct-arconte_retail"></div>
+
+          <!-- ─── Roadmap & Tareas ─── -->
+          <div class="rm-section">
+            <button class="rm-toggle" onclick="toggleRm(this,'rm-arconte-retail')">
+              <span>📋 Roadmap &amp; Tareas</span>
+              <span class="rm-toggle-arrow">▼</span>
+            </button>
+            <div class="rm-content" id="rm-arconte-retail" style="display:none;">
+              <div id="rm-arconte-retail-panel" class="rm-panel active">
+                <div class="rm-loading" style="font-size:12px;color:var(--text-muted);padding:8px 0;">Cargando...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card-footer">
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/arconte-retail" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              Arconte Retail (prod)
+            </a>
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/ArconteDetection_DebugTools" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              Debug Tools
+            </a>
+            <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Israel/avances-arconte.html" target="_blank">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/><path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/></svg>
+              Ver avances
+            </a>
+          </div>
+
+        </div><!-- /arconte retail -->
+
+        <!-- ─── PublicVector ─── -->
+        <div class="project-card project-card-wide">
+
+          <!-- Pipeline de fases -->
+          <div class="project-pipeline">
+            <div class="pipeline-steps">
+              <span class="pipeline-step done">Planeación</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Desarrollo</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Implementación</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Pruebas</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">QA</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Lanzado</span>
+            </div>
+            <span class="pipeline-status-badge" style="background:rgba(52,211,153,0.12); color:var(--green); border-color:rgba(52,211,153,0.3);">✦ En producción</span>
+          </div>
+
+          <!-- Header -->
+          <div class="project-card-header">
+            <div>
+              <div class="project-card-title">PublicVector</div>
+              <div class="project-card-subtitle">Monitoreo de Medios TV / Radio — Detección de Menciones</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span class="version-badge">v1.0.0</span>
+              <span class="project-tag tag-media">Media AI</span>
+            </div>
+          </div>
+
+          <!-- Body 2 columnas -->
+          <div class="project-card-body body-2col">
+
+            <!-- ─ Columna izquierda ─ -->
+            <div style="display:flex; flex-direction:column; gap:18px;">
+
+              <!-- Objetivos -->
+              <div>
+                <div class="sub-label-sm">Objetivos</div>
+                <ul class="obj-list">
+                  <li>Monitoreo 24/7 de <strong>325 canales TV</strong> y <strong>4,446 estaciones de radio LATAM</strong></li>
+                  <li>Detección de menciones en video y audio en tiempo real mediante búsqueda semántica</li>
+                  <li>Identificación automática de segmentos de tipo comercial vs. noticiero</li>
+                  <li>Análisis de emociones y sentimiento por mención detectada</li>
+                  <li>Dashboard con menciones, evidencia de audio/video reproducible y filtros avanzados</li>
+                </ul>
+              </div>
+
+              <!-- Despliegue -->
+              <div>
+                <div class="sub-label-sm">Despliegue</div>
+                <div class="deployment-card">
+                  <div class="deploy-location">
+                    <span class="deploy-icon">⬡</span>
+                    <span class="deploy-name">Servidor H100 GPU</span>
+                    <span class="deploy-badge active">Activo</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Visto bueno -->
+              <div>
+                <div class="sub-label-sm">Visto bueno</div>
+                <div class="approval-grid">
+                  <div class="approval-card pending">
+                    <div class="approval-name">Itzul</div>
+                    <div class="approval-role">CEO</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Abelardo</div>
+                    <div class="approval-role">CTO - Jefe de Sección</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Jonathan</div>
+                    <div class="approval-role">Head of CV</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                  <div class="approval-card pending">
+                    <div class="approval-name">Juan</div>
+                    <div class="approval-role">Backend &amp; Eng</div>
+                    <span class="approval-badge nok">Pendiente</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /col-izquierda -->
+
+            <!-- ─ Columna derecha ─ -->
+            <div style="display:flex; flex-direction:column; gap:18px;">
+
+              <!-- Modelos y métricas -->
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                  <div class="sub-label-sm" style="margin-bottom:0;">Modelos · Métricas</div>
+                  <button id="sm-edit-btn-publicvector" class="admin-only rm-tool-btn" style="font-size:10px;padding:3px 10px;" onclick="toggleStaticMetricsEdit('publicvector')">✏ Editar métricas</button>
+                </div>
+                <div class="metrics-table-wrap">
+                  <table id="sm-table-publicvector" class="metrics-table">
+                    <thead>
+                      <tr>
+                        <th>Modelo</th>
+                        <th>Versión</th>
+                        <th>Accuracy</th>
+                        <th>Recall</th>
+                        <th>FPS</th>
+                        <th>GFLOPS</th>
+                        <th>VRAM</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-sm-project="publicvector" data-sm-key="mencion_video">
+                        <td>Detección de Menciones en Video
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Detecta y localiza en frames de video fragmentos visuales o textuales asociados a una keyword o entidad de interés, usando embeddings multimodales.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver">Vanilla V1</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="publicvector" data-sm-key="mencion_audio">
+                        <td>Detección de Menciones en Audio en Tiempo Real
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Transcribe streams de audio con Whisper large-v3 y detecta menciones semánticas de keywords mediante BGE-M3, procesando en tiempo real sin latencia perceptible.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver">Vanilla V1</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="publicvector" data-sm-key="comercial_noticiero">
+                        <td>Identificación de Comercial y Noticiero
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Clasifica automáticamente segmentos de transmisión como bloque comercial o noticiero, permitiendo filtrar menciones por contexto editorial.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver">Vanilla V1</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                      <tr data-sm-project="publicvector" data-sm-key="emociones">
+                        <td>Detección de Emociones
+                          <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.5;">
+                            Analiza el tono emocional del locutor o presentador en el momento de una mención: positivo, negativo o neutro, usando análisis de sentimiento contextual con Qwen2.5-14B.
+                          </span>
+                        </td>
+                        <td data-sm="version"><span class="mv-ver">Vanilla V1</span></td>
+                        <td class="mv-pend" data-sm="accuracy">—</td><td class="mv-pend" data-sm="recall">—</td>
+                        <td class="mv-pend" data-sm="fps">—</td><td class="mv-pend" data-sm="gflops">—</td><td class="mv-pend" data-sm="vram">—</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Stack -->
+              <div>
+                <div class="sub-label-sm">Stack</div>
+                <div class="project-tech-list">
+                  <span class="tech-badge">Python</span>
+                  <span class="tech-badge">Whisper large-v3</span>
+                  <span class="tech-badge">BGE-M3</span>
+                  <span class="tech-badge">Qwen2.5-14B</span>
+                  <span class="tech-badge">Milvus</span>
+                  <span class="tech-badge">FastAPI</span>
+                  <span class="tech-badge">Next.js</span>
+                  <span class="tech-badge">H100 GPU</span>
+                  <span class="tech-badge">RTSP / IPTV</span>
+                </div>
+              </div>
+
+            </div><!-- /col-derecha -->
+
+          </div><!-- /body-2col -->
+
+          <!-- Sección de modelos dinámica -->
+          <div id="models-direct-publicvector"></div>
+
+          <div class="rm-section">
+            <button class="rm-toggle" onclick="toggleRm(this,'rm-pv')">
+              <span>📋 Roadmap &amp; Tareas</span>
+              <span class="rm-toggle-arrow">▼</span>
+            </button>
+            <div class="rm-content" id="rm-pv" style="display:none;">
+              <div id="rm-pv-panel" class="rm-panel active">
+                <div class="rm-loading" style="font-size:12px;color:var(--text-muted);padding:8px 0;">Cargando...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card-footer">
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/publicvector-frontend" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              PublicVector Frontend (Producción + Modelos)
+            </a>
+          </div>
+
+        </div><!-- /publicvector -->
+
+        <!-- ─── Stack de Modelos en Desarrollo ─── -->
+        <div class="project-card project-card-wide">
+
+          <!-- Pipeline de fases -->
+          <div class="project-pipeline">
+            <div class="pipeline-steps">
+              <span class="pipeline-step done">Concepto</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step done">Pruebas locales</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">Integración</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">Pruebas</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">QA</span>
+              <span class="pipeline-arrow">›</span>
+              <span class="pipeline-step">Producción</span>
+            </div>
+            <span class="pipeline-status-badge" style="background:rgba(163,230,53,0.12); color:var(--accent2); border-color:rgba(163,230,53,0.3);">🔬 I+D / Prueba de concepto</span>
+          </div>
+
+          <!-- Header -->
+          <div class="project-card-header">
+            <div>
+              <div class="project-card-title">Stack de Modelos en Desarrollo</div>
+              <div class="project-card-subtitle">Modelos experimentales · No asignados a proyecto específico</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span class="project-tag" style="background:rgba(163,230,53,0.12); color:var(--accent2); border-color:rgba(163,230,53,0.3);">R&amp;D</span>
+            </div>
+          </div>
+
+
+          <!-- Sección de modelos dinámica (stack_modelos) -->
+          <div id="models-direct-stack_modelos"></div>
+
+          <div class="rm-section">
+            <button class="rm-toggle" onclick="toggleRm(this,'rm-stack')">
+              <span>📋 Roadmap &amp; Tareas</span>
+              <span class="rm-toggle-arrow">▼</span>
+            </button>
+            <div class="rm-content" id="rm-stack" style="display:none;">
+              <div id="rm-stack-panel" class="rm-panel active">
+                <div class="rm-loading" style="font-size:12px;color:var(--text-muted);padding:8px 0;">Cargando...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card-footer">
+            <a class="link-btn" href="https://github.com/Celestial-Dynamics-AI/ArconteDetection_DebugTools" target="_blank">
+              <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              DebugTools (todos los modelos experimentales)
+            </a>
+            <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/ReID_README.html" target="_blank">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/><path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/></svg>
+              README Re-ID
+            </a>
+          </div>
+
+        </div><!-- /stack-modelos-dev -->
+
+      </div><!-- /projects-grid -->
+
+      <!-- Proyectos dinámicos (creados desde la UI) -->
+      <div id="dyn-projects-grid" style="display:flex;flex-direction:column;gap:18px;margin-top:18px;"></div>
+      <!-- Botón nuevo proyecto + formulario -->
+      <div id="new-proj-btn-area" style="margin-top:18px;"></div>
+      <div id="new-proj-form-wrap" style="margin-top:10px;"></div>
+
+    </div>
+  </div><!-- /container -->
+
+  <div id="app-foot"></div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>

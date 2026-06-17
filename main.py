@@ -8,6 +8,9 @@ Arranca con:
 
 Acceso en red local:
     http://<IP-de-esta-PC>:8080
+
+    Get-NetTCPConnection -LocalPort 8080 -State Listen | Select-Object -Expand OwningProcess | ForEach-Object { Stop-Process -Id $_ -Force }
+
 """
 
 import json

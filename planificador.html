@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Celestial — Planificador Semanal</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body data-page="planificador">
+  <div id="app-top"></div>
+
+  <div class="container">
+<div class="section" id="sec-planificador">
+      <div class="section-title">05 — Planificador Semanal</div>
+      <div class="plan-layout">
+        <!-- Proyectos (renderizado dinámico desde _projects) -->
+        <div class="plan-proj-list" id="plan-proj-list">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Proyecto</div>
+        </div>
+        <!-- Sprints -->
+        <div class="plan-sprints" id="plan-sprints">
+          <div style="font-size:12px;color:var(--text-muted);">Cargando…</div>
+        </div>
+      </div>
+      <!-- Importar CSV -->
+      <div class="import-bar">
+        <span style="font-size:11px;color:var(--text-muted);font-weight:700;letter-spacing:.04em;">IMPORTAR CSV</span>
+        <select id="import-project-sel" style="font-size:11px;padding:5px 8px;border-radius:6px;border:1px solid rgba(34,211,238,0.5);background:#1b2735;color:var(--text);cursor:pointer;font-weight:600;">
+          <option value="" style="background:#141d28;color:var(--text);">— Proyecto (opcional) —</option>
+        </select>
+        <label class="import-btn">
+          📂 Subir archivo
+          <input type="file" accept=".csv,.CSV" style="display:none" onchange="handleUnifiedImport(this)">
+        </label>
+        <span style="font-size:10px;color:var(--text-muted);">columnas: tipo · fecha_inicio · fecha_fin · fase · titulo · descripcion · area · responsable · status</span>
+        <span id="import-status" style="font-size:11px;display:none;"></span>
+      </div>
+    </div>
+  </div><!-- /container -->
+
+  <div id="app-foot"></div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>

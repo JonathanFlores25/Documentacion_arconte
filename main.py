@@ -8,6 +8,9 @@ Arranca con:
 
 Acceso en red local:
     http://<IP-de-esta-PC>:8080
+
+    Get-NetTCPConnection -LocalPort 8080 -State Listen | Select-Object -Expand OwningProcess | ForEach-Object { Stop-Process -Id $_ -Force }
+
 """
 
 import json
@@ -33,6 +36,7 @@ CONFIG_FILE     = BASE_DIR / "config.json"
 VOTES_FILE      = BASE_DIR / "votes.json"
 SOLUTIONS_DIR   = BASE_DIR / "solutions"
 SOLUTIONS_META  = BASE_DIR / "solutions_meta.json"
+AUDIT_FILE      = BASE_DIR / "audit.json"
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
@@ -304,9 +308,19 @@ class NotifyBody(BaseModel):
 
 @app.post("/api/notify")
 def post_notify(body: NotifyBody):
-    action_label = {"add": "agregó", "edit": "modificó", "delete": "eliminó"}.get(body.action, body.action)
-    subject = f"[CV Celestial] Se {action_label} {body.type} en {body.project}"
+    action_label = {"add": "agregó", "edit": "modificó", "delete": "eliminó", "move": "movió"}.get(body.action, body.action)
+    # Registrar SIEMPRE en la bitácora (aunque falle el email).
+    user = resolve_user(body.token) or "Anónimo"
+    try:
+        append_audit({
+            "user": user, "action": body.action, "type": body.type,
+            "project": body.project, "detail": body.detail,
+        })
+    except Exception:
+        pass
+    subject = f"[CV Celestial] {user} {action_label} {body.type} en {body.project}"
     text    = (
+        f"Usuario : {user}\n"
         f"Acción  : {action_label} {body.type}\n"
         f"Proyecto: {body.project}\n"
         f"Detalle : {body.detail}\n"
@@ -317,6 +331,39 @@ def post_notify(body: NotifyBody):
         return {"ok": True}
     except Exception as e:
         return {"ok": False, "reason": str(e)}
+
+
+class AuditBody(BaseModel):
+    token:   str
+    action:  str
+    type:    str
+    project: str = ""
+    detail:  str = ""
+
+
+@app.post("/api/audit")
+def post_audit(body: AuditBody):
+    """Registra un evento en la bitácora (cualquier usuario con token válido)."""
+    user = resolve_user(body.token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Token inválido")
+    entry = append_audit({
+        "user": user, "action": body.action, "type": body.type,
+        "project": body.project, "detail": body.detail,
+    })
+    return {"ok": True, "entry": entry}
+
+
+@app.get("/api/audit")
+def get_audit(token: str = ""):
+    """Devuelve la bitácora completa (solo admin/usuarios con token válido):
+    eventos en vivo + reconstrucción histórica (backfill), ordenados desc."""
+    if not is_valid_token(token):
+        raise HTTPException(status_code=403, detail="Acceso denegado")
+    events = load_audit() + reconstruct_audit()
+    # Ordenar por timestamp descendente; los sin fecha quedan al final.
+    events.sort(key=lambda e: e.get("ts") or "", reverse=True)
+    return JSONResponse({"events": events})
 
 
 # ── Debug xlsx (temporal) ────────────────────────────────────────────────────
@@ -460,6 +507,132 @@ def save_solutions_meta(data: dict) -> None:
     tmp = SOLUTIONS_META.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
     tmp.replace(SOLUTIONS_META)
+
+
+# ── Bitácora / Auditoría ────────────────────────────────────────────────────
+
+def resolve_user(token: str) -> str:
+    """Devuelve el nombre del usuario dado su token, o '' si no es válido."""
+    if not token:
+        return ""
+    cfg   = load_config()
+    users = cfg.get("users", {})
+    name  = next((n for n, t in users.items() if t == token), None)
+    if name:
+        return name
+    if token == cfg.get("admin_token", "cv2026") or token == "cv2026":
+        return "Admin"
+    return ""
+
+
+def is_valid_token(token: str) -> bool:
+    return bool(resolve_user(token))
+
+
+def load_audit() -> list:
+    if AUDIT_FILE.exists():
+        try:
+            data = json.loads(AUDIT_FILE.read_text(encoding="utf-8"))
+            return data if isinstance(data, list) else []
+        except Exception:
+            pass
+    return []
+
+
+def save_audit(data: list) -> None:
+    tmp = AUDIT_FILE.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+    tmp.replace(AUDIT_FILE)
+
+
+def append_audit(entry: dict) -> dict:
+    """Agrega una entrada a la bitácora persistente."""
+    entry.setdefault("ts", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    entry.setdefault("source", "live")
+    data = load_audit()
+    data.append(entry)
+    save_audit(data)
+    return entry
+
+
+def reconstruct_audit() -> list:
+    """Reconstruye eventos históricos a partir de los datos que ya existen
+    (eliminados con motivo/usuario, desplazamientos en shift_log, ediciones de
+    roadmap). No persiste; se calcula al vuelo y se marca como 'backfill'."""
+    events: list = []
+
+    # ── projects.json: eliminaciones y desplazamientos por fase/tarea ──────────
+    projects = load_projects()
+    for pid, proj in (projects.items() if isinstance(projects, dict) else []):
+        ptitle = (proj or {}).get("title", pid)
+        for ph in (proj or {}).get("phases", []) or []:
+            phtitle = ph.get("title", ph.get("id", "fase"))
+            if ph.get("deleted"):
+                events.append({
+                    "ts": ph.get("deleted_at", ""), "user": ph.get("deleted_by", "?"),
+                    "action": "delete", "type": "fase", "project": ptitle,
+                    "detail": f"{phtitle}" + (f" — {ph['deleted_reason']}" if ph.get("deleted_reason") else ""),
+                    "source": "backfill",
+                })
+            for ev in (ph.get("shift_log") or []):
+                rng = f" ({ev.get('from')}→{ev.get('to')})" if ev.get("from") and ev.get("to") else ""
+                events.append({
+                    "ts": ev.get("at", ""), "user": ev.get("by", "?"),
+                    "action": "move", "type": "fase", "project": ptitle,
+                    "detail": f"{phtitle}: {('+' if (ev.get('days') or 0) > 0 else '')}{ev.get('days')}d{rng}" + (f" — {ev['reason']}" if ev.get("reason") else ""),
+                    "source": "backfill",
+                })
+            for t in (ph.get("tasks") or []):
+                ttitle = t.get("title") or t.get("description") or t.get("id", "tarea")
+                if t.get("deleted"):
+                    events.append({
+                        "ts": t.get("deleted_at", ""), "user": t.get("deleted_by", "?"),
+                        "action": "delete", "type": "tarea", "project": ptitle,
+                        "detail": f"{phtitle} · {ttitle}" + (f" — {t['deleted_reason']}" if t.get("deleted_reason") else ""),
+                        "source": "backfill",
+                    })
+                for ev in (t.get("shift_log") or []):
+                    rng = f" ({ev.get('from')}→{ev.get('to')})" if ev.get("from") and ev.get("to") else ""
+                    events.append({
+                        "ts": ev.get("at", ""), "user": ev.get("by", "?"),
+                        "action": "move", "type": "tarea", "project": ptitle,
+                        "detail": f"{ttitle}: {('+' if (ev.get('days') or 0) > 0 else '')}{ev.get('days')}d{rng}" + (f" — {ev['reason']}" if ev.get("reason") else ""),
+                        "source": "backfill",
+                    })
+
+    # ── roadmap_edits.json: desplazamientos y tareas agregadas (Arconte Retail) ─
+    edits = load_edits().get("arconte_retail", {}) if isinstance(load_edits(), dict) else {}
+    for k, v in (edits.get("phase_shifts", {}) or {}).items():
+        if isinstance(v, dict) and v.get("reason"):
+            events.append({
+                "ts": "", "user": "?", "action": "move", "type": "fase", "project": "Arconte Retail",
+                "detail": f"Fase {int(k)+1}: {('+' if (v.get('shift') or 0) > 0 else '')}{v.get('shift')}d — {v['reason']}",
+                "source": "backfill",
+            })
+    for tid, v in (edits.get("task_shifts", {}) or {}).items():
+        if isinstance(v, dict) and v.get("reason"):
+            events.append({
+                "ts": "", "user": "?", "action": "move", "type": "tarea", "project": "Arconte Retail",
+                "detail": f"{tid}: {('+' if (v.get('shift') or 0) > 0 else '')}{v.get('shift')}d — {v['reason']}",
+                "source": "backfill",
+            })
+    for t in (edits.get("added_tasks", []) or []):
+        events.append({
+            "ts": "", "user": "?", "action": "add", "type": "tarea", "project": "Arconte Retail",
+            "detail": t.get("description", t.get("id", "")), "source": "backfill",
+        })
+
+    # ── votes.json: eliminaciones de roadmap por votación ──────────────────────
+    votes = load_votes()
+    for p in (votes.get("proposals", []) if isinstance(votes, dict) else []):
+        if p.get("status") == "approved":
+            events.append({
+                "ts": p.get("approved_at", p.get("proposed_at", "")), "user": p.get("proposed_by", "?"),
+                "action": "delete", "type": "roadmap", "project": p.get("project", ""),
+                "detail": f"Aprobada por votación — {p.get('reason', '')}", "source": "backfill",
+            })
+
+    return events
 
 
 @app.get("/api/solutions")

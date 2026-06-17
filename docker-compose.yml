@@ -1,0 +1,11 @@
+services:
+
+  cv-v2:
+    build: .
+    command: python main_v2.py
+    volumes:
+      - .:/app
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
+    working_dir: /app

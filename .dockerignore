@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+
+# Backups manuales — no entran a la imagen
+*.bak
+*.bak[0-9]
+
+# Carpeta de respaldos automáticos
+backups/
+
+# Git
+.git/
+.gitignore
+
+# Archivos de desarrollo
+*.md
+build_*.py
+fill_*.py
+semana_template.html

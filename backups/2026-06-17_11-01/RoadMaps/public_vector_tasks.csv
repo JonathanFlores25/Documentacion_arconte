@@ -1,0 +1,32 @@
+ID,tipo,proyecto,fecha_inicio,fecha_fin,Fases,Dependencia,titulo,descripcion,area,responsable,status
+1,tarea,public_vector,21/04/2026,27/04/2026,1,N/A,Obtencion de requerimientos,Con base en el inicio de mes establecido para el proyecto,PM,Abelardo,COMPLETADO
+2,tarea,public_vector,28/04/2026,30/04/2026,1,1,Obtención de la data,Ventana de recopilación programada del 28 al 30 de abril,Datos,Equipo IA,COMPLETADO
+3,tarea,public_vector,28/04/2026,30/04/2026,2,1,Diseño de backend/frontend,Estructuración lógica de las interfaces y servicios,Frontend,Juan,COMPLETADO
+4,tarea,public_vector,28/04/2026,04/05/2026,2,N/A,Diseño de modelo de reconocimiento de palabras,Flujo de diseño continuo a lo largo del roadmap,AI Eng,Jonathan,COMPLETADO
+7,tarea,public_vector,01/05/2026,12/05/2026,4,1,Etiquetado de datos,Alimentación continua de la base de datos de entrenamiento,Datos,Equipo IA,EN PROCESO
+5,tarea,public_vector,01/05/2026,04/05/2026,3,5,Identificación de programación para video,Módulo de análisis de flujos de televisión,AI Eng,Jonathan,COMPLETADO
+6,tarea,public_vector,04/05/2026,06/05/2026,3,5,Identificacion de programación para radio,Módulo de procesamiento para señales de audio,AI Eng,Israel,COMPLETADO
+8,tarea,public_vector,07/05/2026,07/05/2026,5,1,Setup de servidores de procesamiento (GPU),Configuración y preparación de nodos de hardware dedicados,Infra,Juan,COMPLETADO
+9,tarea,public_vector,07/05/2026,07/05/2026,5,1,Pruebas de conectividad y bandwidth,Validación de la capacidad técnica de la red,Infra,Juan,COMPLETADO
+10,tarea,public_vector,07/05/2026,08/05/2026,3,1 -- 9,Pruebas en el POD,Garantizar que el POD esté operativo para procesamiento visual,Infra,Juan/Jonathan,COMPLETADO
+11,tarea,public_vector,08/05/2026,11/05/2026,5,4,10,Unificacion de la 1a version del modelo,Consolidación e integración de los componentes base,AI Eng,Jonathan,EN PROCESO
+12,tarea,public_vector,08/05/2026,15/05/2026,5,1,Plataforma (1a version),Creación de la primera plataforma local,Frontend,Equipo IA,COMPLETADO
+13,tarea,public_vector,11/05/2026,15/05/2026,6,1,10,12,Obtención de los datos de inferencia (1a version),Entrada continua de flujos multimedia para pruebas,Datos,Juan/Jonathan,COMPLETADO
+14,tarea,public_vector,12/05/2026,15/05/2026,6,1--13,Simulacion de escenarios,Pruebas de control de entornos antes del despliegue,AI Eng,Equipo IA,EN PROCESO
+15,tarea,public_vector,12/05/2026,15/05/2026,7,1--14,Plataforma - POD,Integracion de los modelos y primera version de PV en el pod,Frontend,Equipo IA,EN ESPERA
+16,tarea,public_vector,13/05/2026,15/05/2026,8,11,14,15,Pruebas de latencia y throughput,Mediciones de tiempo de respuesta del sistema,Infra,Jonathan,EN ESPERA
+17,tarea,public_vector,13/05/2026,18/05/2026,8,16,Testing de alertas y notificaciones,Validación de canales de comunicación de eventos,Frontend,Equipo IA,EN ESPERA
+18,tarea,public_vector,14/05/2026,20/05/2026,8,16,Optimizacion del modelo,Ajuste final del pipeline en la ventana de mayo,AI Eng,Equipo IA,EN ESPERA
+19,tarea,public_vector,14/05/2026,20/05/2026,8,16,Optimización de false positives,Reducción de ruido y calibración de umbrales,AI Eng,Equipo IA,EN ESPERA
+20,tarea,public_vector,15/05/2026,20/05/2026,8,16,Ajuste de sensibilidad de alertas,Calibración fina de la lógica de disparo,AI Eng,Equipo IA,EN ESPERA
+21,tarea,public_vector,18/05/2026,22/05/2026,9,1--20,Deployment en ambiente de producción,Puesta en marcha del sistema base,Infra,Juan,EN ESPERA
+22,tarea,public_vector,18/05/2026,22/05/2026,9,15,Configuración de almacenamiento de video,Estructuración del guardado de históricos,Infra,Juan,EN ESPERA
+23,tarea,public_vector,22/05/2026,26/05/2026,9,1--22,Configuración de monitoreo 24/7,Setup inicial del servicio de seguimiento continuo,Infra,Juan,EN ESPERA
+24,tarea,public_vector,22/05/2026,26/05/2026,9,21,Setup de backup y redundancia,Mecanismos de recuperación ante fallos de nodos,Infra,Juan,EN ESPERA
+25,tarea,public_vector,25/05/2026,28/05/2026,9,21,Activación de alertas en vivo,Puesta a punto de notificaciones en tiempo real,Frontend,Equipo IA,EN ESPERA
+26,tarea,public_vector,25/05/2026,29/05/2026,9,21,Go-Live y handover,Entrega técnica del sistema MVP operativos,PM,Equipo IA,EN ESPERA
+27,tarea,public_vector,25/05/2026,29/05/2026,10,21,Monitoreo de performance de modelos,Evaluación y seguimiento de métricas en campo,AI Eng,Equipo IA,EN ESPERA
+28,tarea,public_vector,25/05/2026,29/05/2026,10,21,Actualización de datasets,Inclusión continua de nuevas muestras de datos,Datos,Equipo IA,EN ESPERA
+29,tarea,public_vector,25/05/2026,29/05/2026,19,21,Optimización de detecciones,Refinamiento continuo de bboxes y encodings lógicos,AI Eng,Equipo IA,EN ESPERA
+30,tarea,public_vector,15/05/2026,31/12/2026,11,21,Soporte técnico,Atención operativa continua del sistema,Infra,Equipo IA,EN ESPERA
+31,tarea,public_vector,15/05/2026,31/12/2026,11,21,Mejoras y nuevas funcionalidades,Ciclo continuo de desarrollo post-entrega,Frontend,Equipo IA,EN ESPERA

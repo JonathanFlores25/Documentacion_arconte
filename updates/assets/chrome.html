@@ -1,0 +1,157 @@
+<!-- Soft-delete modal -->
+  <div class="admin-overlay" id="delete-overlay" onclick="if(event.target===this)closeSoftDeleteModal()">
+    <div class="admin-modal">
+      <h3>🗑 Confirmar eliminación</h3>
+      <div id="delete-modal-info" style="font-size:12px;color:var(--text-muted);margin-bottom:12px;"></div>
+      <div style="font-size:12px;color:var(--text);margin-bottom:6px;">¿Por qué se elimina? <span style="color:var(--text-muted)">(opcional)</span></div>
+      <input type="text" id="delete-reason-input" placeholder="Ej: ya no aplica, duplicado…"
+             style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:13px;font-family:inherit;box-sizing:border-box;"
+             onkeydown="if(event.key==='Enter')confirmSoftDelete()">
+      <div class="admin-modal-row" style="margin-top:14px;">
+        <button class="admin-modal-btn danger" onclick="confirmSoftDelete()">Eliminar</button>
+        <button class="admin-modal-btn cancel"  onclick="closeSoftDeleteModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action modal (visto bueno / razón de desplazamiento) -->
+  <div class="admin-overlay" id="action-overlay" onclick="if(event.target===this)closeActionModal()">
+    <div class="admin-modal">
+      <h3 id="action-modal-title">Confirmar</h3>
+      <div id="action-modal-info" style="font-size:12px;color:var(--text-muted);margin-bottom:10px;"></div>
+      <div id="action-modal-label" style="font-size:12px;color:var(--text);margin-bottom:6px;"></div>
+      <textarea id="action-modal-input" rows="3"
+        style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:13px;font-family:inherit;box-sizing:border-box;resize:vertical;"
+        onkeydown="if(event.key==='Enter'&&event.ctrlKey)confirmActionModal()"></textarea>
+      <div class="admin-modal-row" style="margin-top:14px;">
+        <button class="admin-modal-btn" id="action-modal-confirm-btn" onclick="confirmActionModal()">Confirmar</button>
+        <button class="admin-modal-btn cancel" onclick="closeActionModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visto bueno: cerrar tarea semanal -->
+  <div class="admin-overlay" id="wk-close-overlay" onclick="if(event.target===this)closeWkCloseModal()">
+    <div class="admin-modal" style="max-width:440px;width:100%;">
+      <h3>✓ Cerrar tarea</h3>
+      <div id="wk-close-task-info" style="font-size:12px;color:var(--text-muted);margin-bottom:14px;line-height:1.5;border-left:2px solid rgba(34,211,238,0.4);padding-left:8px;"></div>
+      <div id="wk-close-evidence-section"></div>
+      <div id="wk-close-comment-wrap">
+        <div style="font-size:12px;color:var(--text);margin-bottom:5px;">
+          Comentario
+          <span id="wk-close-req-label" style="color:var(--text-muted);font-size:11px;margin-left:4px;"></span>
+        </div>
+        <div style="position:relative;">
+          <textarea id="wk-close-comment" rows="5"
+            placeholder="¿Qué se logró? Decisiones tomadas, resultados obtenidos…"
+            style="width:100%;padding:9px 12px 26px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;font-family:inherit;box-sizing:border-box;resize:vertical;"
+            oninput="updateWkCloseWordCount()"></textarea>
+          <span id="wk-close-word-count" style="position:absolute;bottom:7px;right:10px;font-size:10px;color:var(--text-muted);pointer-events:none;user-select:none;">0 / 150 palabras</span>
+        </div>
+      </div>
+      <div style="margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <label style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--accent);border:1px solid rgba(34,211,238,0.35);border-radius:6px;padding:5px 11px;background:rgba(34,211,238,0.07);">
+          📎 Adjuntar evidencia
+          <input type="file" id="wk-close-file" style="display:none;" onchange="onWkCloseFileChange(this)">
+        </label>
+        <span id="wk-close-file-name" style="font-size:10px;color:var(--text-muted);word-break:break-all;"></span>
+      </div>
+      <div id="wk-close-err" style="font-size:11px;color:var(--red);margin-top:8px;min-height:16px;"></div>
+      <div class="admin-modal-row" style="margin-top:14px;">
+        <button class="admin-modal-btn" id="wk-close-confirm-btn" onclick="confirmWkClose()">Marcar completada</button>
+        <button class="admin-modal-btn cancel" onclick="closeWkCloseModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin modal -->
+  <div class="admin-overlay" id="admin-overlay" onclick="if(event.target===this)closeAdminModal()">
+    <div class="admin-modal">
+      <h3 id="admin-modal-title">🔒 Acceso de Administrador</h3>
+      <input type="password" id="admin-token-input" placeholder="Token de administrador"
+             onkeydown="if(event.key==='Enter')submitAdminToken()">
+      <div id="admin-modal-err" class="admin-modal-err"></div>
+      <div class="admin-modal-row">
+        <button class="admin-modal-btn primary" onclick="submitAdminToken()">Verificar</button>
+        <button class="admin-modal-btn cancel"  onclick="closeAdminModal()">Cancelar</button>
+        <button class="admin-modal-btn danger"  id="admin-logout-btn" onclick="logoutAdmin()" style="display:none">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner de votos pendientes -->
+  <div id="vote-banner" style="display:none;"></div>
+
+  <!-- Modal: proponer eliminación -->
+  <div class="vote-overlay" id="vote-propose-overlay" onclick="if(event.target===this)closeVoteModal()">
+    <div class="vote-modal-box">
+      <h3>⚠ Proponer eliminación de Roadmap</h3>
+      <div class="vm-sub" id="vote-propose-info"></div>
+      <div style="font-size:12px;color:var(--text);margin-bottom:6px;">¿Por qué se elimina? <span style="color:var(--text-muted)">(requerido)</span></div>
+      <textarea id="vote-reason-input" placeholder="Explica la razón para eliminar este roadmap…"></textarea>
+      <div class="vote-modal-err" id="vote-propose-err"></div>
+      <div class="admin-modal-row">
+        <button class="admin-modal-btn danger" onclick="submitVoteProposal()">Proponer</button>
+        <button class="admin-modal-btn cancel"  onclick="closeVoteModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: votar a favor -->
+  <div class="vote-overlay" id="vote-cast-overlay" onclick="if(event.target===this)closeVoteCastModal()">
+    <div class="vote-modal-box">
+      <h3>Votar a favor — Eliminación de Roadmap</h3>
+      <div class="vm-sub" id="vote-cast-info"></div>
+      <div style="font-size:12px;color:var(--text);margin-bottom:6px;">Tu token de acceso</div>
+      <input type="password" id="vote-cast-token" placeholder="Token de administrador"
+             onkeydown="if(event.key==='Enter')submitCastVote()">
+      <div class="vote-modal-err" id="vote-cast-err"></div>
+      <div class="admin-modal-row">
+        <button class="admin-modal-btn danger" onclick="submitCastVote()">Confirmar voto</button>
+        <button class="admin-modal-btn cancel"  onclick="closeVoteCastModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="page-header">
+    <div>
+      <h1>CV <span>Celestial</span> — Documentación</h1>
+      <p>Equipo de Computer Vision · Celestial Dynamics AI</p>
+    </div>
+  </header>
+
+  <nav class="page-nav" id="page-nav">
+    <a href="/inicio.html">Inicio</a>
+    <a href="/organigrama.html">Organigrama</a>
+    <a href="/vision.html">Visión</a>
+    <a href="/proyectos.html">Proyectos</a>
+    <a href="/tareas.html">Tareas por semana</a>
+    <a href="/planificador.html">Planificador Semanal</a>
+    <a href="/documentacion.html">Documentación</a>
+    <a href="/infraestructura.html">Infraestructura</a>
+    <a href="/bitacora.html" id="nav-bitacora" style="display:none;">Bitácora</a>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;padding:0 4px;">
+      <button id="overdue-pill" onclick="openOverdueModal()" title="Tareas de semanas cerradas sin completar" style="display:none;">⚠ <span id="overdue-count">0</span> atrasada<span>s</span></button>
+      <button class="admin-lock-btn" id="admin-lock-btn" onclick="openAdminModal()" title="Acceso admin">
+        🔒 <span id="admin-lock-label">Admin</span>
+      </button>
+      <span class="header-badge">Computer Vision</span>
+    </div>
+  </nav>
+
+  <!-- Ventana (modal) BLOQUEANTE de tareas atrasadas — la llena renderOverdueBanner en app.js.
+       No se cierra al clic fuera; solo desaparece cuando ya no quedan atrasadas
+       (para admin). El botón Cerrar lo agrega el JS solo para no-admins. -->
+  <div class="admin-overlay" id="overdue-overlay">
+    <div class="admin-modal" style="max-width:560px;">
+      <h3 style="color:#fff;">⚠ Tareas de semanas cerradas sin completar</h3>
+      <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:10px;">Tareas de la vista “Tareas por semana” cuyo viernes (8 pm) ya pasó y no se completaron. Resuelve cada una para continuar.</div>
+      <div id="overdue-modal-body" style="max-height:60vh;overflow-y:auto;"></div>
+    </div>
+  </div>
+
+<!-- @FOOT -->
+<footer class="page-footer">
+    <span>CV Celestial — Documentación interna · Celestial Dynamics AI</span>
+    <span id="footer-date"></span>
+  </footer>

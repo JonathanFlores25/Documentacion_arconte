@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Celestial — Infraestructura</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body data-page="infraestructura">
+  <div id="app-top"></div>
+
+  <div class="container">
+    <div class="section" id="sec-infra">
+
+      <div class="infra-intro">
+        <div class="infra-intro-title">🏗️ Infraestructura</div>
+        <p>Cámaras, pods/servicios y estructura distribuida del sistema. Vista de solo lectura para todo el equipo.</p>
+        <span class="infra-draft">⚠ Boceto · datos de ejemplo (pendiente conectar a la fuente real)</span>
+      </div>
+
+      <!-- ── 01 Cámaras ─────────────────────────────────────────── -->
+      <section class="infra-block">
+        <div class="infra-block-head">
+          <span class="infra-num">01</span>
+          <span class="infra-title">📷 Cámaras</span>
+          <span class="infra-pill">12 cámaras · <b class="ok">10 en línea</b> · <b class="off">2 offline</b></span>
+        </div>
+        <div class="cam-grid">
+
+          <div class="cam-card">
+            <div class="cam-logo">📷</div>
+            <div class="cam-info">
+              <div class="cam-name">cam-01 <span class="cam-dot on" title="En línea"></span></div>
+              <div class="cam-addr">rtsp://192.168.1.21:554/stream1</div>
+              <div class="cam-loc">📍 Entrada principal</div>
+            </div>
+          </div>
+
+          <div class="cam-card">
+            <div class="cam-logo">📷</div>
+            <div class="cam-info">
+              <div class="cam-name">cam-02 <span class="cam-dot on"></span></div>
+              <div class="cam-addr">rtsp://192.168.1.22:554/stream1</div>
+              <div class="cam-loc">📍 Pasillo central</div>
+            </div>
+          </div>
+
+          <div class="cam-card">
+            <div class="cam-logo">📷</div>
+            <div class="cam-info">
+              <div class="cam-name">cam-03 <span class="cam-dot off" title="Sin conexión"></span></div>
+              <div class="cam-addr">rtsp://192.168.1.23:554/stream1</div>
+              <div class="cam-loc">📍 Almacén</div>
+            </div>
+          </div>
+
+          <div class="cam-card">
+            <div class="cam-logo">📷</div>
+            <div class="cam-info">
+              <div class="cam-name">cam-04 <span class="cam-dot on"></span></div>
+              <div class="cam-addr">rtsp://192.168.1.24:554/stream1</div>
+              <div class="cam-loc">📍 Caja 1</div>
+            </div>
+          </div>
+
+          <div class="cam-card">
+            <div class="cam-logo">📷</div>
+            <div class="cam-info">
+              <div class="cam-name">cam-05 <span class="cam-dot on"></span></div>
+              <div class="cam-addr">rtsp://192.168.1.25:554/stream1</div>
+              <div class="cam-loc">📍 Caja 2</div>
+            </div>
+          </div>
+
+          <div class="cam-card">
+            <div class="cam-logo">📷</div>
+            <div class="cam-info">
+              <div class="cam-name">cam-06 <span class="cam-dot off"></span></div>
+              <div class="cam-addr">rtsp://192.168.1.26:554/stream1</div>
+              <div class="cam-loc">📍 Estacionamiento</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 02 Pods / Servicios ────────────────────────────────── -->
+      <section class="infra-block">
+        <div class="infra-block-head">
+          <span class="infra-num">02</span>
+          <span class="infra-title">⚙️ Pods / Servicios</span>
+          <span class="infra-pill"><b class="ok">5 running</b> · 1 pendiente</span>
+        </div>
+        <div class="pod-grid">
+
+          <div class="pod-card">
+            <div class="pod-head"><span class="pod-name">⚙️ ingest-rtsp</span><span class="pod-status run">● Running 2/2</span></div>
+            <div class="pod-meta">CPU 40% · MEM 1.2 GB · node-01</div>
+          </div>
+
+          <div class="pod-card">
+            <div class="pod-head"><span class="pod-name">🧠 infer-yolo</span><span class="pod-status run">● Running 1/1</span></div>
+            <div class="pod-meta">GPU 70% · MEM 6.0 GB · node-gpu-01</div>
+          </div>
+
+          <div class="pod-card">
+            <div class="pod-head"><span class="pod-name">🧩 infer-clip</span><span class="pod-status run">● Running 1/1</span></div>
+            <div class="pod-meta">GPU 55% · MEM 4.5 GB · node-gpu-01</div>
+          </div>
+
+          <div class="pod-card">
+            <div class="pod-head"><span class="pod-name">🌐 api-backend</span><span class="pod-status run">● Running 2/2</span></div>
+            <div class="pod-meta">CPU 18% · MEM 512 MB · node-02</div>
+          </div>
+
+          <div class="pod-card">
+            <div class="pod-head"><span class="pod-name">🗄️ postgres</span><span class="pod-status run">● Running 1/1</span></div>
+            <div class="pod-meta">CPU 12% · MEM 2.1 GB · node-02</div>
+          </div>
+
+          <div class="pod-card">
+            <div class="pod-head"><span class="pod-name">📊 reid-worker</span><span class="pod-status pending">◐ Pending 0/1</span></div>
+            <div class="pod-meta">esperando recursos GPU</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 03 Estructura distribuida ──────────────────────────── -->
+      <section class="infra-block">
+        <div class="infra-block-head">
+          <span class="infra-num">03</span>
+          <span class="infra-title">🗺️ Estructura distribuida</span>
+        </div>
+
+        <div class="topo card">
+          <div class="topo-flow">
+            <div class="topo-node cam">📷 Cámaras<small>12 · RTSP</small></div>
+            <div class="topo-arrow">▶</div>
+            <div class="topo-node ingest">📥 Ingest RTSP<small>2 pods · node-01</small></div>
+            <div class="topo-arrow">▶</div>
+            <div class="topo-node ai">🧠 Inferencia IA<small>YOLO · CLIP · ReID</small></div>
+            <div class="topo-arrow">▶</div>
+            <div class="topo-node db">🗄️ PostgreSQL / PostGIS<small>node-02</small></div>
+          </div>
+
+          <div class="topo-branch">
+            <div class="topo-node out">💾 Almacenamiento<small>clips / evidencias</small></div>
+            <div class="topo-node out">🌐 API + Frontend<small>node-02</small></div>
+          </div>
+
+          <div class="topo-legend">
+            <span><span class="lg-dot cam"></span> Captura</span>
+            <span><span class="lg-dot ingest"></span> Ingesta</span>
+            <span><span class="lg-dot ai"></span> Procesamiento IA</span>
+            <span><span class="lg-dot db"></span> Datos</span>
+            <span><span class="lg-dot out"></span> Salida / consumo</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div id="app-foot"></div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentación Semanal — CV Celestial</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d0f1a;
+      --surface:     #131626;
+      --card:        #1a1e35;
+      --border:      #252a45;
+      --accent:      #5b7fff;
+      --accent2:     #a78bfa;
+      --green:       #34d399;
+      --yellow:      #fbbf24;
+      --red:         #f87171;
+      --text:        #e2e8f0;
+      --text-muted:  #8892b0;
+      --new-badge:   #10b981;
+      --radius:      10px;
+      --font:        'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.7;
+      padding: 0 0 60px;
+    }
+
+    /* ─── Header ─── */
+    .page-header {
+      background: linear-gradient(135deg, #1a1e35 0%, #0d0f1a 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 36px 48px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .page-header h1 { font-size: 26px; font-weight: 700; color: #fff; }
+    .page-header h1 span { color: var(--accent); }
+    .meta-block { text-align: right; }
+    .meta-block .week-label { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+    .meta-block .week-range { font-size: 18px; font-weight: 600; color: var(--accent2); }
+
+    /* ─── Layout ─── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+    .section { margin-top: 36px; }
+    .section-title {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--accent); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 26px; }
+
+    /* ─── Project group label ─── */
+    .project-group { margin-bottom: 20px; }
+    .project-group:last-child { margin-bottom: 0; }
+    .project-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--accent2);
+      background: rgba(167,139,250,0.10);
+      border: 1px solid rgba(167,139,250,0.25);
+      border-radius: 20px; padding: 4px 14px; margin-bottom: 10px;
+    }
+    .project-label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
+
+    /* ─── Task list ─── */
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    .task-item {
+      display: grid;
+      grid-template-columns: 26px 1fr auto;
+      align-items: start;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    .task-item:has(.task-check:checked) { border-color: var(--green); }
+
+    .task-check {
+      appearance: none; width: 22px; height: 22px;
+      border: 2px solid var(--border); border-radius: 5px;
+      cursor: pointer; flex-shrink: 0; margin-top: 2px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .task-check:checked {
+      background: var(--green); border-color: var(--green);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6.5 11.5L3 8l1.4-1.4 2.1 2.1 4.6-4.6L12.5 5.5z'/%3E%3C/svg%3E");
+      background-size: 16px; background-repeat: no-repeat; background-position: center;
+    }
+
+    .task-body { display: flex; flex-direction: column; gap: 4px; }
+    .task-name { font-weight: 500; color: var(--text); }
+
+    /* Sub-tareas dentro de una tarea (acordeón Retail) */
+    .subtask-list { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .subtask-item {
+      font-size: 13px; color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      border-left: 2px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .subtask-item strong { color: var(--text); font-size: 13px; display: block; }
+    .subtask-note {
+      font-size: 12px; color: var(--yellow);
+      background: rgba(251,191,36,0.07);
+      border-left: 3px solid var(--yellow);
+      padding: 5px 10px; border-radius: 0 5px 5px 0; margin-top: 4px;
+    }
+    .subtask-note a { color: var(--accent); text-decoration: none; }
+    .subtask-note a:hover { text-decoration: underline; }
+
+    .task-note-wrapper { display: none; }
+    .task-item:has(.task-check:not(:checked)) .task-note-wrapper { display: block; }
+    .task-note {
+      font-size: 13px; color: var(--yellow);
+      background: rgba(251,191,36,0.07);
+      border-left: 3px solid var(--yellow);
+      padding: 6px 10px; border-radius: 0 5px 5px 0; margin-top: 6px;
+    }
+    .task-note strong { color: var(--yellow); }
+    .task-note a { color: var(--accent); text-decoration: none; }
+    .task-note a:hover { text-decoration: underline; }
+
+    .task-status {
+      font-size: 12px; font-weight: 600; padding: 3px 10px;
+      border-radius: 20px; white-space: nowrap; align-self: start;
+    }
+    .status-done    { background: rgba(52,211,153,.15);  color: var(--green); }
+    .status-pending { background: rgba(248,113,113,.15); color: var(--red); }
+    .status-partial { background: rgba(251,191,36,.15);  color: var(--yellow); }
+
+    /* ─── Work blocks ─── */
+    .work-blocks { display: flex; flex-direction: column; gap: 28px; }
+
+    .work-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .work-block-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 22px;
+      background: rgba(91,127,255,0.06);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 10px;
+    }
+    .work-block-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .work-block-ref {
+      font-size: 12px; color: var(--accent);
+      background: rgba(91,127,255,0.12);
+      padding: 2px 10px; border-radius: 20px;
+    }
+    .badge-new {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #fff; background: var(--new-badge);
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .work-block-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 18px; }
+
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .comparison-grid { grid-template-columns: 1fr; } }
+
+    .comp-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px;
+    }
+    .comp-box.before { border-top: 3px solid var(--red); }
+    .comp-box.after  { border-top: 3px solid var(--green); }
+    .comp-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+    .comp-box.before .comp-label { color: var(--red); }
+    .comp-box.after  .comp-label { color: var(--green); }
+    .comp-text { font-size: 14px; color: var(--text-muted); }
+
+    .changes-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .changes-list li { font-size: 14px; padding-left: 20px; position: relative; color: var(--text-muted); }
+    .changes-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+
+    .metrics-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+    .metric-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 18px; min-width: 130px; text-align: center;
+    }
+    .metric-label  { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .metric-value  { font-size: 22px; font-weight: 700; color: var(--accent); margin: 4px 0 2px; }
+    .metric-delta  { font-size: 12px; }
+    .delta-up      { color: var(--green); }
+    .delta-down    { color: var(--red); }
+    .delta-neutral { color: var(--text-muted); }
+
+    .sub-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+
+    /* ─── Improvements ─── */
+    .improvements-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .improvement-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 8px; font-size: 14px;
+    }
+    .improvement-item .imp-icon { font-size: 16px; flex-shrink: 0; }
+    .improvement-item .imp-text { color: var(--text-muted); }
+    .improvement-item .imp-text strong { color: var(--text); }
+
+    /* ─── Next tasks ─── */
+    .next-tasks-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .next-task-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 12px 16px; background: var(--surface);
+      border: 1px solid var(--border); border-left: 3px solid var(--accent2);
+      border-radius: 0 8px 8px 0;
+    }
+    .next-task-num { font-size: 12px; font-weight: 700; color: var(--accent2); width: 22px; flex-shrink: 0; padding-top: 2px; }
+    .next-task-body { display: flex; flex-direction: column; gap: 2px; }
+    .next-task-name { font-weight: 600; color: var(--text); font-size: 14px; }
+    .next-task-desc { font-size: 13px; color: var(--text-muted); }
+    .next-task-tag { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 20px; font-weight: 600; margin-top: 4px; }
+    .tag-roadmap  { background: rgba(167,139,250,.15); color: var(--accent2); }
+    .tag-priority { background: rgba(248,113,113,.15);  color: var(--red); }
+    .tag-feature  { background: rgba(52,211,153,.15);   color: var(--green); }
+
+    /* ─── Info box (sin checkbox, solo info) ─── */
+    .info-box {
+      background: rgba(91,127,255,0.05);
+      border: 1px solid rgba(91,127,255,0.2);
+      border-radius: 8px; padding: 12px 16px; font-size: 13px;
+      color: var(--text-muted); display: flex; gap: 10px; align-items: flex-start;
+    }
+    .info-box-icon { color: var(--accent); flex-shrink: 0; font-size: 15px; }
+
+    /* ─── Link button ─── */
+    .link-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600;
+      color: var(--accent); background: rgba(91,127,255,0.1);
+      border: 1px solid rgba(91,127,255,0.3);
+      border-radius: 6px; padding: 4px 12px;
+      text-decoration: none; margin-top: 6px;
+      transition: background 0.15s;
+    }
+    .link-btn:hover { background: rgba(91,127,255,0.2); }
+    .link-btn svg { width: 13px; height: 13px; }
+
+    /* ─── Block diagram ─── */
+    .diagram-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+    .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
+
+    /* ─── Media gallery ─── */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .media-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .media-item img, .media-item video {
+      width: 100%; display: block;
+      max-height: 220px; object-fit: cover;
+    }
+    .media-caption {
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .media-caption strong { color: var(--text); display: block; }
+
+    /* ─── Footer ─── */
+    .page-footer {
+      margin-top: 48px; border-top: 1px solid var(--border);
+      padding: 20px 48px; display: flex;
+      justify-content: space-between; font-size: 12px;
+      color: var(--text-muted); flex-wrap: wrap; gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <header class="page-header">
+    <div>
+      <h1>Documentación Semanal — <span>CV Celestial</span></h1>
+      <p style="color:var(--text-muted); font-size:13px; margin-top:4px;">
+        Sistema de Visión por Computadora · Equipo de Investigación
+      </p>
+    </div>
+    <div class="meta-block">
+      <div class="week-label">Semana</div>
+      <div class="week-range">26 May – 06 Jun 2026</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+        Documento generado: <span id="gen-date"></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- ═══════════════════ SECCIÓN 1: TAREAS PREVIAS ═══════════════════ -->
+    <div class="section">
+      <div class="section-title">01 — Tareas de la semana anterior</div>
+
+      <!-- ─── Proyecto: Arconte-Security ─── -->
+      <div class="project-group">
+        <div class="project-label"><span class="dot"></span>Proyecto Arconte-Security</div>
+
+        <ul class="task-list">
+
+          <!-- Tarea 1 -->
+          <li class="task-item">
+            <input class="task-check" type="checkbox" id="as-t1" />
+            <div class="task-body">
+              <label class="task-name" for="as-t1">
+                Revisar y probar los modelos actuales: Pelea, Incendio-Humo, Robo con violencia, Robo de autopartes, Choque
+              </label>
+              <div class="task-note-wrapper">
+                <div class="task-note">
+                  <strong>Nota:</strong> Se probaron y se dejaron en su última versión. Aún no se ha realizado un pull al repositorio.
+                </div>
+              </div>
+            </div>
+            <span class="task-status status-partial">Parcial</span>
+          </li>
+
+          <!-- Tarea 2 -->
+          <li class="task-item">
+            <input class="task-check" type="checkbox" id="as-t2" />
+            <div class="task-body">
+              <label class="task-name" for="as-t2">
+                Reducir el costo computacional y acelerar el procesamiento de los modelos
+              </label>
+              <div class="task-note-wrapper">
+                <div class="task-note">
+                  <strong>Nota:</strong> Se realizó el proceso de optimización de los modelos actuales. No se completó: faltan mejoras en los modelos heredados de Sergio, los cuales están en proceso.
+                  <br><br>
+                  <span style="color:var(--text-muted); font-size:12px; display:block; margin-bottom:6px;">Ver avances por modelo:</span>
+                  <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/Pelea_README.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/><path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/></svg>
+                      Pelea
+                    </a>
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/Incendio_README.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/><path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/></svg>
+                      Incendio-Humo
+                    </a>
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/Auto_Partes_README.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/><path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/></svg>
+                      Robo de Autopartes
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span class="task-status status-partial">Parcial</span>
+          </li>
+
+          <!-- Tarea 3 -->
+          <li class="task-item">
+            <input class="task-check" type="checkbox" id="as-t3" />
+            <div class="task-body">
+              <label class="task-name" for="as-t3">
+                Pruebas en la plataforma Arconte (PC Cisco)
+              </label>
+              <div class="task-note-wrapper">
+                <div class="task-note">
+                  <strong>Nota:</strong> No se realizaron pruebas porque la plataforma no está activa en el PC Cisco.
+                </div>
+              </div>
+            </div>
+            <span class="task-status status-pending">Pendiente</span>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- ─── Proyecto: Arconte Retail ─── -->
+      <div class="project-group">
+        <div class="project-label"><span class="dot"></span>Proyecto Arconte Retail</div>
+
+        <ul class="task-list">
+
+          <!-- Tarea 1: Acuerdos de la junta 26-May-2026 (task con sub-items) -->
+          <li class="task-item" style="grid-template-columns: 26px 1fr auto;">
+            <input class="task-check" type="checkbox" id="ar-t1" />
+            <div class="task-body">
+              <label class="task-name" for="ar-t1">
+                Acuerdos de la junta del 26 de mayo de 2026 — seguimiento de puntos acordados
+              </label>
+
+              <!-- Sub-tareas siempre visibles (son puntos de la junta) -->
+              <ul class="subtask-list">
+
+                <li class="subtask-item">
+                  <strong>Limitación de profundidad en modo rostro</strong>
+                  Se requiere un objeto conocido para dimensiones específicas. Para el caso C5 hay que replantear la propuesta de Jonathan: tomar un automóvil como referencia. Latencia reportada: 50 ms. Costo de memoria aún no disponible.
+                  <div class="subtask-note">
+                    <strong>Estado:</strong> Revisar documentación de Roy.
+                    <br>
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Roy/Archivo/Resumen-chamba.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/>
+                        <path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/>
+                      </svg>
+                      Abrir reporte de Roy
+                    </a>
+                  </div>
+                </li>
+
+                <li class="subtask-item">
+                  <strong>Problema de comportamiento — mitigación heurística</strong>
+                  Se recurre a heurística con experto en visión que hace encoding de imagen y texto para confirmar resultado. Siguiente paso: correr modelo de detección de objetos en anaqueles (zona a cargo de Israel); sistema de alertas conjunto con experto en esqueletos y manos. Dataset de la metodología aún no encontrado.
+                  <div class="subtask-note">
+                    <strong>Estado:</strong> En progreso — ver avances de Israel.
+                    <br>
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Israel/avances-arconte.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/>
+                        <path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/>
+                      </svg>
+                      Abrir avances de Israel
+                    </a>
+                  </div>
+                </li>
+
+                <li class="subtask-item">
+                  <strong>Transferencia de conocimiento — modelo de fardeo (65%)</strong>
+                  Definir deficiencias específicas del modelo de fardeo y transferirlas a Israel como referencia de mejora.
+                  <div class="subtask-note">
+                    <strong>Estado:</strong> Ver avances de Israel.
+                    <br>
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Israel/avances-arconte.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/>
+                        <path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/>
+                      </svg>
+                      Abrir avances de Israel
+                    </a>
+                  </div>
+                </li>
+
+                <li class="subtask-item">
+                  <strong>Optimización del cómputo en todos los modelos</strong>
+                  Cuidar la eficiencia computacional y tener claro cómo se guarda la metadata mientras se corre el modelo.
+                  <div class="subtask-note" style="border-left-color: var(--green); color: var(--green); background: rgba(52,211,153,0.07);">
+                    <strong>Estado:</strong> En progreso — se está trabajando en los modelos actuales.
+                  </div>
+                </li>
+
+                <li class="subtask-item">
+                  <strong>Planeación de mejora de accuracy (en espera de videos del cliente)</strong>
+                  1. Revisar prompts entre positivos, negativos y escenarios no contemplados. 2. Reajustar hiperparámetros hasta llegar a un tope una vez que el cliente mande la data.
+                  <div class="subtask-note">
+                    <strong>Estado:</strong> Ver avances de Israel.
+                    <br>
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Israel/avances-arconte.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/>
+                        <path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/>
+                      </svg>
+                      Abrir avances de Israel
+                    </a>
+                  </div>
+                </li>
+
+                <li class="subtask-item">
+                  <strong>Calibración de hiperparámetros — maximizar métrica 65% · Cierre v1</strong>
+                  Siguiente paso: demo con BD sintética; recalibrar cuando llegue data real del cliente y sus parámetros. Se cierra la 1ª versión del sistema.
+                  <div class="subtask-note">
+                    <strong>Estado:</strong> Ver reporte de Roy.
+                    <br>
+                    <a class="link-btn" href="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Roy/Archivo/Resumen-chamba.html" target="_blank">
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 2h5v1.5H3.5v9h9V9H14v5H2V2z" fill="currentColor"/>
+                        <path d="M9 2h5v5h-1.5V4.56L8.06 9 7 7.94 11.44 3.5H9V2z" fill="currentColor"/>
+                      </svg>
+                      Abrir reporte de Roy
+                    </a>
+                  </div>
+                </li>
+
+              </ul><!-- /subtask-list -->
+
+              <div class="task-note-wrapper">
+                <div class="task-note">
+                  <strong>Nota:</strong> Varios sub-puntos de la junta siguen en progreso. Ver notas individuales arriba.
+                </div>
+              </div>
+            </div>
+            <span class="task-status status-partial">Parcial</span>
+          </li>
+
+        </ul>
+      </div>
+
+    </div><!-- /section 01 -->
+
+
+    <!-- ═══════════════════ SECCIÓN 2: TRABAJO DE LA SEMANA ═══════════════════ -->
+    <div class="section">
+      <div class="section-title">02 — Trabajo realizado</div>
+
+      <div class="work-blocks">
+
+        <!-- ─── BLOQUE: AreaRestriction + ReID ─── -->
+        <div class="work-block">
+          <div class="work-block-header">
+            <span class="work-block-title">Restricción de Zona + Identificación de Personas (ReID)</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span class="work-block-ref">AreaRestriction_ReID_Debug.py</span>
+              <span class="work-block-ref">Arconte-Security</span>
+            </div>
+          </div>
+
+          <div class="work-block-body">
+
+            <!-- RESUMEN -->
+            <div>
+              <div class="sub-label">¿Qué hace este módulo?</div>
+              <p style="font-size:14px; color:var(--text-muted); line-height:1.8;">
+                Sistema en tiempo real que combina <strong style="color:var(--text)">detección de zonas restringidas</strong>
+                con <strong style="color:var(--text)">re-identificación de personas (ReID)</strong> para determinar si
+                quien ingresa a un área está <span style="color:var(--green)">AUTORIZADO</span>,
+                <span style="color:var(--red)">NO AUTORIZADO</span> o es
+                <span style="color:var(--yellow)">DESCONOCIDO</span>.
+                <br><br>
+                Opera sobre streams RTSP o video grabado. Soporta dos modos de escena:
+                <strong style="color:var(--text)">indoor</strong> (YOLO recibe solo el crop de la zona) y
+                <strong style="color:var(--text)">outdoor</strong> (YOLO recibe el frame completo y filtra por polígono expandido).
+                La galería de personas autorizadas se construye una sola vez desde imágenes y se persiste en disco.
+              </p>
+
+              <!-- Stack de modelos -->
+              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
+                <span style="font-size:12px; background:rgba(91,127,255,0.12); border:1px solid rgba(91,127,255,0.3); color:var(--accent); padding:3px 12px; border-radius:20px;">YOLOv11x — Detección de personas</span>
+                <span style="font-size:12px; background:rgba(91,127,255,0.12); border:1px solid rgba(91,127,255,0.3); color:var(--accent); padding:3px 12px; border-radius:20px;">ByteTrack — Tracking</span>
+                <span style="font-size:12px; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.3); color:var(--accent2); padding:3px 12px; border-radius:20px;">TransReID ViT-B/16+JPM — Identificación</span>
+                <span style="font-size:12px; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.25); color:var(--green); padding:3px 12px; border-radius:20px;">Similitud coseno — Matching</span>
+              </div>
+            </div>
+
+            <!-- DIAGRAMA DE BLOQUES -->
+            <div>
+              <div class="sub-label">Diagrama de bloques</div>
+              <div class="diagram-wrap">
+                <svg viewBox="0 0 820 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif">
+
+                  <!-- Defs -->
+                  <defs>
+                    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#5b7fff"/>
+                    </marker>
+                    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#a78bfa"/>
+                    </marker>
+                  </defs>
+
+                  <!-- ── ENTRADA ── -->
+                  <rect x="280" y="12" width="260" height="44" rx="8" fill="#1a1e35" stroke="#5b7fff" stroke-width="1.5"/>
+                  <text x="410" y="30" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="600">Entrada</text>
+                  <text x="410" y="48" text-anchor="middle" fill="#8892b0" font-size="11">Video / Stream RTSP</text>
+
+                  <!-- flecha entrada → config escena -->
+                  <line x1="410" y1="56" x2="410" y2="90" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                  <!-- ── CONFIG ESCENA ── -->
+                  <rect x="290" y="90" width="240" height="40" rx="8" fill="#131626" stroke="#252a45" stroke-width="1.5"/>
+                  <text x="410" y="106" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="700" letter-spacing="1">CONFIGURACIÓN DE ESCENA</text>
+                  <text x="410" y="122" text-anchor="middle" fill="#8892b0" font-size="10">indoor (crop) / outdoor (frame completo)</text>
+
+                  <!-- flecha config → galería -->
+                  <line x1="410" y1="130" x2="410" y2="158" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                  <!-- ── CONSTRUCCIÓN GALERÍA (caja lateral izquierda) ── -->
+                  <rect x="14" y="158" width="230" height="100" rx="8" fill="#131626" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5,3"/>
+                  <text x="129" y="177" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700" letter-spacing="0.5">GALERÍA (1 sola vez)</text>
+                  <text x="129" y="196" text-anchor="middle" fill="#8892b0" font-size="10">PersonasPermitidas/*.jpg</text>
+                  <text x="129" y="213" text-anchor="middle" fill="#8892b0" font-size="10">YOLO → Crop → TransReID</text>
+                  <text x="129" y="230" text-anchor="middle" fill="#8892b0" font-size="10">→ gallery.npy + gallery.json</text>
+                  <text x="129" y="247" text-anchor="middle" fill="#34d399" font-size="10" font-style="italic">Persiste en disco</text>
+
+                  <!-- flecha galería → loop -->
+                  <line x1="244" y1="208" x2="278" y2="208" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arr2)"/>
+
+                  <!-- ── LOOP PRINCIPAL — contenedor ── -->
+                  <rect x="14" y="158" width="792" height="380" rx="10" fill="none" stroke="#252a45" stroke-width="1" stroke-dasharray="6,3"/>
+                  <text x="28" y="175" fill="#252a45" font-size="10">LOOP EN TIEMPO REAL</text>
+
+                  <!-- ── SELECCIÓN DE ZONA ── -->
+                  <rect x="290" y="158" width="240" height="42" rx="8" fill="#1a1e35" stroke="#252a45" stroke-width="1.5"/>
+                  <text x="410" y="175" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Selección de Zona</text>
+                  <text x="410" y="191" text-anchor="middle" fill="#8892b0" font-size="10">Polígono interactivo (4 puntos) o zones.json</text>
+
+                  <!-- flecha selección → frame -->
+                  <line x1="410" y1="200" x2="410" y2="228" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                  <!-- ── FRAME + RESIZE ── -->
+                  <rect x="290" y="228" width="240" height="40" rx="8" fill="#1a1e35" stroke="#252a45" stroke-width="1.5"/>
+                  <text x="410" y="244" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Frame</text>
+                  <text x="410" y="260" text-anchor="middle" fill="#8892b0" font-size="10">Outdoor: resize a 640×420 · Indoor: original</text>
+
+                  <!-- flecha frame → YOLO -->
+                  <line x1="410" y1="268" x2="410" y2="296" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                  <!-- ── YOLO + ByteTrack ── -->
+                  <rect x="250" y="296" width="320" height="44" rx="8" fill="#1a1e35" stroke="#5b7fff" stroke-width="2"/>
+                  <text x="410" y="314" text-anchor="middle" fill="#5b7fff" font-size="12" font-weight="700">YOLOv11x + ByteTrack</text>
+                  <text x="410" y="332" text-anchor="middle" fill="#8892b0" font-size="10">Detección de personas (clase 0) + track_id persistente</text>
+
+                  <!-- flecha YOLO → split -->
+                  <line x1="410" y1="340" x2="410" y2="364" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                  <!-- texto "por cada track" -->
+                  <text x="412" y="360" fill="#8892b0" font-size="10" font-style="italic">por cada track_id</text>
+
+                  <!-- split: izquierda ReID, derecha Zone -->
+                  <line x1="280" y1="372" x2="540" y2="372" stroke="#252a45" stroke-width="1"/>
+
+                  <!-- ── ReID branch (izquierda) ── -->
+                  <line x1="310" y1="364" x2="310" y2="388" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arr2)"/>
+                  <rect x="150" y="388" width="320" height="58" rx="8" fill="#1a1e35" stroke="#a78bfa" stroke-width="1.8"/>
+                  <text x="310" y="406" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="700">TransReID ViT-B/16 + JPM</text>
+                  <text x="310" y="422" text-anchor="middle" fill="#8892b0" font-size="10">Crop persona → feature 768-D L2-norm</text>
+                  <text x="310" y="438" text-anchor="middle" fill="#8892b0" font-size="10">Buffer rolling (máx 12) · similitud coseno vs galería</text>
+
+                  <!-- flecha ReID → resultado -->
+                  <line x1="310" y1="446" x2="310" y2="470" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+                  <!-- resultado auth -->
+                  <rect x="155" y="470" width="310" height="38" rx="8" fill="#131626" stroke="#252a45" stroke-width="1.5"/>
+                  <text x="230" y="492" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">AUTORIZADO</text>
+                  <text x="310" y="492" text-anchor="middle" fill="#8892b0" font-size="10">|</text>
+                  <text x="380" y="492" text-anchor="middle" fill="#f87171" font-size="12" font-weight="700">NO AUTORIZADO</text>
+
+                  <!-- ── Zone hit-test branch (derecha) ── -->
+                  <line x1="510" y1="364" x2="510" y2="388" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+                  <rect x="360" y="388" width="300" height="56" rx="8" fill="#1a1e35" stroke="#5b7fff" stroke-width="1.8"/>
+                  <text x="510" y="406" text-anchor="middle" fill="#5b7fff" font-size="12" font-weight="700">Zone Hit-Test</text>
+                  <text x="510" y="422" text-anchor="middle" fill="#8892b0" font-size="10">ref_point (bottom_center) vs polígono expandido</text>
+                  <text x="510" y="438" text-anchor="middle" fill="#8892b0" font-size="10">Grace frames: 20 · ratio mín bbox/zona</text>
+
+                  <line x1="510" y1="444" x2="510" y2="470" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+                  <rect x="375" y="470" width="270" height="38" rx="8" fill="#131626" stroke="#252a45" stroke-width="1.5"/>
+                  <text x="430" y="492" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">ENTER</text>
+                  <text x="510" y="492" text-anchor="middle" fill="#8892b0" font-size="10">|</text>
+                  <text x="590" y="492" text-anchor="middle" fill="#f87171" font-size="12" font-weight="700">EXIT</text>
+
+                  <!-- ── DASHBOARD ── -->
+                  <line x1="410" y1="508" x2="410" y2="534" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arr)"/>
+                  <line x1="310" y1="508" x2="410" y2="534" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2"/>
+                  <line x1="510" y1="508" x2="410" y2="534" stroke="#5b7fff" stroke-width="1" stroke-dasharray="3,2"/>
+
+                  <rect x="200" y="534" width="420" height="54" rx="8" fill="#1a1e35" stroke="#fbbf24" stroke-width="1.5"/>
+                  <text x="410" y="554" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">Dashboard en tiempo real</text>
+                  <text x="410" y="570" text-anchor="middle" fill="#8892b0" font-size="10">Video + zonas overlay · Panel ReID por track · Info bar (FPS, conteos, eventos)</text>
+                  <text x="410" y="582" text-anchor="middle" fill="#8892b0" font-size="9">Alarma visual roja si ENTER + NO AUTORIZADO</text>
+
+                </svg>
+              </div>
+            </div>
+
+            <!-- FIGURAS / MEDIA -->
+            <div>
+              <div class="sub-label">Figuras de referencia</div>
+              <div class="media-grid">
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/Roi-REID/image.png"
+                       alt="Selección de zona ROI" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 1 — Selección de zona (ROI)</strong>
+                    Interfaz interactiva donde el usuario dibuja el polígono de zona restringida (4 clics). El sistema guarda la zona en <code style="font-size:11px; color:var(--accent);">zones.json</code> para reutilizarla en streams RTSP.
+                  </div>
+                </div>
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/Roi-REID/Charly_1.jpeg"
+                       alt="Ejemplo foto de galería" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 2 — Ejemplo de imagen de galería</strong>
+                    Foto usada para construir la galería de personas autorizadas. YOLO detecta el crop de la persona → TransReID extrae un vector de 768 dimensiones → se guarda en <code style="font-size:11px; color:var(--accent);">gallery.npy</code>.
+                  </div>
+                </div>
+
+                <div class="media-item">
+                  <video controls preload="metadata"
+                         src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/Roi-REID/AR_1.mp4">
+                    Tu navegador no soporta video HTML5.
+                  </video>
+                  <div class="media-caption">
+                    <strong>Video 1 — Visualización en streaming</strong>
+                    Dashboard en tiempo real: video con zonas superpuestas, bounding boxes coloreados por estado de autorización (verde=autorizado, rojo=no autorizado, amarillo=desconocido) y panel de scores ReID.
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- MÉTRICAS (placeholder) -->
+            <div>
+              <div class="sub-label">Métricas</div>
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-label">Umbral ReID (thr)</div>
+                  <div class="metric-value">0.65</div>
+                  <div class="metric-delta delta-neutral">similitud coseno</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Buffer features</div>
+                  <div class="metric-value">12</div>
+                  <div class="metric-delta delta-neutral">frames rolling</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Resolución outdoor</div>
+                  <div class="metric-value">640×420</div>
+                  <div class="metric-delta delta-neutral">procesamiento</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Precisión ReID</div>
+                  <div class="metric-value">—</div>
+                  <div class="metric-delta delta-neutral">pendiente evaluar</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">FPS inferencia</div>
+                  <div class="metric-value">—</div>
+                  <div class="metric-delta delta-neutral">pendiente medir</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /work-block-body -->
+        </div><!-- /work-block -->
+
+
+        <!-- ─── BLOQUE 2: ENROLL LAUNCHER + auto_enroll_v2 ─── -->
+        <div class="work-block">
+          <div class="work-block-header">
+            <span class="work-block-title">Re-ID Enrollment — Lanzador gráfico y construcción de galería</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span class="work-block-ref">enroll_launcher.py</span>
+              <span class="work-block-ref">auto_enroll_v2.py</span>
+              <span class="work-block-ref">Arconte-Security</span>
+            </div>
+          </div>
+
+          <div class="work-block-body">
+
+            <!-- RESUMEN -->
+            <div>
+              <div class="sub-label">¿Qué hace este módulo?</div>
+              <p style="font-size:14px; color:var(--text-muted); line-height:1.8;">
+                Interfaz gráfica (tkinter) para construir y lanzar el proceso de <strong style="color:var(--text)">enrollment</strong>:
+                dado un video y una descripción textual del objetivo, el sistema localiza a la persona usando
+                <strong style="color:var(--text)">SAMURAI</strong> (tracker de alta precisión), extrae los mejores
+                <em>N</em> crops y genera una <strong style="color:var(--text)">galería de features</strong> persistida
+                en disco (<code style="color:var(--accent); font-size:12px;">.json + .npy</code>).
+                Esa galería es la que luego consumen los viewers (offline y stream) para buscar a la persona.
+              </p>
+              <p style="font-size:14px; color:var(--text-muted); line-height:1.8; margin-top:8px;">
+                Soporta múltiples backends de extracción de features según el tipo de objetivo:
+                <strong style="color:var(--accent2)">TransReID</strong> (personas a pie, mayor precisión),
+                <strong style="color:var(--accent2)">OSNet</strong> (personas, rápido),
+                <strong style="color:var(--accent2)">ViT-DINO</strong> (casos difíciles),
+                <strong style="color:var(--accent2)">CLIP</strong> (personas en vehículo).
+                Incluye aumentación de datos (flip, brillo, contraste, crop) y super-resolución opcional
+                (Real-ESRGAN x2/x4) para crops de baja resolución.
+              </p>
+
+              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
+                <span style="font-size:12px; background:rgba(91,127,255,0.12); border:1px solid rgba(91,127,255,0.3); color:var(--accent); padding:3px 12px; border-radius:20px;">SAMURAI — Tracking inicial</span>
+                <span style="font-size:12px; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.3); color:var(--accent2); padding:3px 12px; border-radius:20px;">TransReID / OSNet / ViT / CLIP</span>
+                <span style="font-size:12px; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.25); color:var(--green); padding:3px 12px; border-radius:20px;">Real-ESRGAN x2/x4 (opcional)</span>
+                <span style="font-size:12px; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.25); color:var(--yellow); padding:3px 12px; border-radius:20px;">Augmentación de datos</span>
+              </div>
+            </div>
+
+            <!-- FIGURAS -->
+            <div>
+              <div class="sub-label">Capturas de la interfaz</div>
+              <div class="media-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/REID-Semantico/image_1.png" alt="Interfaz gráfica" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 1 — Interfaz gráfica</strong>
+                    Vista completa del lanzador: selección de video con preview, campo de descripción (genera nombre automático), parámetros de enrollment y log en tiempo real.
+                  </div>
+                </div>
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/REID-Semantico/image_2.png" alt="Búsqueda semántica" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 2 — Búsqueda de objetos semántica</strong>
+                    Modo de búsqueda usando descripción textual (e.g. "Hombre con playera roja"). El sistema infiere clases de contexto (moto, carro) automáticamente desde las palabras clave.
+                  </div>
+                </div>
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/REID-Semantico/image_3.png" alt="Búsqueda por bbox" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 3 — Búsqueda por bounding box</strong>
+                    Detección y scoring de personas detectadas por YOLO. Cada bbox muestra score y fracción de match contra la galería.
+                  </div>
+                </div>
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/REID-Semantico/image_4.png" alt="Encontrado y seguimiento" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 4 — Encontrado y seguimiento (LOCK/TRACK)</strong>
+                    Una vez que el sistema bloquea al objetivo (estado TRACK), dibuja la zona de seguimiento en cian y muestra el score de confirmación en tiempo real.
+                  </div>
+                </div>
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/REID-Semantico/image_5.png" alt="Crops de galería" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 5 — Grid de crops de galería</strong>
+                    Vista de los crops base y aumentados que se guardan en la galería. Crops base en cian, aumentados en amarillo. Permite verificar la calidad del enrollment antes de buscar.
+                  </div>
+                </div>
+
+                <div class="media-item">
+                  <img src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/REID-Semantico/image_6.png" alt="PCA de features" loading="lazy" />
+                  <div class="media-caption">
+                    <strong>Figura 6 — PCA de features de enrollment</strong>
+                    Proyección 2D de las features extraídas. Verde = conservadas, rojo = outliers eliminados, ★ = centroide. Permite evaluar la cohesión y variedad de la galería.
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- MÉTRICAS -->
+            <div>
+              <div class="sub-label">Parámetros clave de enrollment</div>
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-label">Top crops</div>
+                  <div class="metric-value">5–10</div>
+                  <div class="metric-delta delta-neutral">mejores frames</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Aug factor</div>
+                  <div class="metric-value">5</div>
+                  <div class="metric-delta delta-neutral">variantes/crop</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Search frames</div>
+                  <div class="metric-value">120</div>
+                  <div class="metric-delta delta-neutral">frames SAMURAI</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Clip frames</div>
+                  <div class="metric-value">100</div>
+                  <div class="metric-delta delta-neutral">frames post-lock</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Precisión galería</div>
+                  <div class="metric-value">—</div>
+                  <div class="metric-delta delta-neutral">pendiente evaluar</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /work-block-body -->
+        </div><!-- /work-block enroll -->
+
+
+        <!-- ─── BLOQUE 3: ReID VIEWER OFFLINE + STREAM ─── -->
+        <div class="work-block">
+          <div class="work-block-header">
+            <span class="work-block-title">Re-ID Viewer — Búsqueda y seguimiento de personas</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span class="work-block-ref">reid_viewer_v2_offline.py</span>
+              <span class="work-block-ref">reid_viewer_v2_stream.py</span>
+              <span class="work-block-ref">Arconte-Security</span>
+            </div>
+          </div>
+
+          <div class="work-block-body">
+
+            <!-- RESUMEN -->
+            <div>
+              <div class="sub-label">¿Qué hacen estos módulos?</div>
+              <p style="font-size:14px; color:var(--text-muted); line-height:1.8;">
+                Dos implementaciones de la misma máquina de estados <strong style="color:var(--text)">SEARCH → TRACK</strong>
+                para localizar y seguir a una persona específica a partir de una galería de features pre-construida:
+              </p>
+
+              <!-- Tabla Offline vs Stream -->
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px;">
+                <div class="comp-box before" style="border-top-color: var(--accent);">
+                  <div class="comp-label" style="color:var(--accent);">Offline (batch)</div>
+                  <div class="comp-text" style="font-size:13px; line-height:1.8;">
+                    Procesa video completo en 2 fases. YOLO en lotes (8 frames/lote) y FE en lotes (32 crops/lote)
+                    → ~8–20× más rápido que frame-a-frame. No tiene UI en tiempo real.
+                    Al terminar exporta <em>clips</em> de cada intervalo encontrado y <em>crops</em> del objetivo.
+                    Soporta modo carpeta (analiza múltiples videos y genera resumen global).
+                  </div>
+                </div>
+                <div class="comp-box after" style="border-top-color: var(--accent2);">
+                  <div class="comp-label" style="color:var(--accent2);">Stream (tiempo real)</div>
+                  <div class="comp-text" style="font-size:13px; line-height:1.8;">
+                    Operación en vivo sobre cámara USB o RTSP IP-cam. UI en dos paneles:
+                    video con anotaciones a la izquierda + crops y zoom de zona a la derecha.
+                    Reconexión automática si el stream cae. Graba clips en cuanto bloquea al objetivo.
+                    Proyección PCA en tiempo real (modo debug).
+                  </div>
+                </div>
+              </div>
+
+              <!-- Galería negativa -->
+              <div style="background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.2); border-radius:8px; padding:12px 16px; margin-top:12px; font-size:13px; color:var(--text-muted);">
+                <strong style="color:var(--yellow);">Galería negativa automática:</strong>
+                En los primeros <em>N</em> frames se acumulan features de personas que <em>no</em> son el objetivo.
+                Esto reduce falsos positivos restando la similitud con la galería negativa al score final.
+              </div>
+            </div>
+
+            <!-- DIAGRAMA ESTADO SEARCH/TRACK -->
+            <div>
+              <div class="sub-label">Diagrama de la máquina de estados SEARCH / TRACK</div>
+              <div class="diagram-wrap">
+                <svg viewBox="0 0 780 480" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif">
+                  <defs>
+                    <marker id="arS" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5b7fff"/></marker>
+                    <marker id="arT" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#a78bfa"/></marker>
+                    <marker id="arG" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#34d399"/></marker>
+                    <marker id="arR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f87171"/></marker>
+                  </defs>
+
+                  <!-- ══ ENTRADA ══ -->
+                  <rect x="290" y="10" width="200" height="38" rx="8" fill="#1a1e35" stroke="#5b7fff" stroke-width="1.5"/>
+                  <text x="390" y="25" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">Galería (.json + .npy)</text>
+                  <text x="390" y="40" text-anchor="middle" fill="#8892b0" font-size="10">features L2-norm del objetivo</text>
+
+                  <line x1="390" y1="48" x2="390" y2="76" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arS)"/>
+
+                  <!-- ══ GALERÍA NEGATIVA ══ -->
+                  <rect x="530" y="48" width="200" height="50" rx="8" fill="#131626" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,2"/>
+                  <text x="630" y="65" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="700">Galería negativa (auto)</text>
+                  <text x="630" y="80" text-anchor="middle" fill="#8892b0" font-size="10">primeros N frames → resta</text>
+                  <text x="630" y="93" text-anchor="middle" fill="#8892b0" font-size="10">similitud → score ajustado</text>
+                  <line x1="530" y1="70" x2="492" y2="98" stroke="#fbbf24" stroke-width="1" stroke-dasharray="3,2"/>
+
+                  <!-- ══ ESTADO SEARCH ══ -->
+                  <rect x="120" y="76" width="540" height="150" rx="10" fill="#131626" stroke="#5b7fff" stroke-width="1.5"/>
+                  <text x="142" y="96" fill="#5b7fff" font-size="11" font-weight="700" letter-spacing="0.5">ESTADO: SEARCH</text>
+
+                  <!-- dentro de SEARCH: pasos -->
+                  <rect x="140" y="104" width="150" height="36" rx="6" fill="#1a1e35" stroke="#252a45" stroke-width="1"/>
+                  <text x="215" y="119" text-anchor="middle" fill="#e2e8f0" font-size="11">YOLOv11x</text>
+                  <text x="215" y="133" text-anchor="middle" fill="#8892b0" font-size="10">detecta personas</text>
+                  <line x1="290" y1="122" x2="312" y2="122" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arS)"/>
+
+                  <rect x="312" y="104" width="150" height="36" rx="6" fill="#1a1e35" stroke="#252a45" stroke-width="1"/>
+                  <text x="387" y="119" text-anchor="middle" fill="#a78bfa" font-size="11">Feature extractor</text>
+                  <text x="387" y="133" text-anchor="middle" fill="#8892b0" font-size="10">crop → vector L2-norm</text>
+                  <line x1="462" y1="122" x2="484" y2="122" stroke="#5b7fff" stroke-width="1.5" marker-end="url(#arS)"/>
+
+                  <rect x="484" y="104" width="150" height="36" rx="6" fill="#1a1e35" stroke="#252a45" stroke-width="1"/>
+                  <text x="559" y="119" text-anchor="middle" fill="#e2e8f0" font-size="11">Match galería</text>
+                  <text x="559" y="133" text-anchor="middle" fill="#8892b0" font-size="10">similitud coseno + fracción</text>
+
+                  <!-- confirmación -->
+                  <rect x="210" y="158" width="360" height="52" rx="6" fill="rgba(91,127,255,0.08)" stroke="rgba(91,127,255,0.25)" stroke-width="1"/>
+                  <text x="390" y="175" text-anchor="middle" fill="#5b7fff" font-size="11" font-weight="600">Confirmación espacial</text>
+                  <text x="390" y="191" text-anchor="middle" fill="#8892b0" font-size="10">confirm_count++  si centro dentro de zone_thr</text>
+                  <text x="390" y="204" text-anchor="middle" fill="#8892b0" font-size="10">velocidad estimada con EMA · lock inmediato / dinámico / regular</text>
+
+                  <!-- flecha SEARCH → LOCK -->
+                  <line x1="390" y1="226" x2="390" y2="258" stroke="#34d399" stroke-width="2" marker-end="url(#arG)"/>
+                  <text x="406" y="246" fill="#34d399" font-size="10" font-style="italic">confirm_count ≥ lock_frames</text>
+
+                  <!-- ══ LOCK → TRACK ══ -->
+                  <rect x="240" y="258" width="300" height="38" rx="8" fill="#1a1e35" stroke="#34d399" stroke-width="2"/>
+                  <text x="390" y="275" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">LOCK — zona bloqueada</text>
+                  <text x="390" y="289" text-anchor="middle" fill="#8892b0" font-size="10">_make_zone(): crea ventana de seguimiento centrada en el bbox</text>
+                  <line x1="390" y1="296" x2="390" y2="326" stroke="#a78bfa" stroke-width="2" marker-end="url(#arT)"/>
+
+                  <!-- ══ ESTADO TRACK ══ -->
+                  <rect x="120" y="326" width="540" height="120" rx="10" fill="#131626" stroke="#a78bfa" stroke-width="1.5"/>
+                  <text x="142" y="346" fill="#a78bfa" font-size="11" font-weight="700" letter-spacing="0.5">ESTADO: TRACK</text>
+
+                  <rect x="140" y="354" width="185" height="36" rx="6" fill="#1a1e35" stroke="#252a45" stroke-width="1"/>
+                  <text x="232" y="369" text-anchor="middle" fill="#e2e8f0" font-size="11">YOLO en zona bloqueada</text>
+                  <text x="232" y="383" text-anchor="middle" fill="#8892b0" font-size="10">crop dentro del locked_zone</text>
+                  <line x1="325" y1="372" x2="345" y2="372" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arT)"/>
+
+                  <rect x="345" y="354" width="155" height="36" rx="6" fill="#1a1e35" stroke="#252a45" stroke-width="1"/>
+                  <text x="422" y="369" text-anchor="middle" fill="#a78bfa" font-size="11">Match (umbral relajado)</text>
+                  <text x="422" y="383" text-anchor="middle" fill="#8892b0" font-size="10">thr × 0.85, frac/2</text>
+                  <line x1="500" y1="372" x2="520" y2="372" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arT)"/>
+
+                  <rect x="520" y="354" width="120" height="36" rx="6" fill="#1a1e35" stroke="#34d399" stroke-width="1.5"/>
+                  <text x="580" y="369" text-anchor="middle" fill="#34d399" font-size="11">Guardar clip</text>
+                  <text x="580" y="383" text-anchor="middle" fill="#8892b0" font-size="10">+ crops del objetivo</text>
+
+                  <!-- actualizar zona -->
+                  <text x="390" y="412" text-anchor="middle" fill="#8892b0" font-size="10">Match → actualizar locked_zone con EMA | No match → lost_count++</text>
+                  <text x="390" y="426" text-anchor="middle" fill="#8892b0" font-size="10">Zona se expande gradualmente · velocidad predictiva si pierde</text>
+
+                  <!-- flecha TRACK → SEARCH (lost) -->
+                  <path d="M 120 386 Q 60 386 60 300 Q 60 200 120 180" fill="none" stroke="#f87171" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arR)"/>
+                  <text x="34" y="295" fill="#f87171" font-size="10" font-style="italic" text-anchor="middle">lost_count</text>
+                  <text x="34" y="308" fill="#f87171" font-size="10" font-style="italic" text-anchor="middle">&gt; lost_max</text>
+                  <text x="34" y="321" fill="#f87171" font-size="10" font-style="italic" text-anchor="middle">→ SEARCH</text>
+
+                  <!-- ══ SALIDA ══ -->
+                  <line x1="580" y1="390" x2="680" y2="390" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arG)"/>
+                  <rect x="680" y="370" width="90" height="40" rx="6" fill="#131626" stroke="#34d399" stroke-width="1"/>
+                  <text x="725" y="387" text-anchor="middle" fill="#34d399" font-size="10">Clips .mp4</text>
+                  <text x="725" y="400" text-anchor="middle" fill="#8892b0" font-size="10">+ crops/</text>
+
+                  <!-- Log labels -->
+                  <text x="390" y="462" text-anchor="middle" fill="#252a45" font-size="10">Logs: [SEARCH] primer match · [LOCK] zona bloqueada · [LOST] pierde objetivo · [RESULTADO] ENCONTRADO / NO ENCONTRADO</text>
+                </svg>
+              </div>
+            </div>
+
+            <!-- LOGS de ejemplo -->
+            <div>
+              <div class="sub-label">Ejemplo de logs generados</div>
+              <pre style="background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:14px; font-size:12px; color:#8892b0; overflow-x:auto; line-height:1.8;"><span style="color:#5b7fff;">[INFO]</span>  thr_feat=0.70  min_fraction=0.25
+<span style="color:#5b7fff;">[INFO]</span>  frame_skip=2   yolo_batch=8   feat_batch=32
+<span style="color:#8892b0;">─────────────────────────────────────────────────────────</span>
+<span style="color:#5b7fff;">[F1]</span>   Normal0015.mp4: 450f → 225 analizados  1082 dets  3.2s
+<span style="color:#fbbf24;">[TOP]</span>  mejor: s=0.734 f=75% en f=152   (thr=0.70/frac≥25%)  OK ≥ thr
+<span style="color:#34d399;">[LOCK]</span> f=152  54×130px  s=0.734 f=75%  cnt=4  spd=3.2  [reg]
+<span style="color:#f87171;">[LOST]</span> f=450  → SEARCH  |  intervalo cerrado: 298 frames  s_avg=0.681  f_avg=68%
+<span style="color:#8892b0;">═══════════════════════════════════════════════════════</span>
+<span style="color:#34d399;">[RESULTADO] ENCONTRADO</span>  —  1 intervalo(s)  duración: 9.9s
+    [1]  f=152→450   10.1s→30.0s   (19.9s)  298 frames   s_avg=0.681  f_avg=68%
+<span style="color:#5b7fff;">[CLIP 1]</span>  reid_clips/clip_02_f152-450_10s-30s.mp4
+<span style="color:#5b7fff;">[CROPS]</span>  reid_clips/crops_iv01  (298 imágenes)</pre>
+            </div>
+
+            <!-- VIDEO -->
+            <div>
+              <div class="sub-label">Video de ejemplo — intervalo encontrado</div>
+              <div class="media-grid" style="grid-template-columns: 1fr;">
+                <div class="media-item">
+                  <video controls preload="metadata" style="max-height:320px;"
+                         src="file:///media/pc/MainWork2/Codes/DocumentacionCV_Celestial/Jonathan/REID-Semantico/clip_02_f152-450_10s-30s.mp4">
+                    Tu navegador no soporta video HTML5.
+                  </video>
+                  <div class="media-caption">
+                    <strong>Video 1 — Clip exportado automáticamente (clip_02_f152-450_10s-30s.mp4)</strong>
+                    Intervalo donde el sistema localizó al objetivo en el video de prueba.
+                    Frame 152 al 450 (10s → 30s). Cada frame muestra el bbox con score (s=) y fracción (f=) de match en tiempo real.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MÉTRICAS -->
+            <div>
+              <div class="sub-label">Parámetros / Métricas de prueba</div>
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-label">Score máx (test)</div>
+                  <div class="metric-value">0.734</div>
+                  <div class="metric-delta delta-neutral">TransReID thr=0.70</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Score avg intervalo</div>
+                  <div class="metric-value">0.681</div>
+                  <div class="metric-delta delta-neutral">298 frames</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Fracción avg</div>
+                  <div class="metric-value">68%</div>
+                  <div class="metric-delta delta-neutral">frac_min=25%</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">YOLO batch</div>
+                  <div class="metric-value">8×</div>
+                  <div class="metric-delta delta-up">aceleración</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">FE batch</div>
+                  <div class="metric-value">32×</div>
+                  <div class="metric-delta delta-up">~20× más rápido</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Precisión global</div>
+                  <div class="metric-value">—</div>
+                  <div class="metric-delta delta-neutral">pendiente evaluar</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /work-block-body -->
+        </div><!-- /work-block viewer -->
+
+      </div>
+    </div><!-- /section 02 -->
+
+
+    <!-- ═══════════════════ SECCIÓN 3: MEJORAS FUTURAS ═══════════════════ -->
+    <div class="section">
+      <div class="section-title">03 — Áreas de mejora identificadas</div>
+
+      <div class="card">
+        <ul class="improvements-list">
+
+          <li class="improvement-item">
+            <span class="imp-icon">⚡</span>
+            <div class="imp-text">
+              <strong>Modelos heredados de Sergio:</strong> Completar el proceso de mejora para desbloquear la optimización computacional pendiente en Arconte-Security.
+            </div>
+          </li>
+
+          <li class="improvement-item">
+            <span class="imp-icon">🖥</span>
+            <div class="imp-text">
+              <strong>Plataforma Arconte (PC Cisco):</strong> Activar la plataforma para poder ejecutar las pruebas de integración que llevan bloqueadas.
+            </div>
+          </li>
+
+          <li class="improvement-item">
+            <span class="imp-icon">🔬</span>
+            <div class="imp-text">
+              <strong>Dataset de metodología (Retail):</strong> Encontrar o construir el dataset para detectar productos en anaqueles, requisito para el sistema de alertas.
+            </div>
+          </li>
+
+          <li class="improvement-item">
+            <span class="imp-icon">📊</span>
+            <div class="imp-text">
+              <strong>Modelo de fardeo (65%):</strong> Definir y documentar las deficiencias específicas para guiar la transferencia de conocimiento a Israel.
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div><!-- /section 03 -->
+
+
+    <!-- ═══════════════════ SECCIÓN 4: TAREAS PRÓXIMA SEMANA ═══════════════════ -->
+    <div class="section">
+      <div class="section-title">04 — Tareas pendientes · Próxima semana</div>
+
+      <div class="card">
+        <div class="info-box" style="margin-bottom: 16px;">
+          <span class="info-box-icon">ℹ</span>
+          <span>Las tareas de la próxima semana se agregarán con base en el roadmap y plan de trabajo definido. Se completará esta sección al cierre del periodo.</span>
+        </div>
+
+        <ol class="next-tasks-list">
+
+          <li class="next-task-item">
+            <div class="next-task-num">01</div>
+            <div class="next-task-body">
+              <div class="next-task-name">Completar pull de los modelos (Pelea, Incendio-Humo, Robo, Autopartes, Choque)</div>
+              <div class="next-task-desc">Subir al repositorio la última versión probada de cada modelo Arconte-Security.</div>
+              <span class="next-task-tag tag-priority">Alta prioridad</span>
+            </div>
+          </li>
+
+          <li class="next-task-item">
+            <div class="next-task-num">02</div>
+            <div class="next-task-body">
+              <div class="next-task-name">Terminar optimización de modelos heredados de Sergio</div>
+              <div class="next-task-desc">Resolver las mejoras pendientes para poder completar la reducción de costo computacional.</div>
+              <span class="next-task-tag tag-roadmap">Roadmap</span>
+            </div>
+          </li>
+
+          <li class="next-task-item">
+            <div class="next-task-num">03</div>
+            <div class="next-task-body">
+              <div class="next-task-name">Activar plataforma Arconte y ejecutar pruebas en PC Cisco</div>
+              <div class="next-task-desc">Coordinar con el equipo para levantar la plataforma y correr las pruebas bloqueadas.</div>
+              <span class="next-task-tag tag-priority">Alta prioridad</span>
+            </div>
+          </li>
+
+          <li class="next-task-item">
+            <div class="next-task-num">04</div>
+            <div class="next-task-body">
+              <div class="next-task-name">Definir deficiencias del modelo de fardeo y documentarlas para Israel</div>
+              <div class="next-task-desc">Transferencia de conocimiento formal con métricas y casos de fallo identificados.</div>
+              <span class="next-task-tag tag-roadmap">Roadmap</span>
+            </div>
+          </li>
+
+        </ol>
+      </div>
+    </div><!-- /section 04 -->
+
+  </div><!-- /container -->
+
+  <!-- ─── Footer ─── -->
+  <footer class="page-footer">
+    <span>CV Celestial — Documentación Semanal · Semana 26 May – 06 Jun 2026</span>
+    <span id="footer-date"></span>
+  </footer>
+
+  <script>
+    const now = new Date();
+    const fmt = new Intl.DateTimeFormat('es-MX', { dateStyle: 'long' });
+    const str = fmt.format(now);
+    document.getElementById('gen-date').textContent = str;
+    document.getElementById('footer-date').textContent = str;
+
+    document.querySelectorAll('.task-check').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const item  = cb.closest('.task-item');
+        const badge = item.querySelector('.task-status');
+        if (cb.checked) {
+          badge.textContent = 'Completada';
+          badge.className   = 'task-status status-done';
+        } else {
+          badge.textContent = 'Pendiente';
+          badge.className   = 'task-status status-pending';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

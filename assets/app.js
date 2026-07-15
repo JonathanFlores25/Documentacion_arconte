@@ -380,6 +380,7 @@ function splitPeople(str) {
         updateAdminUI();
         closeAdminModal();
         _rerenderAllToolbars();
+        renderOverdueBanner();
         if (_pendingAdminCb) { const cb = _pendingAdminCb; _pendingAdminCb = null; cb(); }
       } else {
         err.textContent = 'Token incorrecto';
@@ -398,6 +399,7 @@ function splitPeople(str) {
     updateAdminUI();
     closeAdminModal();
     _rerenderAllToolbars();
+    renderOverdueBanner();
   }
 
   function _rerenderAllToolbars() {
@@ -872,7 +874,9 @@ function splitPeople(str) {
       // Solo los no-admin pueden cerrar (no pueden resolver). Para admin la
       // ventana es bloqueante: se va sola cuando ya no quedan atrasadas.
       const closeBtn = admin ? '' :
-        `<div class="admin-modal-row" style="margin-top:14px;justify-content:flex-end;"><button class="admin-modal-btn" onclick="closeOverdueModal()">Cerrar</button></div>`;
+        `<div class="admin-modal-row" style="margin-top:14px;justify-content:flex-end;gap:8px;">` +
+        `<button class="admin-modal-btn" onclick="closeOverdueModal();openAdminModal()">Iniciar sesion Admin</button>` +
+        `<button class="admin-modal-btn" onclick="closeOverdueModal()">Cerrar</button></div>`;
       body.innerHTML =
         `<div class="ovd-week"><div class="ovd-week-h">${items.length} tarea(s) sin completar de semanas ya vencidas</div><ul class="ovd-list">${lis}</ul></div>` +
         (moveAllBtn ? `<div style="margin-top:12px;">${moveAllBtn}</div>` : '') +
@@ -3979,6 +3983,8 @@ function splitPeople(str) {
     { name:'S10', start:'2026-06-08', end:'2026-06-12' },
     { name:'S11', start:'2026-06-15', end:'2026-06-19' },
     { name:'S12', start:'2026-06-22', end:'2026-06-26' },
+    { name:'S13', start:'2026-06-29', end:'2026-07-03' },
+    { name:'S14', start:'2026-07-06', end:'2026-07-10' },
   ];
 
   function getCurrentAndNextSprints(n = 4) {
@@ -5112,6 +5118,8 @@ const SPRINTS = [
   { name:'S10', start:'2026-06-08', end:'2026-06-12' },
   { name:'S11', start:'2026-06-15', end:'2026-06-19' },
   { name:'S12', start:'2026-06-22', end:'2026-06-26' },
+  { name:'S13', start:'2026-06-29', end:'2026-07-03' },
+  { name:'S14', start:'2026-07-06', end:'2026-07-10' },
 ];
 const DOMAIN_START = SPRINTS[0].start;
 const DOMAIN_END   = SPRINTS[SPRINTS.length - 1].end;

@@ -13,6 +13,31 @@ con el servidor original:
 
     python main_v2.py        ->  http://localhost:8090   (inicio.html / nueva versión)
     python main.py           ->  http://localhost:8080   (index.html / versión actual)
+    
+
+    ● Ya tienes todo configurado. Para correr el proyecto en Docker:                                                                                                                          
+                                                                                                                                                                                          
+  # Levantar el contenedor (la primera vez hace build automáticamente)                                                                                                                    
+  docker compose up -d                                                                                                                                                                    
+                                                                                                                                                                                          
+  # Ver los logs                                                                                                                                                                          
+  docker compose logs -f                                                                                                                                                                  
+                                                                                                                                                                                          
+  # Parar el contenedor                                                                                                                                                                 
+  docker compose down
+
+  Detalles de tu configuración:                                                                                                                                                           
+  - Servicio: cv-v2
+  - Ejecuta: python main_v2.py                                                                                                                                                            
+  - Puerto: 8090 (mapeado al host)                                                                                                                                                      
+  - El código se monta como volumen (.:/app), así que cambios en el código se reflejan sin rebuild                                                                                        
+  - Se reinicia automáticamente (unless-stopped)                                                  
+                                                                                                                                                                                          
+  Si es la primera vez o cambiaste requirements.txt, fuerza un rebuild:                                                                                                                 
+                                                                                                                                                                                          
+  docker compose up -d --build                                                                                                                                                          
+                                                                                                                                                                                          
+  Una vez corriendo, accedes en: http://localhost:8090      
 """
 
 from fastapi.routing import APIRoute

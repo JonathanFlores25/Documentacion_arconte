@@ -14,14 +14,12 @@ DEST="$BACKUP_ROOT/$TIMESTAMP"
 mkdir -p "$DEST"
 
 # ── Archivos JSON de datos ─────────────────────────────────────────────────
-for f in projects.json estado.json roadmap.json roadmap_edits.json \
-          votes.json solutions_meta.json audit.json config.json; do
+for f in projects.json solutions_meta.json config.json; do
     [ -f "$PROJECT_DIR/$f" ] && cp "$PROJECT_DIR/$f" "$DEST/"
 done
 
 # ── Carpetas de datos ──────────────────────────────────────────────────────
 [ -d "$PROJECT_DIR/solutions"  ] && cp -r "$PROJECT_DIR/solutions"  "$DEST/"
-[ -d "$PROJECT_DIR/RoadMaps"   ] && cp -r "$PROJECT_DIR/RoadMaps"   "$DEST/"
 
 echo "[$TIMESTAMP] Respaldo guardado en $DEST"
 

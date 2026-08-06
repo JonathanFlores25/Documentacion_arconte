@@ -931,7 +931,10 @@
         "description": "Sistema de búsqueda y re-identificación de personas y vehículos. Opera en dos etapas: enrolamiento (construye galería de features desde video o foto del objetivo) y búsqueda (localiza al objetivo en streams RTSP o video). Usa descripción en lenguaje natural para localizar al objetivo en el primer frame válido.",
         "tech": "LocateAnything-3B, SAMURAI (SAM2), YOLO11x, CLIP ViT-L/14, TransReID, ResNet50",
         "notes": "Estado: Pruebas de integración local en curso.",
-        "created_at": "2026-06-01"
+        "created_at": "2026-06-01",
+        "fullcv_id": "reid",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       },
       {
         "id": "m_stack_parking_002",
@@ -953,7 +956,10 @@
         "description": "Conteo de personas en escenas densas desde cámaras altas (personas de 15–60 px). Divide el frame en un grid de patches (2×4), hace zoom individual por patch y corre YOLO en cada uno, luego aplica NMS global para eliminar duplicados en bordes solapados. Suavizado temporal con media móvil.",
         "tech": "YOLO11x, Patch Grid 2×4, NMS Global, Temporal Smooth",
         "notes": "Estado: Prueba de concepto, sin versión asignada.",
-        "created_at": "2026-06-01"
+        "created_at": "2026-06-01",
+        "fullcv_id": "crowd_counter",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       },
       {
         "id": "m_stack_fire_ir_004",
@@ -964,7 +970,10 @@
         "description": "Versión especializada para cámaras infrarrojas y visión nocturna. A diferencia del modelo RGB, usa máscara HSV de brillo alto y zona amarillo-caliente, CLAHE para contraste IR, flickering gate temporal y prompts CLIP adaptados para imágenes termales. Score combinado: coherencia de keyframes + concentración espacial + coherencia temporal.",
         "tech": "CLIP ViT-L/14, MOG2, CLAHE, KSM, WinCLIP, IR / Nocturno",
         "notes": "Estado: Prueba de concepto, primeras pruebas locales.",
-        "created_at": "2026-06-01"
+        "created_at": "2026-06-01",
+        "fullcv_id": "fire",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       },
       {
         "id": "m_1781063286682_qwk",
@@ -975,7 +984,10 @@
         "description": "El Contador de Piezas es un modelo de visión artificial en tiempo real (online) diseñado para automatizar la detección, clasificación y conteo de componentes industriales y de ferretería (como tuercas y tornillos) mediante el procesamiento de un flujo de video continuo. Como Prueba de Concepto (PoC), el sistema localiza visualmente cada objeto en movimiento, identifica su categoría específica sin importar su orientación y rastrea su trayectoria para asegurar que cada elemento sea contabilizado una única vez.",
         "tech": "YOLO11x",
         "notes": "",
-        "created_at": "2026-06-10"
+        "created_at": "2026-06-10",
+        "fullcv_id": "object_counter",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       }
     ]
   },

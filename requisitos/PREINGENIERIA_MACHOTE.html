@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cuestionario de pre-ingeniería — Celestial Dynamics</title>
+<style>
+  :root{
+    --tinta:#1a1d21; --tinta-2:#4a5158; --linea:#d6dae0; --linea-2:#eceef1;
+    --acento:#0b5c8a; --acento-suave:#eaf2f8; --aviso:#fff8e6; --aviso-borde:#e0b94a;
+    --papel:#ffffff; --fondo:#f4f6f8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:28px 16px; background:var(--fondo); color:var(--tinta);
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    font-size:14px; line-height:1.55;
+  }
+  .hoja{
+    max-width:1000px; margin:0 auto; background:var(--papel);
+    padding:48px 56px 64px; border:1px solid var(--linea);
+    box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+
+  /* ---------- Portada ---------- */
+  .marca{font-size:12px; letter-spacing:2.5px; font-weight:700; color:var(--acento);}
+  h1{font-size:26px; margin:6px 0 2px; font-weight:650; letter-spacing:-.2px;}
+  .subtitulo{font-size:16px; color:var(--tinta-2); margin:0 0 26px; font-weight:400;}
+  .machote{
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:1px;
+    background:var(--acento); color:#fff; padding:3px 10px; border-radius:3px;
+    margin-bottom:14px;
+  }
+
+  h2{
+    font-size:17px; margin:38px 0 12px; padding-bottom:7px;
+    border-bottom:2px solid var(--acento); font-weight:650;
+  }
+  h3{font-size:14.5px; margin:26px 0 8px; font-weight:650; color:var(--acento);}
+  h4{font-size:13px; margin:18px 0 6px; font-weight:650; color:var(--tinta-2);
+     text-transform:uppercase; letter-spacing:.6px;}
+  p{margin:0 0 11px;}
+
+  table{width:100%; border-collapse:collapse; margin:10px 0 18px; font-size:13px;}
+  th,td{border:1px solid var(--linea); padding:7px 10px; text-align:left; vertical-align:top;}
+  th{background:var(--acento-suave); font-weight:650; font-size:12.5px;}
+  td.num{width:34px; text-align:center; color:var(--tinta-2); font-variant-numeric:tabular-nums;}
+  .col-porque{color:var(--tinta-2); font-size:12.5px;}
+  tbody tr:nth-child(even) td{background:#fafbfc;}
+
+  /* Tabla de datos de portada */
+  .ficha td:first-child{width:190px; font-weight:600; background:var(--acento-suave);}
+
+  /* Campos rellenables */
+  input[type="text"], textarea{
+    width:100%; border:none; border-bottom:1px dotted #9aa4ae; background:transparent;
+    font-family:inherit; font-size:13px; color:var(--acento); padding:2px 1px;
+  }
+  input[type="text"]:focus, textarea:focus{outline:none; background:#fffdf0;}
+  textarea{border:1px dotted #9aa4ae; min-height:38px; resize:vertical; padding:4px 6px;}
+  .campo{color:var(--acento); font-weight:600;}
+  input[type="checkbox"]{width:15px; height:15px; vertical-align:-2px; margin-right:5px;}
+
+  /* Recuadros de precisión */
+  .aviso{
+    background:var(--aviso); border:1px solid var(--aviso-borde); border-left-width:4px;
+    padding:12px 16px; margin:16px 0 20px; font-size:13px;
+  }
+  .aviso .titulo{font-weight:700; display:block; margin-bottom:5px;}
+  .nota{
+    background:var(--acento-suave); border-left:4px solid var(--acento);
+    padding:12px 16px; margin:16px 0 20px; font-size:13px;
+  }
+
+  .criterio th{background:#f0f4f2;}
+  .criterio{border-left:3px solid #4a8f6a;}
+
+  .instrucciones{
+    background:#f7f8fa; border:1px solid var(--linea); padding:16px 20px; margin:22px 0 30px;
+    font-size:13px;
+  }
+  .instrucciones ul{margin:8px 0 0; padding-left:20px;}
+  .instrucciones li{margin-bottom:5px;}
+
+  .pie{
+    margin-top:44px; padding-top:14px; border-top:1px solid var(--linea);
+    font-size:11.5px; color:var(--tinta-2); display:flex; justify-content:space-between;
+  }
+  .btn-imprimir{
+    position:fixed; top:16px; right:16px; background:var(--acento); color:#fff;
+    border:none; padding:9px 16px; border-radius:4px; font-size:13px; cursor:pointer;
+    font-family:inherit; box-shadow:0 2px 6px rgba(0,0,0,.18);
+  }
+  .opcional{font-weight:400; color:var(--tinta-2); font-size:12px;}
+
+  /* ---------- Impresión ---------- */
+  @media print{
+    body{background:#fff; padding:0; font-size:11pt;}
+    .hoja{max-width:none; border:none; box-shadow:none; padding:0;}
+    .btn-imprimir{display:none;}
+    h2{page-break-after:avoid;} h3{page-break-after:avoid;}
+    table{page-break-inside:auto;} tr{page-break-inside:avoid;}
+    .aviso,.nota{page-break-inside:avoid;}
+    input[type="text"],textarea{border-bottom:1px solid #999; color:#000;}
+    textarea{border:1px solid #999;}
+    .salto{page-break-before:always;}
+  }
+</style>
+</head>
+<body>
+
+<button class="btn-imprimir" onclick="window.print()">Imprimir / Guardar PDF</button>
+
+<div class="hoja">
+
+  <div class="marca">CELESTIAL DYNAMICS</div>
+  <span class="machote">MACHOTE REUTILIZABLE</span>
+  <h1>Cuestionario de pre-ingeniería</h1>
+  <p class="subtitulo">Información técnica y operativa necesaria para dimensionar y comprometer los casos de uso de analítica de video</p>
+
+  <table class="ficha">
+    <tr><td>Dirigido a</td><td><input type="text" placeholder="Razón social del cliente" /></td></tr>
+    <tr><td>Proyecto</td><td><input type="text" placeholder="Nombre del proyecto o licitación" /></td></tr>
+    <tr><td>Emite</td><td>Celestial Dynamics</td></tr>
+    <tr><td>Asunto</td><td>Requisitos de información previos al compromiso de alcance</td></tr>
+    <tr><td>Fecha</td><td><input type="text" placeholder="__ de ________ de 20__" /></td></tr>
+    <tr><td>Versión del documento</td><td><input type="text" placeholder="v1.0" /></td></tr>
+    <tr><td>Contacto Celestial Dynamics</td><td><input type="text" placeholder="Nombre · correo · teléfono" /></td></tr>
+  </table>
+
+  <div class="instrucciones">
+    <strong>Instrucciones de uso de este machote</strong>
+    <ul>
+      <li>Complete la ficha superior y conserve únicamente los apartados del punto 5 que correspondan a los casos de uso solicitados. Elimine los demás.</li>
+      <li>En la columna <em>Requerimiento del cliente</em> del punto 4, anote el identificador que utilice el cliente (REQ-04, RF-12, etc.) para que el documento quede trazado contra su pliego.</li>
+      <li>Los espacios <span class="campo">[__]</span> de los criterios de aceptación se negocian con el cliente: son el valor que Celestial Dynamics se compromete a cumplir y a medir.</li>
+      <li>Los recuadros «Precisión sobre…» son declaraciones que conviene sostener sin modificar: acotan el alcance antes de que se convierta en un reclamo.</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ -->
+  <h2>1. Para qué sirve este documento</h2>
+  <p>El cliente ha definido <strong>qué</strong> desea obtener. Este documento reúne la
+  información que Celestial Dynamics necesita para determinar <strong>si es
+  alcanzable con las cámaras y la infraestructura existentes</strong>, y con qué
+  criterio de aceptación medible se compromete cada caso de uso.</p>
+
+  <p>Está organizado por familia de casos de uso. Cada apartado contiene lo que se
+  ejecuta, las preguntas concretas, la limitante técnica que motiva cada pregunta
+  y el criterio de aceptación propuesto.</p>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre el orden de los trabajos</span>
+    La capacidad de un modelo está acotada por la información que la cámara
+    captura. Un rostro que ocupa 20 píxeles no es identificable por ningún
+    algoritmo, y una zona que la cámara no encuadra no puede medirse. Por ello la
+    evaluación de las cámaras precede al compromiso de alcance, y no al revés.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2>2. Estado de los modelos y proceso de refinamiento</h2>
+
+  <p>Todos los modelos que Celestial Dynamics presenta se encuentran en
+  <strong>estado vanilla o generalizado</strong>: fueron entrenados con conjuntos
+  de datos de propósito general y validados sobre video de laboratorio o de
+  escenas genéricas, <strong>no sobre las instalaciones del cliente</strong>.</p>
+
+  <p>Esto no es una omisión ni una limitación temporal: es el punto de partida de
+  cualquier despliegue. Un modelo no conoce la altura de las cámaras del cliente,
+  su iluminación, el uniforme de su personal ni la geometría de sus pasillos hasta
+  que se le muestra video de ese sitio. Por eso el video de las instalaciones no
+  es un requisito administrativo, sino la materia prima del trabajo.</p>
+
+  <h4>Los tres estados de un modelo</h4>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:34px">#</th>
+        <th style="width:150px">Estado</th>
+        <th style="width:28%">En qué consiste</th>
+        <th style="width:24%">Qué requiere del cliente</th>
+        <th>Qué puede comprometerse</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td><strong>Vanilla<br />(generalizado)</strong></td>
+        <td>El modelo tal como se presenta en la demostración. Entrenado y validado con datos de propósito general</td>
+        <td>Nada</td>
+        <td>Que el sistema opera y señala el tipo de evento solicitado. Habrá detecciones que no ocurran y marcas que aparezcan de más: es el resultado esperado en esta etapa, no una falla</td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td><strong>Calibrado al sitio</strong></td>
+        <td>Ajuste de los parámetros del modelo a la instalación concreta: umbrales, zonas, tiempos, resolución de análisis y descriptores propios del sitio. <em>No</em> se reentrenan los pesos</td>
+        <td>Video de muestra de cada cámara en condiciones reales (apartado 7, puntos 1 a 4)</td>
+        <td>Criterios de aceptación medidos sobre ese sitio. Es el estado mínimo para un compromiso numérico</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td><strong>Refinado<br />(fine-tuning)</strong></td>
+        <td>Reentrenamiento de los pesos del modelo con imágenes del propio sitio, previamente etiquetadas</td>
+        <td>Video del sitio en distintos horarios y condiciones, grabaciones de eventos reales y un proceso de etiquetado</td>
+        <td>Mejora sustancial en los casos propios del sitio. Se dimensiona y cotiza como proyecto aparte, con su propio calendario</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre por qué se solicita video de las instalaciones</span>
+    Un modelo generalizado no puede afinarse con video ajeno. Los umbrales que
+    funcionan en una nave industrial no funcionan en una tienda, y los
+    descriptores calibrados para una prenda de trabajo no sirven para otra: un
+    juego de descriptores hecho para un mandil gris no reconoce un polo rojo.
+    <br /><br />
+    Por eso el material del apartado 7 condiciona lo que puede comprometerse. Sin
+    video del sitio, el alcance se limita al estado 1 de la tabla anterior, y los
+    criterios de aceptación no pueden expresarse en números.
+  </div>
+
+  <h4>Qué se calibra con el video del sitio, por caso de uso</h4>
+  <table>
+    <thead><tr><th style="width:34%">Caso de uso</th><th>Parámetros que se ajustan en el estado 2</th></tr></thead>
+    <tbody>
+      <tr><td>Conteo de personas y aforo</td><td>Geometría del corredor y de las líneas de cruce, umbral de luz, aforo máximo, confianza de detección</td></tr>
+      <tr><td>Filas y zonas de atención</td><td>Delimitación del puesto y de la zona de espera, tolerancia de ausencia, descriptores del uniforme del personal, umbrales de aviso</td></tr>
+      <tr><td>Reconocimiento facial y demografía</td><td>Umbral de similitud, tamaño mínimo de rostro admitido, resolución de análisis, frecuencia de reidentificación</td></tr>
+      <tr><td>Zonas restringidas y personal autorizado</td><td>Polígonos de las zonas, umbral de autorización, estrategia de análisis según el tipo de escena</td></tr>
+      <tr><td>Detección de caídas</td><td>Zonas de riesgo, umbrales de descenso y de confirmación, resolución de inferencia, margen del juez de postura</td></tr>
+      <tr><td>Detección de eventos en general</td><td>Umbral de confianza, resolución de análisis, duración mínima del evento, tiempo de sostenimiento de la alerta</td></tr>
+    </tbody>
+  </table>
+
+  <div class="nota">
+    <strong>Cómo se refleja esto en el alcance.</strong> Los criterios de
+    aceptación del apartado 5 se pactan indicando <strong>contra qué estado</strong>
+    se miden. Un criterio numérico exigido sobre un modelo en estado 1, sin video
+    del sitio, no es sostenible por ninguna de las dos partes.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2>3. Etapas del trabajo</h2>
+  <table>
+    <thead><tr><th style="width:52px">Etapa</th><th style="width:190px">Actividad</th><th>Descripción</th><th style="width:150px">Responsable</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Cuestionario</td><td>El cliente responde los apartados 5 y 6 de este documento</td><td>Cliente</td></tr>
+      <tr><td class="num">2</td><td>Entrega de material</td><td>El cliente entrega las muestras de video y las fotografías del apartado 7</td><td>Cliente</td></tr>
+      <tr><td class="num">3</td><td>Visita técnica</td><td>Evaluación en sitio de las cámaras, medición del enlace y revisión del equipo de red</td><td>Ambos</td></tr>
+      <tr><td class="num">4</td><td>Medición</td><td>Celestial Dynamics ejecuta los medidores sobre el video real del cliente y obtiene los valores por cámara</td><td>Celestial Dynamics</td></tr>
+      <tr><td class="num">5</td><td>Informe de viabilidad</td><td>Entrega del resultado por cámara y por caso de uso, con semáforo y valores medidos (apartado 8)</td><td>Celestial Dynamics</td></tr>
+      <tr><td class="num">6</td><td>Alcance</td><td>Se comprometen únicamente los casos de uso viables, con sus criterios de aceptación</td><td>Ambos</td></tr>
+    </tbody>
+  </table>
+  <p>Las fechas se confirman al concluir la etapa 4, ya que de ella depende saber qué
+  casos de uso son alcanzables con la instalación actual.</p>
+
+  <!-- ============================================================ -->
+  <h2 class="salto">4. Selector de casos de uso y umbrales</h2>
+  <p>Marque los casos de uso solicitados y anote el identificador del requerimiento
+  del cliente. La columna de píxeles indica el tamaño mínimo que debe tener el
+  objetivo dentro de la imagen para que el caso de uso sea alcanzable.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:38px">Aplica</th>
+        <th>Caso de uso</th>
+        <th style="width:120px">Requerimiento del cliente</th>
+        <th style="width:150px">Píxeles mínimos sobre el objetivo</th>
+        <th style="width:130px">Ángulo requerido</th>
+        <th style="width:110px">¿Sirve cámara de techo existente?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Conteo de personas (entradas y salidas)</td><td><input type="text" /></td><td>60 px de alto de persona</td><td>Cenital</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Aforo y aglomeración</td><td><input type="text" /></td><td>40 px de alto de persona</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Filas y zonas de atención</td><td><input type="text" /></td><td>80 px de alto de persona</td><td>Lateral o diagonal</td><td>Normalmente sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Conteo de objetos</td><td><input type="text" /></td><td>40 px del objeto</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td><strong>Reconocimiento facial</strong> (listas)</td><td><input type="text" /></td><td><strong>40 px de rostro</strong></td><td><strong>Frontal, 1.6–2.0 m</strong></td><td><strong>No</strong></td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td><strong>Demografía</strong> (sexo y edad)</td><td><input type="text" /></td><td><strong>40 px de rostro</strong></td><td><strong>Frontal, 1.6–2.0 m</strong></td><td><strong>No</strong></td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Zonas restringidas y personal autorizado</td><td><input type="text" /></td><td>100 px de alto de persona</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Búsqueda de una persona en grabaciones</td><td><input type="text" /></td><td>100 px de alto de persona</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Detección de caídas</td><td><input type="text" /></td><td>100 px de alto de persona</td><td>Con el piso visible</td><td>Normalmente sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Fuego y humo</td><td><input type="text" /></td><td>Fenómeno claramente visible</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Riñas y agresiones</td><td><input type="text" /></td><td>100 px de alto de persona</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Robo con violencia / hurto en tienda</td><td><input type="text" /></td><td>100 px de alto de persona</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Zonas prohibidas (personas o vehículos)</td><td><input type="text" /></td><td>60 px del objeto</td><td>Cualquiera</td><td>Sí</td></tr>
+      <tr><td style="text-align:center"><input type="checkbox" /></td><td>Otros (especificar)</td><td><input type="text" /></td><td colspan="3"><input type="text" /></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre el reconocimiento facial y la demografía</span>
+    Una cámara cenital de videovigilancia general <strong>no permite</strong>
+    reconocimiento facial ni estimación demográfica, con ninguna resolución: el
+    rostro no queda encuadrado de frente y ocupa demasiados pocos píxeles. En
+    mediciones sobre material de videovigilancia habitual se han obtenido rostros
+    de <strong>21 píxeles</strong>, frente a los 40 píxeles mínimos requeridos. El
+    sistema rechaza deliberadamente registrar una referencia por debajo de ese
+    umbral, en lugar de admitir una que no permitiría identificar a nadie.
+    <br /><br />
+    Estos dos casos de uso requieren <strong>cámaras dedicadas, colocadas a la
+    altura del rostro</strong> en los puntos de interés. Conviene que quede
+    asentado como requisito de instalación desde el pliego.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2 class="salto">5. Preguntas por caso de uso</h2>
+  <p class="opcional">Conserve únicamente los apartados que correspondan a lo solicitado.</p>
+
+  <!-- ---------- 4.1 ---------- -->
+  <h3>5.1 Conteo de personas, aforo y aglomeración</h3>
+  <p><strong>Lo que se ejecuta:</strong> conteo de entradas y salidas por corredor,
+  con recuento acumulado de personas dentro; y conteo de ocupación instantánea
+  sobre el campo de visión completo, con alerta al superar el aforo configurado.</p>
+
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:38%">Pregunta</th><th style="width:32%">Por qué se pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿En qué accesos o áreas se requiere el conteo?</td><td class="col-porque">Define el número de cámaras y de zonas a delimitar</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿Cada acceso tiene entrada y salida por el mismo vano, o están separadas?</td><td class="col-porque">Define la configuración del corredor de conteo</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>¿La cámara del acceso es cenital? ¿A qué altura está montada?</td><td class="col-porque">El ángulo cenital es lo que evita que dos personas juntas se cuenten como una</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>¿Hay contraluz en el acceso y en qué horario?</td><td class="col-porque">El modelo realza la imagen en penumbra y suspende el conteo en oscuridad en lugar de registrar datos falsos; eso protege el dato pero genera huecos</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Se requiere excluir del conteo al personal? ¿Usa uniforme distintivo y consistente en todos los turnos?</td><td class="col-porque">El uniforme es el mecanismo para distinguir colaborador de cliente. Si no existe o varía, la exclusión exige registrar al personal por rostro, con las condiciones del apartado 5.3</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>¿Se requiere excluir por edad u otro atributo de la persona?</td><td class="col-porque">La estimación de edad es aproximada y de uso agregado; excluir por edad a nivel individual no es alcanzable y la regla debe redefinirse</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">7</td><td>¿Cuál es el horario hábil de cada sitio, incluidos días especiales?</td><td class="col-porque">Es el parámetro de la alerta por actividad fuera de horario</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">8</td><td>¿Cuál es el aforo máximo por área y a qué porcentaje debe avisarse?</td><td class="col-porque">Es el valor numérico que configura la alerta de aglomeración</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">9</td><td>La información por hora, día, semana y mes: ¿se consulta en una interfaz, se exporta, o se entrega a otro sistema?</td><td class="col-porque">Determina si se requiere capa de persistencia y reportería, que es trabajo adicional al modelo de visión</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Criterio de aceptación propuesto</h4>
+  <table class="criterio">
+    <thead><tr><th style="width:34%">Concepto</th><th>Criterio medible</th></tr></thead>
+    <tbody>
+      <tr><td>Exactitud del conteo</td><td>Error ≤ <span class="campo">[__]</span> % respecto a un conteo manual de referencia, en una ventana de <span class="campo">[__]</span> minutos en horario pico, por acceso</td></tr>
+      <tr><td>Aglomeración</td><td>Alerta emitida cuando la ocupación del área supere el umbral configurado durante ≥ <span class="campo">[__]</span> segundos</td></tr>
+      <tr><td>Actividad fuera de horario</td><td>Alerta emitida ante cualquier entrada registrada fuera del horario declarado</td></tr>
+      <tr><td>Exclusión de personal</td><td>Sujeto a lo que resulte de la pregunta 5</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ---------- 4.2 ---------- -->
+  <h3>5.2 Filas y zonas de atención</h3>
+  <p><strong>Lo que se ejecuta:</strong> verificación de que el puesto de atención
+  está atendido, con tolerancia configurable a ausencias breves y alerta de puesto
+  abandonado. La medición del comportamiento del cliente en fila (cantidad,
+  tiempo de espera, deserción) se dimensiona por separado.</p>
+
+  <div class="nota">
+    <strong>Verifique el estado de disponibilidad antes de comprometer este apartado.</strong>
+    El componente correspondiente al personal está desarrollado y validado. El
+    componente de comportamiento de clientes en fila debe confirmarse contra el
+    estado del catálogo de modelos al momento de la propuesta.
+  </div>
+
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:38%">Pregunta</th><th style="width:32%">Por qué se pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿Cuántas posiciones de atención hay por zona y cuántas operan de forma simultánea?</td><td class="col-porque">Cada posición requiere su propia zona delimitada y su propio veredicto</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿Una sola cámara encuadra la fila completa y el mostrador, o la fila excede el campo de visión?</td><td class="col-porque">Si la fila se sale del encuadre, su longitud no puede medirse</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>¿El ángulo permite distinguir a quien está detrás del mostrador de quien está delante?</td><td class="col-porque">Es la separación entre personal y cliente. Un ángulo cenital puro no la permite</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>¿Qué se considera «atendida»: que haya una persona en el puesto, o que esté efectivamente cobrando?</td><td class="col-porque">Lo primero es medible por visión; lo segundo requiere integración con el punto de venta</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Cuántos segundos de ausencia del personal son aceptables antes de considerar el puesto abandonado?</td><td class="col-porque">Es un parámetro directo del modelo</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>¿Qué se considera «deserción»: abandonar la fila, o retirarse del establecimiento?</td><td class="col-porque">Lo primero es medible con una cámara; lo segundo requiere seguimiento entre cámaras</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">7</td><td>¿A partir de cuántos minutos de espera o cuántas personas en fila debe notificarse?</td><td class="col-porque">Son los umbrales de la alerta</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">8</td><td>¿Se requiere granularidad por minuto? ¿Consulta histórica o solo el dato en vivo?</td><td class="col-porque">La granularidad por minuto multiplica el volumen de la capa de persistencia</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Criterio de aceptación propuesto</h4>
+  <table class="criterio">
+    <thead><tr><th style="width:34%">Concepto</th><th>Criterio medible</th></tr></thead>
+    <tbody>
+      <tr><td>Puesto desatendido</td><td>Alerta emitida cuando el puesto permanezca sin personal más que la tolerancia configurada, con margen de ± <span class="campo">[__]</span> segundos</td></tr>
+      <tr><td>Personas en fila</td><td>Error ≤ ± <span class="campo">[__]</span> personas respecto a un conteo manual, dentro de la zona delimitada</td></tr>
+      <tr><td>Tiempo de espera</td><td>Error ≤ ± <span class="campo">[__]</span> segundos respecto a medición manual con cronómetro, sobre <span class="campo">[__]</span> casos</td></tr>
+      <tr><td>Deserción</td><td>Detección de ≥ <span class="campo">[__]</span> % de los abandonos de fila observados manualmente</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ---------- 4.3 ---------- -->
+  <h3 class="salto">5.3 Reconocimiento facial y demografía</h3>
+  <p><strong>Lo que se ejecuta:</strong> comparación del rostro captado contra
+  galerías cargadas previamente, con alerta al coincidir; y estimación de sexo y
+  edad aproximada para reporte agregado.</p>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre el alcance de la estimación de edad</span>
+    La edad que produce el sistema es una <strong>estimación aproximada y de uso
+    agregado</strong>. En medición sobre fotografías controladas, un mismo sujeto
+    obtuvo <strong>42 años en una fotografía y 28 en otra</strong>. Por ello el
+    sistema reporta la mediana por persona seguida y distribuciones por franja
+    horaria, y no un dato por individuo.
+    <br /><br />
+    No es apto para verificación de mayoría de edad ni para decisión alguna sobre
+    una persona en particular. El sexo, en cambio, resulta estable entre tomas.
+  </div>
+
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:38%">Pregunta</th><th style="width:32%">Por qué se pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿En qué puntos exactos se requiere el reconocimiento o la demografía?</td><td class="col-porque">Cada punto requiere una cámara dedicada a altura de rostro</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿El cliente instalará esas cámaras o se requiere que Celestial Dynamics las suministre e instale?</td><td class="col-porque">Define el alcance de suministro y de obra</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>¿Cuántas personas contendrá cada lista o galería, por sitio?</td><td class="col-porque">Dimensiona la galería y el tiempo de comparación</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>¿Qué fotografías existen hoy de esas personas y en qué condiciones fueron tomadas?</td><td class="col-porque">Determina si la galería inicial es utilizable. Se requieren de 2 a 4 fotografías frontales de primer plano por persona</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Quién administra las altas y bajas de cada lista, y con qué autorización?</td><td class="col-porque">Define roles, permisos y bitácora</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>¿Las listas se comparten entre sitios? ¿Una sola central o una por sitio con sincronización?</td><td class="col-porque">Compartir listas implica un repositorio central y su infraestructura, más allá del modelo</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">7</td><td>¿Qué destinatarios reciben cada tipo de alerta y por qué medio?</td><td class="col-porque">Suele distinguirse el destinatario según el tipo de lista</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">8</td><td>La demografía: ¿se destina a reportes agregados o se espera un dato por cliente?</td><td class="col-porque">Si es lo segundo, la expectativa debe corregirse antes del alcance</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">9</td><td>¿Qué rangos de edad se requieren para el reporte?</td><td class="col-porque">El sistema entrega un valor continuo; los rangos se definen para el reporte</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">10</td><td>¿Existe aviso de privacidad vigente que cubra tratamiento biométrico y consentimiento firmado?</td><td class="col-porque">Es requisito legal previo, no posterior (apartado 6.3)</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">11</td><td>¿Cuánto tiempo deben conservarse las imágenes de evidencia?</td><td class="col-porque">Define almacenamiento y política de supresión</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre la carga de fotografías</span>
+    El sistema admite tanto la carga manual de archivos como la captura del rostro
+    directamente desde el video en curso. Conviene anticipar que no toda
+    fotografía es utilizable: en una galería de prueba de 20 fotografías,
+    <strong>5 no contenían un rostro detectable</strong> y no aportaron nada a la
+    identificación. El sistema informa cuántas fotografías resultaron válidas por
+    persona al construir la galería.
+  </div>
+
+  <h4>Criterio de aceptación propuesto</h4>
+  <table class="criterio">
+    <thead><tr><th style="width:34%">Concepto</th><th>Criterio medible</th></tr></thead>
+    <tbody>
+      <tr><td>Identificación de registrados</td><td>Identificación de ≥ <span class="campo">[__]</span> % de las apariciones de personas registradas, sobre <span class="campo">[__]</span> pases controlados por el punto de control</td></tr>
+      <tr><td>Falsos positivos</td><td>≤ <span class="campo">[__]</span> identificaciones erróneas por cada <span class="campo">[__]</span> horas de operación</td></tr>
+      <tr><td>Latencia de la alerta</td><td>Alerta emitida en ≤ <span class="campo">[__]</span> segundos desde que el rostro es visible en el campo de visión</td></tr>
+      <tr><td>Evidencia</td><td>Cada alerta incluye la imagen del rostro captado y el registro coincidente</td></tr>
+      <tr><td>Sexo</td><td>Concordancia ≥ <span class="campo">[__]</span> % con clasificación manual sobre una muestra de <span class="campo">[__]</span> personas</td></tr>
+      <tr><td>Edad</td><td>Error medio ≤ ± <span class="campo">[__]</span> años <strong>sobre el agregado</strong> de la muestra, nunca por individuo</td></tr>
+      <tr><td>Alertamiento demográfico</td><td>Ninguno. La información demográfica se reporta, no genera alertas</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ---------- 4.4 ---------- -->
+  <h3>5.4 Zonas restringidas, personal autorizado y búsqueda de personas</h3>
+  <p><strong>Lo que se ejecuta:</strong> vigilancia de zonas delimitadas con
+  distinción entre persona autorizada y no autorizada mediante firma corporal; y
+  búsqueda de una persona determinada dentro de grabaciones.</p>
+
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:38%">Pregunta</th><th style="width:32%">Por qué se pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿Qué zonas se vigilan y cuál es la regla: nadie entra, o solo personal autorizado?</td><td class="col-porque">Son dos modos de operación distintos; el primero no requiere galería</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿Cuántas personas integran el padrón de autorizados y quién lo mantiene?</td><td class="col-porque">Dimensiona la galería corporal</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>¿Es posible tomar de 2 a 4 fotografías de <strong>cuerpo completo</strong> de cada persona autorizada, con su ropa de trabajo habitual?</td><td class="col-porque">La identificación corporal usa cuerpo completo. Es una galería distinta a la de rostro y no son intercambiables</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>¿El personal cambia de vestimenta entre turnos o temporadas?</td><td class="col-porque">La firma corporal se basa en la apariencia; un cambio de vestimenta exige actualizar la galería</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Se requiere búsqueda retrospectiva en grabaciones? ¿De qué antigüedad y volumen?</td><td class="col-porque">Define almacenamiento y tiempo de proceso</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Criterio de aceptación propuesto</h4>
+  <table class="criterio">
+    <thead><tr><th style="width:34%">Concepto</th><th>Criterio medible</th></tr></thead>
+    <tbody>
+      <tr><td>Detección de intrusión</td><td>Alerta ante ≥ <span class="campo">[__]</span> % de los ingresos a zona observados, sobre <span class="campo">[__]</span> pases controlados</td></tr>
+      <tr><td>Distinción autorizado / no autorizado</td><td>Clasificación correcta en ≥ <span class="campo">[__]</span> % de los ingresos de personal registrado</td></tr>
+      <tr><td>Latencia</td><td>Alerta en ≤ <span class="campo">[__]</span> segundos desde el ingreso a la zona</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ---------- 4.5 ---------- -->
+  <h3>5.5 Detección de eventos (caídas, fuego y humo, riñas, robo, hurto, fumadores)</h3>
+  <p><strong>Lo que se ejecuta:</strong> señalización del evento sobre el video, con
+  alerta. Cada modelo se selecciona según el evento solicitado.</p>
+
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:38%">Pregunta</th><th style="width:32%">Por qué se pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿Qué eventos concretos se requiere detectar y en qué áreas?</td><td class="col-porque">Cada evento es un modelo distinto y se ejecuta por separado</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿Existen puntos de riesgo específicos (huecos, escaleras, andenes, rampas, bordes de plataforma)?</td><td class="col-porque">Delimitar esas zonas adelanta la alerta de caída aproximadamente un segundo y reduce falsos negativos</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>¿Hay áreas donde las personas se sientan o recuestan de forma habitual (comedor, sala de descanso, camas)?</td><td class="col-porque">Son la fuente principal de falsos positivos en detección de caídas y deben validarse con video del propio sitio</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>Para fuego y humo: ¿qué dimensión de fenómeno interesa detectar?</td><td class="col-porque">Se detectan llamas o humo de dimensión considerable y claramente visibles; las flamas pequeñas (encendedor, cigarro, vela, soldadura) quedan por debajo del umbral</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Se requiere detección de gas o de atmósferas peligrosas?</td><td class="col-porque">No existe modelo de gas. El humo de combustión es un fenómeno distinto de una fuga de gas y no se identifican vapores invisibles</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>¿El piso tiene reflejos intensos o superficies especulares?</td><td class="col-porque">Degradan la detección de personas tendidas</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">7</td><td>¿Existe grabación de un evento real de cada tipo a detectar?</td><td class="col-porque">Es el único material que permite validar la detección. Sin él solo puede verificarse que el sistema opera</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre la resolución en detección de personas</span>
+    La resolución con que se analiza la imagen determina si una persona lejana es
+    detectada. En medición controlada, una persona al fondo de una nave aparecía
+    en el <strong>5 %</strong> de los cuadros al analizar a resolución reducida, y
+    en el <strong>59 %</strong> al elevarla. El costo de cómputo sube en la misma
+    proporción: es un compromiso que se define por cámara.
+  </div>
+
+  <h4>Criterio de aceptación propuesto</h4>
+  <table class="criterio">
+    <thead><tr><th style="width:34%">Concepto</th><th>Criterio medible</th></tr></thead>
+    <tbody>
+      <tr><td>Detección del evento</td><td>Señalización de ≥ <span class="campo">[__]</span> % de los eventos provocados de forma controlada, sobre <span class="campo">[__]</span> repeticiones</td></tr>
+      <tr><td>Falsos positivos</td><td>≤ <span class="campo">[__]</span> alertas erróneas por cada <span class="campo">[__]</span> horas de operación por cámara</td></tr>
+      <tr><td>Latencia</td><td>Alerta emitida en ≤ <span class="campo">[__]</span> segundos desde el inicio del evento</td></tr>
+      <tr><td>Evidencia</td><td>Cada alerta incluye la imagen del momento del evento</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <h2 class="salto">6. Preguntas transversales</h2>
+
+  <h3>6.1 Cámaras</h3>
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:52%">Pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿En qué puntos se requiere análisis y qué se busca observar en cada uno?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿Se utilizarán las cámaras existentes del cliente o se requiere que Celestial Dynamics suministre cámaras? En el segundo caso, ¿quién realiza la instalación y la obra civil?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>Marca, modelo y resolución nativa de cada cámara</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>Cuadros por segundo reales del flujo de cada cámara</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Se entregará el flujo principal o el sub-flujo? Indicar la resolución de cada uno</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>Códec y tasa de bits (H.264 / H.265, Mbps)</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">7</td><td>Dirección de red, usuario y contraseña de cada cámara</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">8</td><td>Altura de montaje, ángulo de inclinación y distancia a la zona de interés</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">9</td><td>Condiciones de iluminación por horario. ¿Opera de noche? ¿Con infrarrojo?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">10</td><td>¿Alguna cámara es motorizada o se reposiciona?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">11</td><td>Obstrucciones presentes en el campo de visión</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">12</td><td>¿Las cámaras mantienen fecha y hora correctas y no se reinician durante la operación?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">13</td><td>Una fotografía del campo de visión de cada cámara</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre la resolución y el sub-flujo</span>
+    El mínimo operativo es <strong>800 × 600 píxeles a 15 cuadros por
+    segundo</strong>; una resolución mayor mejora el resultado. El sub-flujo de
+    muchas cámaras opera a 640 × 360, suficiente para conteo y aforo e
+    insuficiente para rostro.
+    <br /><br />
+    Los cuadros por segundo declarados deben ser los <strong>reales</strong>: la
+    lógica de tolerancias, tiempos de espera y ventanas de detección está
+    expresada en segundos y se convierte a cuadros con ese valor. Un dato
+    incorrecto descalibra los tiempos de las alertas.
+  </div>
+
+  <h4>Ficha por cámara</h4>
+  <table>
+    <thead><tr><th style="width:80px">Cámara</th><th>Ubicación</th><th style="width:90px">Resolución</th><th style="width:60px">FPS</th><th style="width:110px">Altura y ángulo</th><th style="width:100px">Iluminación</th><th>Casos de uso solicitados</th></tr></thead>
+    <tbody>
+      <tr><td><input type="text" placeholder="CAM-01" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td></tr>
+      <tr><td><input type="text" placeholder="CAM-02" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td></tr>
+      <tr><td><input type="text" placeholder="CAM-03" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td></tr>
+      <tr><td><input type="text" placeholder="CAM-04" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td></tr>
+      <tr><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td></tr>
+      <tr><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td><td><input type="text" /></td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="salto">6.2 Modo de despliegue, enlace y latencia</h3>
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:38%">Pregunta</th><th style="width:32%">Por qué se pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿El procesamiento se realiza en sitio o de forma remota en el laboratorio de Celestial Dynamics?</td><td class="col-porque">Define si se requiere equipo con GPU por sitio o un enlace permanente</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>Si es en sitio: ¿qué equipo existe o puede destinarse? ¿Hay GPU NVIDIA disponible?</td><td class="col-porque">El procesamiento requiere GPU</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>Si es remoto: velocidad de <strong>subida</strong> sostenida del enlace de cada sitio</td><td class="col-porque">Referencia: 3 Mbps por cámara en operación secuencial; 10 Mbps para cuatro cámaras simultáneas</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>¿Se cuenta con dirección IP pública fija? Si no, ¿existe dominio DDNS operativo?</td><td class="col-porque">Es condición para alcanzar las cámaras desde el exterior</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>Marca y modelo del firewall o router principal</td><td class="col-porque">Para confirmar que admite el tipo de conexión cifrada utilizada</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>¿El área de redes puede habilitar el paso hacia las cámaras seleccionadas, y únicamente hacia ellas?</td><td class="col-porque">Es el bloqueo de integración más frecuente</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">7</td><td>¿Qué latencia es aceptable entre el evento y la alerta?</td><td class="col-porque">Define la arquitectura: procesamiento local para latencia baja, remoto si se tolera mayor</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">8</td><td>¿Existe respaldo de energía? ¿Cuál es el comportamiento esperado ante un corte?</td><td class="col-porque">Continuidad del servicio</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">9</td><td>¿Cuántos sitios contempla el despliegue total y en qué etapas?</td><td class="col-porque">Dimensiona la infraestructura</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre la velocidad de internet</span>
+    El dato requerido es la velocidad de <strong>subida</strong>, no la de bajada,
+    porque el video viaja desde las instalaciones del cliente hacia el servidor de
+    procesamiento. Es frecuente que un servicio ofrezca una velocidad de bajada
+    alta y una de subida considerablemente menor. Conviene verificar la velocidad
+    de subida efectivamente contratada antes de confirmar este punto.
+  </div>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre la ejecución simultánea</span>
+    La plataforma ejecuta un modelo sobre una cámara por instancia. La operación
+    de varios casos de uso y varias cámaras en simultáneo se resuelve levantando
+    instancias adicionales, lo que consume memoria de video y capacidad de
+    cómputo. Es un asunto de dimensionamiento y debe presupuestarse.
+  </div>
+
+  <h3>6.3 Datos personales y biométricos</h3>
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:52%">Pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>¿Cuenta con aviso de privacidad integral vigente que cubra videovigilancia y, en su caso, tratamiento biométrico?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿Existe aviso corto colocado de forma visible en las áreas videovigiladas?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>¿Se recabará consentimiento expreso y por escrito de los titulares cuyos datos biométricos se traten?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>¿Quién es el área o persona responsable de datos personales y por qué medio se atienden las solicitudes de derechos ARCO?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Cuál es el plazo de conservación de imágenes, evidencias y galerías?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>¿Se contempla transferencia de datos a terceros distintos del encargado del tratamiento?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">7</td><td>Si se comparten galerías entre sitios: ¿la operación ocurre entre entidades de un mismo responsable?</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre las responsabilidades</span>
+    El cliente es el <strong>responsable</strong> del tratamiento de los datos
+    personales captados por sus cámaras. Celestial Dynamics actúa como
+    <strong>encargado</strong>, tratando los datos únicamente conforme a las
+    instrucciones del responsable. Los avisos y los consentimientos se emiten a
+    nombre del cliente.
+    <br /><br />
+    Los datos biométricos derivados del rostro son <strong>datos personales
+    sensibles</strong> conforme al artículo 3, fracción VI, de la LFPDPPP, y su
+    tratamiento requiere consentimiento expreso y por escrito del titular.
+    Celestial Dynamics dispone de formatos base de apoyo, que no sustituyen la
+    revisión del área jurídica del cliente.
+  </div>
+
+  <h3>6.4 Alertamiento y operación</h3>
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:52%">Pregunta</th><th>Respuesta</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Por cada caso de uso: quién recibe la alerta y por qué medio (pantalla en sitio, correo, mensajería, sistema propio)</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>¿Qué tiempo de respuesta se espera del destinatario?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>¿Se requiere histórico consultable, o basta con la operación en vivo?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>¿Quién valida un falso positivo y bajo qué procedimiento?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>¿Se requiere integración con algún sistema existente? ¿Cuál y con qué interfaz?</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">6</td><td>¿Quién brinda el soporte de primer nivel en sitio?</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre la naturaleza de la salida</span>
+    Los modelos operan como <strong>apoyo para revisión humana</strong>: señalan,
+    no deciden. El envío de alertas por correo, mensajería o hacia sistemas de
+    terceros, así como el histórico consultable con granularidad por minuto, hora,
+    día, semana y mes, son componentes de plataforma que se dimensionan por
+    separado del modelo de visión.
+  </div>
+
+  <h3>6.5 Contactos y accesos</h3>
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:40%">Rol requerido</th><th>Nombre, área y datos de contacto</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Responsable de redes o sistemas, con facultades para configurar el firewall</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">2</td><td>Responsable operativo por sitio, que conozca los flujos y los horarios</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">3</td><td>Responsable de datos personales o del área jurídica</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">4</td><td>Responsable de seguridad, destinatario de las alertas</td><td><textarea></textarea></td></tr>
+      <tr><td class="num">5</td><td>Interlocutor único del proyecto</td><td><textarea></textarea></td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <h2 class="salto">7. Material que se requiere del cliente</h2>
+  <p>La columna <em>Estado</em> indica a qué nivel de la tabla del apartado 2
+  habilita cada material: sin los puntos 1 a 4 no se alcanza el estado calibrado,
+  y sin los puntos 7 y 8 no puede iniciarse un refinamiento.</p>
+  <table>
+    <thead><tr><th class="num">#</th><th style="width:26%">Material</th><th style="width:22%">Formato</th><th>Para qué</th><th style="width:66px">Estado</th><th style="width:66px">Entregado</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Video de muestra de cada cámara</td><td>10 a 15 minutos continuos, calidad original, sin recomprimir</td><td>Es el material sobre el que se realiza la medición de la etapa 4</td><td style="text-align:center">2</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">2</td><td>Muestra en hora pico y en hora valle</td><td>2 grabaciones por cámara</td><td>La aglomeración y las filas solo se observan en hora pico</td><td style="text-align:center">2</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">3</td><td>Muestra nocturna o con infrarrojo, si aplica</td><td>5 minutos</td><td>Es un escenario distinto, no una variante del diurno</td><td style="text-align:center">2</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">4</td><td>Fotografía del campo de visión de cada cámara</td><td>Imagen</td><td>Permite delimitar zonas y validar el encuadre sin visita adicional</td><td style="text-align:center">2</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">5</td><td>Fotografías de las personas a registrar en galerías de rostro</td><td>2 a 4 por persona, primer plano, frontales</td><td>Galería de reconocimiento facial</td><td style="text-align:center">2</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">6</td><td>Fotografías de cuerpo completo del personal autorizado</td><td>2 a 4 por persona, con ropa de trabajo</td><td>Es una galería distinta a la anterior y no son intercambiables</td><td style="text-align:center">2</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">7</td><td><strong>Grabación de un evento real</strong> de cada situación a detectar</td><td>La grabación disponible</td><td>Es lo único que permite validar la detección. Sin este material solo puede verificarse que el sistema opera, no que detecta lo que interesa</td><td style="text-align:center">2 y 3</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">8</td><td><strong>Video extendido para refinamiento</strong>, si se contrata el estado 3</td><td>Horas de grabación por cámara, cubriendo distintos horarios, turnos, temporadas y condiciones de iluminación</td><td>Es el conjunto con el que se reentrena el modelo. El volumen y el periodo se acuerdan al dimensionar el refinamiento</td><td style="text-align:center">3</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+      <tr><td class="num">9</td><td>Autorización para el <strong>etiquetado</strong> de ese material y criterio de qué se considera un evento</td><td>Documento y sesión de trabajo</td><td>El reentrenamiento exige marcar los eventos sobre el video. Sin un criterio acordado de qué cuenta como evento, el etiquetado no es reproducible</td><td style="text-align:center">3</td><td style="text-align:center"><input type="checkbox" /></td></tr>
+    </tbody>
+  </table>
+
+  <div class="aviso">
+    <span class="titulo">Precisión sobre el video de muestra</span>
+    El video debe entregarse en su calidad original. Una grabación reenviada por
+    mensajería o recomprimida pierde detalle de forma irreversible, y la medición
+    resultante no representa a la cámara real.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2>8. Entregable de la pre-ingeniería</h2>
+  <p>Al concluir la etapa 5, Celestial Dynamics entrega un <strong>informe de
+  viabilidad por cámara y por caso de uso</strong>, con el valor medido en cada
+  renglón:</p>
+
+  <table>
+    <thead><tr><th style="width:150px">Resultado</th><th style="width:40%">Significado</th><th>Consecuencia</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Viable</strong></td><td>La cámara cumple los umbrales medidos</td><td>Se compromete en el alcance con su criterio de aceptación</td></tr>
+      <tr><td><strong>Viable con ajuste</strong></td><td>Cumple tras una modificación: reubicar la cámara, utilizar el flujo principal en lugar del sub-flujo, mejorar la iluminación o elevar la resolución de análisis</td><td>Se compromete condicionado a que el ajuste se realice, asentado por escrito</td></tr>
+      <tr><td><strong>No viable</strong></td><td>No se alcanza por condiciones físicas de la instalación</td><td>No se compromete. Se propone cámara adicional o se excluye del alcance</td></tr>
+    </tbody>
+  </table>
+
+  <p>Cada renglón se acompaña del valor medido, no de una apreciación. Ejemplo:</p>
+  <div class="nota">
+    <code>CAM-ACCESO-01</code> · Reconocimiento facial · <strong>No viable</strong> —
+    rostro medido: 21 px (mínimo requerido: 40 px). Causa: cámara cenital a 3.5 m
+    de altura. Alternativa: cámara dedicada a 1.8 m, frontal, en el acceso.
+    <br />La misma cámara para conteo de personas: <strong>Viable</strong>.
+  </div>
+
+  <!-- ============================================================ -->
+  <h2>9. Consideraciones a declarar desde ahora</h2>
+  <table>
+    <thead><tr><th style="width:30%">Punto</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Los modelos se presentan en estado vanilla</strong></td><td>Están entrenados con datos de propósito general y validados en laboratorio, no con video de las instalaciones del cliente. Habrá detecciones que no ocurran y marcas que aparezcan de más: es el resultado esperado de ese estado. El paso a modelo calibrado y, en su caso, refinado, con lo que cada uno requiere y permite comprometer, se detalla en el <strong>apartado 2</strong></td></tr>
+      <tr><td>El refinamiento es un proyecto aparte</td><td>El reentrenamiento con imágenes del sitio (estado 3) tiene su propio alcance, calendario y costo, y depende del material de los puntos 7.8 y 7.9. No está incluido en la pre-ingeniería ni en la demostración</td></tr>
+      <tr><td>Las métricas de producción se construyen en el piloto</td><td>Las validaciones disponibles se realizaron sobre video de laboratorio. La tasa de falsos positivos por hora y por cámara sobre grabaciones reales se obtiene durante el piloto y requiere el material del punto 7.7</td></tr>
+      <tr><td>Los modelos son apoyo, no automatismo</td><td>Señalan situaciones para revisión humana. No sustituyen la supervisión del personal, los detectores, las alarmas, los protocolos de protección civil ni los sistemas existentes, que deben permanecer operando con normalidad</td></tr>
+      <tr><td>La demografía es agregada</td><td>Con el margen de error declarado en el apartado 5.3</td></tr>
+      <tr><td>La granularidad histórica es capa de plataforma</td><td>El registro por minuto, hora, día, semana y mes requiere persistencia y reportería, que se dimensionan aparte del modelo de visión</td></tr>
+      <tr><td>Los resultados dependen del sitio</td><td>La iluminación, el ángulo de las cámaras, las obstrucciones y la estabilidad del enlace influyen directamente en lo que se observa</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <h2>10. Acuse</h2>
+  <table>
+    <thead><tr><th style="width:50%">Por el cliente</th><th>Por Celestial Dynamics</th></tr></thead>
+    <tbody>
+      <tr>
+        <td style="height:90px">Nombre: <input type="text" /><br /><br />Cargo: <input type="text" /><br /><br />Firma y fecha:</td>
+        <td>Nombre: <input type="text" /><br /><br />Cargo: <input type="text" /><br /><br />Firma y fecha:</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pie">
+    <span>Celestial Dynamics — Cuestionario de pre-ingeniería · Machote v1.0</span>
+    <span>Documento de trabajo. Los criterios de aceptación se pactan por escrito.</span>
+  </div>
+
+</div>
+</body>
+</html>

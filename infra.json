@@ -1,0 +1,86 @@
+{
+  "servers": [
+    {
+      "id": "srv_prod",
+      "name": "Servidor de Producción",
+      "role": "Documentación + Demos CV",
+      "host": "",
+      "status": "online",
+      "gpu": "",
+      "vram": "",
+      "cpu": "",
+      "ram": "",
+      "services": "CV Docs :8090 — activo\nFull_CV :8000 — activo",
+      "notes": "Corre cv-docs en Docker. Los datos vivos (projects.json, solutions/) viven aquí."
+    },
+    {
+      "id": "srv_demos",
+      "name": "PC de Demos (GPU)",
+      "role": "Ejecución de modelos Full_CV",
+      "host": "",
+      "status": "online",
+      "gpu": "NVIDIA RTX 3050",
+      "vram": "6 GB",
+      "cpu": "",
+      "ram": "",
+      "services": "Full_CV :8000 — activo",
+      "notes": "GPU limita cámaras simultáneas con YOLO11x; un solo modelo activo a la vez (Fase 1)."
+    },
+    {
+      "id": "srv_a6000",
+      "name": "Servidor A6000",
+      "role": "Escalar a ~50 modelos (Fase 2, Docker por modelo)",
+      "host": "",
+      "status": "planned",
+      "gpu": "NVIDIA RTX A6000",
+      "vram": "48 GB",
+      "cpu": "",
+      "ram": "",
+      "services": "",
+      "notes": "Planeado en el roadmap de Full_CV: cada modelo en su contenedor Docker."
+    }
+  ],
+  "deployments": [
+    {
+      "id": "dep_pod_cisco",
+      "name": "Pod Cisco",
+      "project": "Arconte",
+      "status": "inactive",
+      "note": "El pod no está configurado — en espera de setup de infraestructura."
+    }
+  ],
+  "cameras": [
+    {
+      "id": "cam_d1",
+      "project": "Arconte Retail · Cámara D1",
+      "location": "IP: 192.168.254.3 — NVR: 192.168.168.10",
+      "count": "1",
+      "status": "connected",
+      "notes": "RTSP: rtsp://admin:celestialA33@192.168.168.10:554/Streaming/Channels/101"
+    },
+    {
+      "id": "cam_d2",
+      "project": "Arconte Retail · Cámara D2",
+      "location": "IP: 192.168.254.11 — NVR: 192.168.168.10",
+      "count": "1",
+      "status": "connected",
+      "notes": "RTSP: rtsp://admin:celestialA33@192.168.168.10:554/Streaming/Channels/201"
+    },
+    {
+      "id": "cam_d3",
+      "project": "Arconte Retail · Cámara D3",
+      "location": "IP: 192.168.254.6 — NVR: 192.168.168.10",
+      "count": "1",
+      "status": "connected",
+      "notes": "RTSP: rtsp://admin:celestialA33@192.168.168.10:554/Streaming/Channels/301"
+    },
+    {
+      "id": "cam_d4",
+      "project": "Arconte Retail · Cámara D4",
+      "location": "IP: 192.168.254.10 — NVR: 192.168.168.10",
+      "count": "1",
+      "status": "connected",
+      "notes": "RTSP: rtsp://admin:celestialA33@192.168.168.10:554/Streaming/Channels/401"
+    }
+  ]
+}

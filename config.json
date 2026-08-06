@@ -3,6 +3,11 @@
     "Admin": "cv2026"
   },
   "admin_token": "cv2026",
-  "notify_emails": [],
-  "resend_api_key": ""
+  "fullcv": {
+    "url": "http://localhost:8000",
+    "username": "",
+    "password": "",
+    "profiles_dir": "",
+    "sync_ttl_seconds": 300
+  }
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentación — Visión por Computadora | CV Celestial</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body data-page="documentacion">
+  <div id="app-top"></div>
+
+  <div class="bk-shell">
+
+    <!-- Índice del libro -->
+    <aside class="bk-side" id="bk-side">
+      <div class="bk-side-head">
+        <div class="bk-side-brand">
+          <small>Librito</small>
+          <a href="#">Documentación de Visión por Computadora</a>
+        </div>
+        <div class="bk-search-wrap">
+          <input type="search" id="bk-search" placeholder="Buscar en todo el librito…"
+                 autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="bk-search-hint">Atajos: <kbd>/</kbd> buscar · <kbd>←</kbd> <kbd>→</kbd> documento</div>
+        <div class="bk-status">
+          <span id="bk-status-text"><span class="bk-sync-dot"></span>cargando…</span>
+          <button class="bk-refresh" id="bk-refresh" type="button"
+                  title="Volver a leer los .md del repo de modelos">Actualizar</button>
+        </div>
+      </div>
+      <div id="bk-index"></div>
+    </aside>
+
+    <!-- Portada / lector / resultados -->
+    <main class="bk-main" id="bk-stage"></main>
+
+  </div><!-- /bk-shell -->
+
+  <button class="bk-side-toggle" id="bk-side-toggle" type="button">☰ Índice</button>
+
+  <div id="app-foot"></div>
+
+  <script src="/assets/app.js"></script>
+  <script src="/assets/docs.js"></script>
+</body>
+</html>

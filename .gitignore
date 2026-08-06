@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+backups/
+*.bak*
+*.json.tmp
+fullcv_cache.json
+docs_cache.json
+requisitos_cache.json

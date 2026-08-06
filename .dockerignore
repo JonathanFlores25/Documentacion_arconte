@@ -18,6 +18,3 @@ backups/
 
 # Archivos de desarrollo
 *.md
-build_*.py
-fill_*.py
-semana_template.html

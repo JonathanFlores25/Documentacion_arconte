@@ -1,11 +1,23 @@
 services:
 
-  cv-v2:
+  cv-docs:
     build: .
-    command: python main_v2.py
+    command: python main.py
     volumes:
       - .:/app
+      # Documentación de modelos ("el librito"): los README/CONTRATO viven junto
+      # al código en el repo hermano. Se monta SOLO LECTURA — la doc nunca
+      # escribe ahí. Si la ruta no existe en este servidor, el librito cae al
+      # snapshot de docs_cache.json y sigue funcionando.
+      - ../ArconteDetection_DebugTools/Models:/models_docs:ro
     ports:
       - "8090:8090"
     restart: unless-stopped
     working_dir: /app
+    # Integración Full_CV: desde el contenedor, localhost no llega al host.
+    # host.docker.internal → gateway del host, donde corre Full_CV (:8000).
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - FULLCV_URL=http://host.docker.internal:8000
+      - MODELS_DOCS_DIR=/models_docs

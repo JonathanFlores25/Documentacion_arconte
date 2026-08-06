@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Requerimientos de pre-ingeniería | CV Celestial</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body data-page="requerimientos">
+  <div id="app-top"></div>
+
+  <div class="bk-shell">
+
+    <!-- Índice de apartados -->
+    <aside class="bk-side" id="rq-side">
+      <div class="bk-side-head">
+        <div class="bk-side-brand">
+          <small>Pre-ingeniería</small>
+          <a href="/requerimientos.html">Requerimientos para comprometer alcance</a>
+        </div>
+        <div class="bk-status">
+          <span id="rq-status-text"><span class="bk-sync-dot"></span>cargando…</span>
+          <button class="bk-refresh" id="rq-refresh" type="button"
+                  title="Volver a leer el machote">Actualizar</button>
+        </div>
+      </div>
+      <div id="rq-index"></div>
+    </aside>
+
+    <!-- Portada + umbrales + cuestionario -->
+    <main class="bk-main" id="rq-stage"></main>
+
+  </div><!-- /bk-shell -->
+
+  <button class="bk-side-toggle" id="bk-side-toggle" type="button">☰ Apartados</button>
+
+  <div id="app-foot"></div>
+
+  <script src="/assets/app.js"></script>
+  <script src="/assets/reqs.js"></script>
+</body>
+</html>

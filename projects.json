@@ -68,11 +68,28 @@
           "deleted_reason": "djdjjd"
         },
         {
+          "title": "Avance: Robo con violencia",
+          "description": "Inclusión de heurística: Area Spike, con optimización bajo dataset sintético",
+          "area": "AI Eng",
+          "resp": "Israel",
+          "done": true,
+          "done_note": "Se logró, y se mergeo en debugtools",
+          "done_by": "Admin",
+          "done_at": "2026-06-22"
+        }
+      ],
+      "S12": [],
+      "S13": [],
+      "S14": [
+        {
           "title": "Exploración y mejoramiento de detección de choques",
           "description": "Exploración de áreas deficientes del modelo (Heurísticas, hiperparámetros, prompts, etc.) y mejoramiento.",
           "area": "AI Eng",
           "resp": "Israel",
-          "done": false
+          "done": false,
+          "shift_reason": "Tareas paralelas",
+          "shifted_by": "Admin",
+          "shifted_at": "2026-07-08"
         }
       ]
     },
@@ -234,11 +251,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_vl3u",
-            "start_iso": "2026-06-15",
-            "shift_days": 45,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 66,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_0cqr"
             ]
@@ -329,11 +346,11 @@
             "responsible": "Jonathan",
             "done": false,
             "id": "t_1781559996996_f9ul",
-            "start_iso": "2026-06-15",
-            "shift_days": 39,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 60,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_qm27",
               "t_1781559996996_3fuw"
@@ -379,11 +396,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_03wg",
-            "start_iso": "2026-06-15",
-            "shift_days": 35,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 56,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_0cqr",
               "t_1781559996996_pv1p",
@@ -416,11 +433,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_upmg",
-            "start_iso": "2026-06-15",
-            "shift_days": 34,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 55,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_0cqr",
               "t_1781559996996_pv1p",
@@ -454,11 +471,11 @@
             "responsible": "Jonathan",
             "done": false,
             "id": "t_1781559996996_r7xq",
-            "start_iso": "2026-06-15",
-            "shift_days": 33,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 54,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_f9ul",
               "t_1781559996996_03wg",
@@ -472,11 +489,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_am1x",
-            "start_iso": "2026-06-15",
-            "shift_days": 33,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 54,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_r7xq"
             ]
@@ -488,11 +505,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_vamu",
-            "start_iso": "2026-06-15",
-            "shift_days": 33,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 54,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_r7xq"
             ]
@@ -504,11 +521,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_df94",
-            "start_iso": "2026-06-15",
-            "shift_days": 33,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 54,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_r7xq"
             ]
@@ -520,11 +537,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_zils",
-            "start_iso": "2026-06-15",
-            "shift_days": 33,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 54,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_r7xq"
             ]
@@ -545,11 +562,11 @@
             "responsible": "Juan",
             "done": false,
             "id": "t_1781559996996_xw1z",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_0cqr",
               "t_1781559996996_pv1p",
@@ -580,11 +597,11 @@
             "responsible": "Juan",
             "done": false,
             "id": "t_1781559996996_dax8",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_upmg"
             ]
@@ -596,11 +613,11 @@
             "responsible": "Juan",
             "done": false,
             "id": "t_1781559996996_by87",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_0cqr",
               "t_1781559996996_pv1p",
@@ -633,11 +650,11 @@
             "responsible": "Juan",
             "done": false,
             "id": "t_1781559996996_hxi3",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_xw1z"
             ]
@@ -649,11 +666,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_ii1p",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_xw1z"
             ]
@@ -665,11 +682,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_kd05",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_xw1z"
             ]
@@ -690,11 +707,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_7jln",
-            "start_iso": "2026-06-15",
-            "shift_days": 21,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 42,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_xw1z"
             ]
@@ -706,11 +723,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_wn4y",
-            "start_iso": "2026-06-15",
-            "shift_days": 21,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 42,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_xw1z"
             ]
@@ -731,11 +748,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_31cc",
-            "start_iso": "2026-06-15",
-            "shift_days": 21,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 42,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "deps": [
               "t_1781559996996_xw1z"
             ]
@@ -756,11 +773,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_79ra",
-            "start_iso": "2026-06-22",
-            "shift_days": 38,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 52,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "shift_log": [
               {
                 "days": 7,
@@ -782,11 +799,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781559996996_r83a",
-            "start_iso": "2026-06-22",
-            "shift_days": 38,
-            "shift_reason": "Actualizacion",
+            "start_iso": "2026-07-06",
+            "shift_days": 52,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "shift_log": [
               {
                 "days": 7,
@@ -800,6 +817,32 @@
             "deps": [
               "t_1781559996996_xw1z"
             ]
+          },
+          {
+            "id": "t_1782775773235_gvls",
+            "title": "Optimizacion Modelo Qween",
+            "description": "Se debe baajr el coste computacional",
+            "area": "AI Eng",
+            "responsible": "Jonathan",
+            "done": false,
+            "start_iso": "2026-07-06",
+            "shift_days": 7,
+            "shift_reason": "Tareas paralelas",
+            "shifted_by": "Admin",
+            "shifted_at": "2026-07-08"
+          },
+          {
+            "id": "t_1782944497940_71jt",
+            "title": "Test",
+            "description": "dsfcvadsdsa",
+            "area": "AI Eng",
+            "responsible": "Jonathan",
+            "done": false,
+            "start_iso": "2026-07-06",
+            "shift_days": 7,
+            "shift_reason": "Tareas paralelas",
+            "shifted_by": "Admin",
+            "shifted_at": "2026-07-08"
           }
         ],
         "shift_days": 7,
@@ -819,7 +862,23 @@
       }
     ],
     "sprint_tasks": {},
-    "acuerdos": [],
+    "acuerdos": [
+      {
+        "session": "S13",
+        "iso_date": "2026-06-29",
+        "display": "29 jun 2026",
+        "hora": "",
+        "items": [
+          {
+            "title": "Unificacion PV",
+            "description": "Todos los modelso OK",
+            "responsible": "EQUIPO AI",
+            "status": "PENDIENTE",
+            "date": "2026-06-29"
+          }
+        ]
+      }
+    ],
     "models": []
   },
   "stack_modelos": {
@@ -872,7 +931,10 @@
         "description": "Sistema de búsqueda y re-identificación de personas y vehículos. Opera en dos etapas: enrolamiento (construye galería de features desde video o foto del objetivo) y búsqueda (localiza al objetivo en streams RTSP o video). Usa descripción en lenguaje natural para localizar al objetivo en el primer frame válido.",
         "tech": "LocateAnything-3B, SAMURAI (SAM2), YOLO11x, CLIP ViT-L/14, TransReID, ResNet50",
         "notes": "Estado: Pruebas de integración local en curso.",
-        "created_at": "2026-06-01"
+        "created_at": "2026-06-01",
+        "fullcv_id": "reid",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       },
       {
         "id": "m_stack_parking_002",
@@ -894,7 +956,10 @@
         "description": "Conteo de personas en escenas densas desde cámaras altas (personas de 15–60 px). Divide el frame en un grid de patches (2×4), hace zoom individual por patch y corre YOLO en cada uno, luego aplica NMS global para eliminar duplicados en bordes solapados. Suavizado temporal con media móvil.",
         "tech": "YOLO11x, Patch Grid 2×4, NMS Global, Temporal Smooth",
         "notes": "Estado: Prueba de concepto, sin versión asignada.",
-        "created_at": "2026-06-01"
+        "created_at": "2026-06-01",
+        "fullcv_id": "crowd_counter",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       },
       {
         "id": "m_stack_fire_ir_004",
@@ -905,7 +970,10 @@
         "description": "Versión especializada para cámaras infrarrojas y visión nocturna. A diferencia del modelo RGB, usa máscara HSV de brillo alto y zona amarillo-caliente, CLAHE para contraste IR, flickering gate temporal y prompts CLIP adaptados para imágenes termales. Score combinado: coherencia de keyframes + concentración espacial + coherencia temporal.",
         "tech": "CLIP ViT-L/14, MOG2, CLAHE, KSM, WinCLIP, IR / Nocturno",
         "notes": "Estado: Prueba de concepto, primeras pruebas locales.",
-        "created_at": "2026-06-01"
+        "created_at": "2026-06-01",
+        "fullcv_id": "fire",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       },
       {
         "id": "m_1781063286682_qwk",
@@ -916,7 +984,10 @@
         "description": "El Contador de Piezas es un modelo de visión artificial en tiempo real (online) diseñado para automatizar la detección, clasificación y conteo de componentes industriales y de ferretería (como tuercas y tornillos) mediante el procesamiento de un flujo de video continuo. Como Prueba de Concepto (PoC), el sistema localiza visualmente cada objeto en movimiento, identifica su categoría específica sin importar su orientación y rastrea su trayectoria para asegurar que cada elemento sea contabilizado una única vez.",
         "tech": "YOLO11x",
         "notes": "",
-        "created_at": "2026-06-10"
+        "created_at": "2026-06-10",
+        "fullcv_id": "object_counter",
+        "linked_by": "Admin",
+        "linked_at": "2026-07-16"
       }
     ]
   },
@@ -989,11 +1060,11 @@
             "responsible": "Juan",
             "done": false,
             "id": "t_1781544555664_kud3",
-            "start_iso": "2026-06-15",
-            "shift_days": 56,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 77,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN PROCESO",
             "deps": [
               "t_1781544555664_oe12"
@@ -1229,6 +1300,19 @@
             "deps": [
               "t_1781544555664_qm7l"
             ]
+          },
+          {
+            "id": "t_1782147660850_yofn",
+            "title": "Levantamiento",
+            "description": "Se levantará le paltaforam en el pod 59",
+            "area": "AI Eng",
+            "responsible": "Rodrigo",
+            "done": false,
+            "start_iso": "2026-07-06",
+            "shift_days": 14,
+            "shift_reason": "Tareas paralelas",
+            "shifted_by": "Admin",
+            "shifted_at": "2026-07-08"
           }
         ]
       },
@@ -1246,11 +1330,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781544555664_k63c",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN PROCESO",
             "deps": [
               "t_1781544555664_oe12",
@@ -1281,11 +1365,11 @@
             "responsible": "Abelardo",
             "done": false,
             "id": "t_1781544555664_ljzm",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": []
           },
@@ -1419,8 +1503,15 @@
             "description": "Mejoramiento continuo del modelo FardeoExpert mediante Windowing post heurística ponderado, ablación de prompts, etc. Desempeño actual con database de videos sintéticos: TP=65 FN=29 FP=78 TN=316",
             "area": "AI Eng",
             "responsible": "Israel",
-            "done": false,
-            "start_iso": "2026-06-15"
+            "done": true,
+            "start_iso": "2026-06-22",
+            "shift_days": 7,
+            "shift_reason": "Se mueve porque no esta completado los modelos",
+            "shifted_by": "Admin",
+            "shifted_at": "2026-06-22",
+            "done_note": "Se logró",
+            "done_by": "Admin",
+            "done_at": "2026-06-22"
           },
           {
             "id": "t_1781564374414_18ko",
@@ -1429,7 +1520,11 @@
             "area": "AI Eng",
             "responsible": "Rodrigo",
             "done": false,
-            "start_iso": "2026-06-15"
+            "start_iso": "2026-07-06",
+            "shift_days": 21,
+            "shift_reason": "Tareas paralelas",
+            "shifted_by": "Admin",
+            "shifted_at": "2026-07-08"
           },
           {
             "id": "t_1781564885326_jxcx",
@@ -1437,8 +1532,15 @@
             "description": "Primer video (detección) funcional de detección automática de presencia de cajero, sin necesidad de ROI definida. Es deseable probar con más videos.",
             "area": "AI Eng",
             "responsible": "Israel",
-            "done": false,
-            "start_iso": "2026-06-15"
+            "done": true,
+            "start_iso": "2026-06-22",
+            "shift_days": 7,
+            "shift_reason": "Se mueve porque no esta completado los modelos",
+            "shifted_by": "Admin",
+            "shifted_at": "2026-06-22",
+            "done_note": "Se logró",
+            "done_by": "Admin",
+            "done_at": "2026-06-22"
           }
         ]
       },
@@ -1456,11 +1558,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781544555664_3u4h",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_ljzm"
@@ -1473,11 +1575,11 @@
             "responsible": "Israel",
             "done": false,
             "id": "t_1781544555664_u08e",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_3gsb",
@@ -1491,11 +1593,11 @@
             "responsible": "Rodrigo",
             "done": false,
             "id": "t_1781544555664_h7f2",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_v1ne",
@@ -1509,11 +1611,11 @@
             "responsible": "Jonathan",
             "done": false,
             "id": "t_1781544555664_mhm5",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_jnmf",
@@ -1527,11 +1629,11 @@
             "responsible": "Israel",
             "done": false,
             "id": "t_1781544555664_52vo",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_3u4h"
@@ -1544,11 +1646,11 @@
             "responsible": "Rodrigo",
             "done": false,
             "id": "t_1781544555664_gj6k",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_3u4h"
@@ -1561,11 +1663,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781544555664_e9so",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_3u4h"
@@ -1578,11 +1680,11 @@
             "responsible": "Equipo IA",
             "done": false,
             "id": "t_1781544555664_xqwb",
-            "start_iso": "2026-06-15",
-            "shift_days": 28,
-            "shift_reason": "Falta POD",
+            "start_iso": "2026-07-06",
+            "shift_days": 49,
+            "shift_reason": "Tareas paralelas",
             "shifted_by": "Admin",
-            "shifted_at": "2026-06-15",
+            "shifted_at": "2026-07-08",
             "status": "EN ESPERA",
             "deps": [
               "t_1781544555664_3u4h"
@@ -1617,7 +1719,23 @@
         }
       ]
     },
-    "acuerdos": [],
+    "acuerdos": [
+      {
+        "session": "S12",
+        "iso_date": "2026-06-22",
+        "display": "22 jun 2026",
+        "hora": "",
+        "items": [
+          {
+            "title": "Reunion",
+            "description": "Ejemplificacion del model de ROI y Fardeo",
+            "responsible": "Jonathan",
+            "status": "PENDIENTE",
+            "date": "2026-06-22"
+          }
+        ]
+      }
+    ],
     "models": [],
     "static_metrics": {
       "fardeo": {
